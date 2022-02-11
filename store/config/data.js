@@ -7,6 +7,14 @@ export const state = () => ({
         {
             text: "Русский",
             value: "ru"
+        },
+        {
+            text: "Deutsch",
+            value: "de"
+        },
+        {
+            text: "Polskie",
+            value: "pl"
         }
     ],
     themes: ["Dark", "Light"],

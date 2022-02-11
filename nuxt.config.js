@@ -1,3 +1,10 @@
+const langs = ["en", "ru", "pl", "de"];
+import de from "./locales/de.js";
+import en from "./locales/en.js";
+import pl from "./locales/pl.js";
+import ru from "./locales/ru.js";
+let locales = {en, de, ru, pl};
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   server: {
@@ -78,18 +85,11 @@ export default {
   },
 
   i18n: {
-    locales: ['en', 'ru'],
+    locales: langs,
     defaultLocale: 'ru',
     vueI18n: {
       fallbackLocale: 'ru',
-      messages: {
-        en: {
-          Main: 'Main'
-        },
-        ru: {
-          Main: 'Главная'
-        }
-      }
+      messages: locales
     }
   },
 
