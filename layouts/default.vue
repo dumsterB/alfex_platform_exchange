@@ -28,6 +28,14 @@ export default {
   computed: {},
   methods: {},
   async created() {
+    if (this.$store.state.auth.user) {
+    } else {
+      if (this.$router.history.current.path != "/auth/registration") {
+        this.$router.push({
+          path: "/auth/login",
+        });
+      }
+    }
     setTimeout(() => {
       this.isLoading = false;
     }, 1000);

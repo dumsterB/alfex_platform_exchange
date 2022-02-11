@@ -9,9 +9,6 @@ export default {
 
   head: {
     title: 'vue-platform',
-    htmlAttrs: {
-      lang: 'en'
-    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -23,6 +20,27 @@ export default {
     ]
   },
 
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/api/auth/login', method: 'post', propertyName: "data.token" },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/user_platform/current', method: 'get', propertyName: "data" }
+        },
+        token: {
+          property: "data.token"
+        }
+      }
+    },
+    redirect: {
+      login: '/auth/login',
+      logout: '/auth/login',
+      callback: '/auth/login',
+      home: '/account'
+    }
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'balm-ui/dist/balm-ui.css'
@@ -30,6 +48,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/axios',
+    '~/plugins/envstore',
     '@/plugins/balm-ui'
   ],
 
@@ -44,7 +64,6 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/pwa',
     '@nuxtjs/i18n'
   ],
 
