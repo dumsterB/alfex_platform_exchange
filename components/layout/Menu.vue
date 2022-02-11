@@ -10,7 +10,7 @@
   >
     <div
       v-if="style_panel_left_minimal"
-      class="logo d-flex align-center justify-center px-4"
+      class="logo d-flex align-center justify-start px-4"
     ></div>
 
     <div

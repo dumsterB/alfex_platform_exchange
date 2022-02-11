@@ -19,6 +19,7 @@
         <v-card
           flat
           class="d-flex flex-columns align-center mt-2 py-2 pr-2 pl-6"
+          style="width: 200px"
           v-on="on"
         >
           <div class="mr-4">
@@ -40,6 +41,11 @@
         >
           <v-list-item-title>{{ action.name }}</v-list-item-title>
         </v-list-item>
+        <v-list-item style="margin-top: 8px"
+          ><language-select
+            style="width: 50px"
+          ></language-select
+        ></v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
@@ -47,6 +53,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import LanguageSelect from "~/components/settings/LanguageSelect";
 
 export default {
   data: function () {
@@ -87,6 +94,10 @@ export default {
 
   watch: {
     
+  },
+
+  components: {
+    LanguageSelect
   },
 
   computed: {
