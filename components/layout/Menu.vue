@@ -6,8 +6,7 @@
     :mini-variant="style_panel_left_minimal"
     mobile-break-point="1"
     mini-variant-width="75"
-    id="main_menu"
-    class="menu elevation-0"
+    class="elevation-0"
   >
     <div
       v-if="style_panel_left_minimal"
@@ -22,7 +21,7 @@
     <div
       v-if="style_panel_left_minimal"
       class="d-flex align-center px-4"
-      style="height: 100px; margin: 0px"
+      style="height: 70px; margin: 0px"
     >
       <v-btn
         icon
@@ -37,7 +36,7 @@
     <v-row
       v-if="!style_panel_left_minimal"
       class="align-center px-4"
-      style="height: 100px; margin: 0px"
+      style="height: 70px; margin: 0px"
     >
       <v-btn
           icon
@@ -68,12 +67,11 @@
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title
-                      class="menu_item__title"
-                      v-text="item.title"
+                      v-text="$t(item.title)"
                     />
                   </v-list-item-content>
                 </template>
-                <span>{{ item.title }}</span>
+                <span>{{ $t(item.title) }}</span>
               </v-tooltip>
             </template>
           </v-list-item>

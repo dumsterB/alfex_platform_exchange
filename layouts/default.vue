@@ -30,7 +30,7 @@ export default {
   async created() {
     setTimeout(() => {
       this.isLoading = false;
-    }, 2000);
+    }, 1000);
   },
   components: {
     NavBar,

@@ -44,8 +44,25 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/pwa'
-],
+    '@nuxtjs/pwa',
+    '@nuxtjs/i18n'
+  ],
+
+  i18n: {
+    locales: ['en', 'ru'],
+    defaultLocale: 'ru',
+    vueI18n: {
+      fallbackLocale: 'ru',
+      messages: {
+        en: {
+          Main: 'Main'
+        },
+        ru: {
+          Main: 'Главная'
+        }
+      }
+    }
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

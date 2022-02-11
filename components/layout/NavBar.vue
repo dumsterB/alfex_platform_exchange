@@ -3,9 +3,7 @@
     app
     flat
     fixed
-    id="nav_bar"
-    class="nav_bar"
-    style="border-bottom: 1px solid #383741; height: 101px"
+    style="border-bottom: 1px solid #383741; height: 71px"
   >
     <v-spacer></v-spacer>
 
@@ -14,14 +12,13 @@
       bottom
       right
       :offset-y="true"
-      class="user_menu"
       content-class="elevation-1"
       :close-on-content-click="false"
     >
       <template v-slot:activator="{ on }">
         <v-card
           flat
-          class="user_menu-block d-flex flex-columns align-center mt-8 py-2 pr-2 pl-6"
+          class="d-flex flex-columns align-center mt-2 py-2 pr-2 pl-6"
           v-on="on"
         >
           <div class="mr-4">
