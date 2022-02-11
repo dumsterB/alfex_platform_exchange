@@ -46,6 +46,11 @@
             style="width: 50px"
           ></language-select
         ></v-list-item>
+        <v-list-item style="margin-top: 8px"
+          ><theme-select
+            style="width: 50px"
+          ></theme-select
+        ></v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
@@ -54,6 +59,7 @@
 <script>
 import { mapGetters } from "vuex";
 import LanguageSelect from "~/components/settings/LanguageSelect";
+import ThemeSelect from "~/components/settings/ThemeSelect";
 
 export default {
   data: function () {
@@ -61,8 +67,6 @@ export default {
       user_image: null,
       account_menu: this.initAccountMenu(),
     };
-  },
-  components: {
   },
   methods: {
     initAccountMenu() {
@@ -97,7 +101,8 @@ export default {
   },
 
   components: {
-    LanguageSelect
+    LanguageSelect,
+    ThemeSelect
   },
 
   computed: {

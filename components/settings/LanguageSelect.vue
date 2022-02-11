@@ -1,6 +1,5 @@
 <template>
   <v-select
-    class="lang_select"
     v-model="$i18n.locale"
     :items="langs"
     outlined

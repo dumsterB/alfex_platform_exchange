@@ -48,6 +48,16 @@ export default {
     '@nuxtjs/i18n'
   ],
 
+  vuetify: {
+    customVariables: ['~/assets/app.scss'],
+    theme: {
+      themes: {
+        dark: {
+        }
+      }
+    }
+  },
+
   i18n: {
     locales: ['en', 'ru'],
     defaultLocale: 'ru',
