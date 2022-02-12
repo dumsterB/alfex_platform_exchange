@@ -4,11 +4,11 @@
     <div v-if="!isLoading" class="main-page">
       <Menu />
       <NavBar />
-      <v-content fluid>
+      <v-main fluid>
         <v-container fluid class="layout_default__content ma-0 pa-0">
           <nuxt />
         </v-container>
-      </v-content>
+      </v-main>
     </div>
   </v-app>
 </template>

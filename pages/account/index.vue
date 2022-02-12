@@ -9,7 +9,7 @@
         </v-row>
       </v-col>
       <v-col :cols="12" :md="4" :lg="4" :sm="12" :xs="12">
-        <Wallet></Wallet>
+          <Wallet></Wallet>
         <Exchange></Exchange>
       </v-col>
     </v-row>
@@ -36,9 +36,10 @@ export default {
     ...mapActions(model, {
       fetchCurrencies: "fetchList",
     }),
+
   },
   async mounted() {
-    await this.fetchCurrencies();
+    await this.fetchCurrencies()
   },
 };
 </script>

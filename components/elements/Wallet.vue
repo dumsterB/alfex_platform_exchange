@@ -17,19 +17,19 @@
             elevation="0"
             tile
           >
-            <div v-for="coin of coins" :key="coin.currency">
-            <v-list-item class="pa-1" >
-              <v-list-item-content>
-                <v-list-item-title>
-                  <v-badge class="ml-1 mb-1" :color="coin.color" dot></v-badge>
-                  <span class="ml-2">{{coin.currency}}</span></v-list-item-title>
-              </v-list-item-content>
-              <v-spacer></v-spacer>
-              <v-list-item-content class="flexNone">
-                <v-list-item-title>{{coin.quantity}}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider></v-divider>
+            <div v-for="(coin,i) of wallet" :key="i">
+              <v-list-item class="pa-1" >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <v-badge class="ml-1 mb-1" dot></v-badge>
+                    <span class="ml-2">{{ coin.currency.symbol }}</span></v-list-item-title>
+                </v-list-item-content>
+                <v-spacer></v-spacer>
+                <v-list-item-content class="flexNone">
+                  <v-list-item-title>{{ coin.balance }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider></v-divider>
             </div>
           </v-card>
         </div>
@@ -40,39 +40,56 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+const wallet = 'data/wallet'
 export default {
   name: "Wallet",
-  data(){
-    return{
-      coins:[
+  data() {
+    return {
+      coins: [
         {
-          color:'red',
-          currency:'USD',
-          quantity:'$74.491'
+          color: 'red',
+          currency: 'USD',
+          quantity: '$74.491'
         },
         {
-          color:'pink',
-          currency:'BNB',
-          quantity:'$134.491'
+          color: 'pink',
+          currency: 'BNB',
+          quantity: '$134.491'
         },
         {
-          color:'blue',
-          currency:'ADA',
-          quantity:'$14.421'
+          color: 'blue',
+          currency: 'ADA',
+          quantity: '$14.421'
         },
         {
-          color:'yellow',
-          currency:'BTC',
-          quantity:'$74.491'
+          color: 'yellow',
+          currency: 'BTC',
+          quantity: '$74.491'
         },
         {
-          color:'red',
-          currency:'ETH',
-          quantity:'$74.491'
+          color: 'red',
+          currency: 'ETH',
+          quantity: '$74.491'
         }
       ]
     }
-  }
+  },
+  computed: {
+    ...mapGetters("data/wallet", {
+      wallet: "list",
+    }),
+
+  },
+  methods:{
+    ...mapActions(wallet, {
+      fetchWallet: "fetchList",
+    })
+  },
+
+ async mounted() {
+    await this.fetchWallet()
+ }
 }
 </script>
 
