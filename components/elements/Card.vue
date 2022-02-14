@@ -13,8 +13,7 @@
     </v-card-text>
 
     <v-card-actions class="justify-space-between">
-      <v-card-subtitle> {{ item.date }} </v-card-subtitle>
-
+      <v-card-subtitle> {{ item.date }}</v-card-subtitle>
       <v-btn color="#23ad41" text>
         {{ $t("read_more") }}
       </v-btn>

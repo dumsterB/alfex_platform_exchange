@@ -11,6 +11,20 @@
   </v-app>
 </template>
 
-<script>
-</script>
+<script></script>
 
+<style>
+html {
+  font-family: "Cera Pro";
+  height: 100%;
+  font-style: normal;
+  font-weight: normal;
+  background-repeat: no-repeat;
+  -webkit-transition: 223ms;
+  -o-transition: 223ms;
+  transition: 223ms;
+}
+div {
+  font-family: "Cera Pro";
+}
+</style>
