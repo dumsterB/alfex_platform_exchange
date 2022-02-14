@@ -14,7 +14,7 @@ export const state = () => ({
             badge_color: 'primary',
         }, {
             icon: 'mdi-cog-outline',
-            title: 'settings_page',
+            title: 'user_settings',
             key: 'Settings',
             to: '/settings',
             badge_color: 'primary',

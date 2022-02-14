@@ -96,7 +96,7 @@ export default {
     trading: 'trading',
     cryptocurrency: 'all cryptocurrency',
     news_page: 'blog',
-    settings_page: 'settings',
+    settings_page: 'Settings',
     spot_account: 'spot account',
     fiat_account: 'fiat account',
     total_equity: 'total equity',
