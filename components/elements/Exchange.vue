@@ -1,8 +1,8 @@
 <template>
 <div class="ma-4">
   <div class="d-flex mdc-form-field--space-between">
-    <p class="text-h6">Обмен</p>
-    <a href="">Посмотреть больше</a>
+    <p class="text-h6">{{$t('exchange')}}</p>
+    <a href="">{{$t('view_more')}}</a>
   </div>
   <v-card class="pa-3">
     <div class="justify-center text-center">

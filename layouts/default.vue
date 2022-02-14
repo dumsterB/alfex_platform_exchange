@@ -5,7 +5,7 @@
       <Menu />
       <NavBar />
       <v-main fluid>
-        <v-container fluid class="layout_default__content ma-0 pa-0">
+        <v-container fluid class="layout_default__content mt-5 ma-0 pa-0">
           <nuxt />
         </v-container>
       </v-main>

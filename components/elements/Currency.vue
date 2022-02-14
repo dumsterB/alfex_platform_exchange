@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div >
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
-        <v-card class="ma-4 currecyCard" elevation="3" v-bind="attrs" v-on="on" :width="200">
+        <v-card class="currecyCard" elevation="3" v-bind="attrs" v-on="on" :width="200">
           <v-list-item three-line class="pa-2" @click="$router.push('/')">
             <v-list-item-content class="pa-1">
               <div class="d-flex">
@@ -27,11 +27,7 @@
       <span>Tooltip</span>
       <br>
       <span>Tooltip</span>
-
-
-
     </v-tooltip>
-
   </div>
 </template>
 <script>

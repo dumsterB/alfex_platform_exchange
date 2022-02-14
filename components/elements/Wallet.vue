@@ -1,15 +1,15 @@
 <template>
   <div class="ma-4">
     <div class="d-flex mdc-form-field--space-between">
-      <p class="text-h6">Мой кошелек</p>
-      <a href="">Посмотреть все</a>
+      <p class="text-h6">{{$t('my_wallet')}}</p>
+      <a href="">{{$t('view_more')}}</a>
     </div>
     <v-card class="pa-3">
       <div class="justify-center">
         <div class="text-center pa-4">
           <div>Всего</div>
           <div id="chart">
-            <apexchart width="200" type="donut" :options="chartOptions" :series="series"></apexchart>
+            <apexchart width="300" type="donut" :options="chartOptions" :series="series"></apexchart>
           </div>
           <strong class="text-h4">$380.787</strong>
           <div>≈ 0.00870 BTC</div>
