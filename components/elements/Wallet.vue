@@ -8,6 +8,9 @@
       <div class="justify-center">
         <div class="text-center pa-4">
           <div>Всего</div>
+          <div id="chart">
+            <apexchart width="200" type="donut" :options="chartOptions" :series="series"></apexchart>
+          </div>
           <strong class="text-h4">$380.787</strong>
           <div>≈ 0.00870 BTC</div>
         </div>
@@ -17,7 +20,7 @@
             elevation="0"
             tile
           >
-            <div v-for="(coin,i) of wallet" :key="i">
+            <div v-for="(coin,i) of filteredArr" :key="i">
               <v-list-item class="pa-1" >
                 <v-list-item-content>
                   <v-list-item-title>
@@ -27,6 +30,18 @@
                 <v-spacer></v-spacer>
                 <v-list-item-content class="flexNone">
                   <v-list-item-title>{{ coin.balance }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider></v-divider>
+            </div>
+            <div >
+              <v-list-item class="pa-1" >
+                  <v-list-item-title>
+                    <v-badge class="ml-1 mb-1" dot></v-badge>
+                    <span class="ml-2" ><a href=""> Посмотреть остальные</a> </span></v-list-item-title>
+                <v-spacer></v-spacer>
+                <v-list-item-content class="flexNone">
+                  <v-list-item-title> {{getLengthArr}}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-divider></v-divider>
@@ -41,11 +56,17 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import apexchart from 'vue-apexcharts'
 const wallet = 'data/wallet'
 export default {
+  components:{
+    apexchart
+  },
   name: "Wallet",
   data() {
     return {
+      filteredArr:[],
+      getLengthArr:'',
       coins: [
         {
           color: 'red',
@@ -72,7 +93,24 @@ export default {
           currency: 'ETH',
           quantity: '$74.491'
         }
-      ]
+      ],
+      series: [44, 55, 41, 17, 15],
+      chartOptions: {
+        chart: {
+          type: 'donut',
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+      }
     }
   },
   computed: {
@@ -89,6 +127,8 @@ export default {
 
  async mounted() {
     await this.fetchWallet()
+   this.filteredArr=this.wallet.slice(0,5)
+   this.getLengthArr=this.wallet.length-5
  }
 }
 </script>
