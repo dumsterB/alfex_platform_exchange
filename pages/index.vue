@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import '../assets/variables.scss';
+import "../assets/scss/variables.scss";
 export default {
   mounted() {
     this.$router.push({

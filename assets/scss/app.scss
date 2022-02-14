@@ -1,5 +1,16 @@
 /* BASE */
 
+body {
+    height: 100%;
+    font-family: Cera Pro !important;
+    font-style: normal;
+    font-weight: normal;
+    background-repeat: no-repeat;
+    -webkit-transition: 223ms;
+    -o-transition: 223ms;
+    transition: 223ms;
+}
+
 a {
     text-decoration: none;
     color: #23ad41 !important;
