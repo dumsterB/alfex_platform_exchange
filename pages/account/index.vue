@@ -16,6 +16,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Currency from "~/components/elements/Currency";
+
 const model = "data/currency";
 
 export default {

@@ -39,13 +39,13 @@
       style="height: 70px; margin: 0px"
     >
       <v-btn
-          icon
-          class="ml-auto"
-          color="#aaa"
-          @click.stop="style_panel_left_minimal = !style_panel_left_minimal"
-        >
-          <v-icon size="28">{{ "mdi-chevron-left" }}</v-icon>
-        </v-btn>
+        icon
+        class="ml-auto"
+        color="#aaa"
+        @click.stop="style_panel_left_minimal = !style_panel_left_minimal"
+      >
+        <v-icon size="28">{{ "mdi-chevron-left" }}</v-icon>
+      </v-btn>
     </v-row>
 
     <v-divider color="#21212B"></v-divider>
@@ -61,14 +61,10 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-list-item-action v-on="on">
-                    <v-icon color="#444351" size="24">{{
-                      item.icon
-                    }}</v-icon>
+                    <v-icon color="#444351" size="24">{{ item.icon }}</v-icon>
                   </v-list-item-action>
                   <v-list-item-content>
-                    <v-list-item-title
-                      v-text="$t(item.title)"
-                    />
+                    <v-list-item-title v-text="$t(item.title)" />
                   </v-list-item-content>
                 </template>
                 <span>{{ $t(item.title) }}</span>
@@ -83,7 +79,6 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-
 export default {
   data: function () {
     return {
@@ -105,5 +100,4 @@ export default {
   watch: {},
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

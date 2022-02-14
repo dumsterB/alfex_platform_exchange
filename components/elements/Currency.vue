@@ -29,7 +29,7 @@ export default {
   },
   methods: {},
   mounted() {
-    // console.log(this.currency)
+    // console.log(this.currency);
   },
 };
 </script>
