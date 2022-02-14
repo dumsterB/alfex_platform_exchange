@@ -10,7 +10,7 @@
       </v-list-item-content>
       <v-list-item-content class="coinList pa-1 flexNone">
         <div class="success-text chip">24H</div>
-        <span class="success-text ">000.00%</span>
+        <span class="success-text">000.00%</span>
       </v-list-item-content>
     </v-list-item>
   </v-card>

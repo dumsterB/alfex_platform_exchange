@@ -1,20 +1,33 @@
 <template>
   <div class="error_mess">
-    <h1 v-if="error.statusCode === 404">{{$t("PageNotFound")}}</h1>
-    <h1 v-else>{{$t("AnErrorOccurred")}}</h1>
-    <NuxtLink to="/account">{{$t("GoToHomePage")}}</NuxtLink>
+    <h1 v-if="error.statusCode === 404">{{ $t("PageNotFound") }}</h1>
+    <h1 v-else>{{ $t("AnErrorOccurred") }}</h1>
+    <NuxtLink to="/account">{{ $t("GoToHomePage") }}</NuxtLink>
   </div>
 </template>
 
 <script>
-  export default {
-    props: ['error'],
-    layout: 'error' // you can set a custom layout for the error page
-  }
+export default {
+  props: ["error"],
+  layout: "error", // you can set a custom layout for the error page
+};
 </script>
 
 <style>
 .error_mess {
-    text-align: center;
+  text-align: center;
+}
+html {
+  font-family: "Cera Pro";
+  height: 100%;
+  font-style: normal;
+  font-weight: normal;
+  background-repeat: no-repeat;
+  -webkit-transition: 223ms;
+  -o-transition: 223ms;
+  transition: 223ms;
+}
+div {
+  font-family: "Cera Pro";
 }
 </style>

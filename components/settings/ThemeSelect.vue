@@ -14,15 +14,13 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: {
-  },
+  props: {},
   data() {
     return {
       selected_theme: "",
     };
   },
-  watch: {
-  },
+  watch: {},
   computed: {
     ...mapGetters("config/data", {
       themes_store: "themes",
@@ -36,7 +34,7 @@ export default {
         });
       });
       return themes;
-    }
+    },
   },
   methods: {
     async modeChange(mode) {
