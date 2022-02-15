@@ -7,14 +7,12 @@
     >
     </v-img>
     <v-card-title>{{ item.heading }}</v-card-title>
-
     <v-card-text class="text--primary">
       <div>{{ item.excerpt }}</div>
     </v-card-text>
-
     <v-card-actions class="justify-space-between">
       <v-card-subtitle> {{ item.date }}</v-card-subtitle>
-      <v-btn color="#23ad41" text>
+      <v-btn @click="handlerOpenArticle" color="#23ad41" text>
         {{ $t("read_more") }}
       </v-btn>
     </v-card-actions>
@@ -22,21 +20,23 @@
 </template>
 
 <script>
-import { useLocale } from "vuetify";
 export default {
-  name: "Card",
+  name: "NewsItem",
   props: {
     item: {
       type: Object,
       default: {},
     },
   },
-  setup() {
-    const { t } = useLocale();
+
+  methods: {
+    handlerOpenArticle: function () {
+      this.$router.push({
+        path: `/news/${this.item.articleId}`,
+      });
+    },
   },
-  mounted() {
-    console.log(this.item);
-  },
+  mounted() {},
 };
 </script>
 <style lang="scss" scoped></style>
