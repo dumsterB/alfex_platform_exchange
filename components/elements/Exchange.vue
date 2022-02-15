@@ -41,7 +41,7 @@
           </template>
         </v-select>
       </div>
-      <v-btn x-large class="success-btn" elevation="0">Торговля</v-btn>
+      <v-btn x-large class="success-btn" elevation="0">{{$t('trade')}}</v-btn>
     </div>
   </v-card>
 </div>
