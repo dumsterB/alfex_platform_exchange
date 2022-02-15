@@ -8,7 +8,7 @@
             v-for="article in news"
             :key="article.articleId"
           >
-            <Card :item="article" />
+            <NewsItem :item="article" />
           </v-col>
         </v-row>
       </v-col>
@@ -17,26 +17,26 @@
 </template>
 
 <script>
-import Card from "~/components/elements/Card";
+import NewsItem from "~/components/elements/NewsItem";
 import { mapGetters, mapActions } from "vuex";
 const model = "config/data";
 
 export default {
   components: {
-    Card,
+    NewsItem,
   },
   computed: {
     ...mapGetters(model, {
       news: "news",
     }),
   },
-  methods: {
-    ...mapActions(model, {
-      fetchNews: "fetchList",
-    }),
-  },
-  async mounted() {
-    await this.fetchNews();
-  },
+  // methods: {
+  //   ...mapActions(model, {
+  //     fetchNews: "fetchNews",
+  //   }),
+  // },
+  // async mounted() {
+  //   await this.fetchNews();
+  // },
 };
 </script>

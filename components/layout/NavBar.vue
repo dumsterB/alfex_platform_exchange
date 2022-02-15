@@ -6,18 +6,25 @@
     style="border-bottom: 1px solid #383741; height: 71px"
   >
     <div class="d-flex mt-8">
-
-    <v-btn elevation="0" class="navLink">{{$t('my_wallet')}}</v-btn>
-    <v-btn elevation="0" class="navLink">{{$t('user_commodities')}}</v-btn>
-    <v-btn elevation="0" class="navLink" >{{$t('user_arbitrage')}}</v-btn>
-    <v-btn elevation="0" class="navLink">{{$t('user_trading')}}</v-btn>
-    <v-text-field
-      label="Search"
-      outlined
-      class="ml-2"
-      dense
-      prepend-inner-icon="mdi-magnify"
-    ></v-text-field>
+      <v-btn elevation="0" @click="handlerOpenWallet" class="navLink">{{
+        $t("my_wallet")
+      }}</v-btn>
+      <v-btn elevation="0" @click="handlerOpenCommodities" class="navLink">{{
+        $t("user_commodities")
+      }}</v-btn>
+      <v-btn elevation="0" @click="handlerOpenArbitrage" class="navLink">{{
+        $t("user_arbitrage")
+      }}</v-btn>
+      <v-btn elevation="0" @click="handlerOpenTrading" class="navLink">{{
+        $t("user_trading")
+      }}</v-btn>
+      <v-text-field
+        label="Search"
+        outlined
+        class="ml-2"
+        dense
+        prepend-inner-icon="mdi-magnify"
+      ></v-text-field>
     </div>
     <v-spacer></v-spacer>
 
@@ -58,14 +65,10 @@
           <v-list-item-title>{{ action.name }}</v-list-item-title>
         </v-list-item>
         <v-list-item style="margin-top: 8px"
-          ><language-select
-            style="width: 50px"
-          ></language-select
+          ><language-select style="width: 50px"></language-select
         ></v-list-item>
         <v-list-item style="margin-top: 8px"
-          ><theme-select
-            style="width: 50px"
-          ></theme-select
+          ><theme-select style="width: 50px"></theme-select
         ></v-list-item>
       </v-list>
     </v-menu>
@@ -101,28 +104,41 @@ export default {
         },
       ];
     },
+    handlerOpenWallet: function () {
+      this.$router.push({
+        path: `/wallet`,
+      });
+    },
+    handlerOpenCommodities: function () {
+      this.$router.push({
+        path: `/commodities`,
+      });
+    },
+    handlerOpenArbitrage: function () {
+      this.$router.push({
+        path: `/arbitrage`,
+      });
+    },
+    handlerOpenTrading: function () {
+      this.$router.push({
+        path: `/trading`,
+      });
+    },
     async auth_logout() {
       this.$auth.logout();
     },
-    async close(i, message_id) {
-
-    },
+    async close(i, message_id) {},
   },
-  mounted() {
+  mounted() {},
 
-  },
-
-  watch: {
-
-  },
+  watch: {},
 
   components: {
     LanguageSelect,
-    ThemeSelect
+    ThemeSelect,
   },
 
   computed: {
-
     userAvatar: function () {
       try {
         this.user_image =
@@ -133,15 +149,14 @@ export default {
       }
     },
     user_in() {
-    //   let name = this.$store.state.auth.user.name;
-    //   let surname = this.$store.state.auth.user.surname;
-    //   let initiales = name && name.length > 0 ? name[0] : "";
-    //   initiales += surname && surname.length > 0 ? surname[0] : "";
+      //   let name = this.$store.state.auth.user.name;
+      //   let surname = this.$store.state.auth.user.surname;
+      //   let initiales = name && name.length > 0 ? name[0] : "";
+      //   initiales += surname && surname.length > 0 ? surname[0] : "";
       return "User";
     },
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style lang="scss" scoped></style>
