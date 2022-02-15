@@ -5,6 +5,20 @@
     fixed
     style="border-bottom: 1px solid #383741; height: 71px"
   >
+    <div class="d-flex mt-8">
+
+    <v-btn elevation="0" class="navLink">{{$t('my_wallet')}}</v-btn>
+    <v-btn elevation="0" class="navLink">{{$t('user_commodities')}}</v-btn>
+    <v-btn elevation="0" class="navLink" >{{$t('user_arbitrage')}}</v-btn>
+    <v-btn elevation="0" class="navLink">{{$t('user_trading')}}</v-btn>
+    <v-text-field
+      label="Search"
+      outlined
+      class="ml-2"
+      dense
+      prepend-inner-icon="mdi-magnify"
+    ></v-text-field>
+    </div>
     <v-spacer></v-spacer>
 
     <v-menu
@@ -91,15 +105,15 @@ export default {
       this.$auth.logout();
     },
     async close(i, message_id) {
-      
+
     },
   },
   mounted() {
-    
+
   },
 
   watch: {
-    
+
   },
 
   components: {
@@ -108,7 +122,7 @@ export default {
   },
 
   computed: {
-    
+
     userAvatar: function () {
       try {
         this.user_image =

@@ -58,7 +58,7 @@ export default {
   deposit: 'депозит',
   withdraw: 'вывод', // изъять
   history_button: 'история',
-  exchange: 'обмен',
+  exchange: 'Обмен',
   // commodities
   commodities: 'товары',
   moskow: 'Московские индексы',
@@ -130,11 +130,11 @@ export default {
   document_type: 'Выберите тип вашего документа',
   choose_crypto: 'Выберите криптовалюту',
   // user menu in header
-  my_wallet: 'мой кошелек',
+  my_wallet: 'Мой кошелек',
   user_forex: 'Форекс',
-  user_commodities: 'товары',
-  user_arbitrage: 'арбитраж',
-  user_trading: 'авто трейд',
+  user_commodities: 'Товары',
+  user_arbitrage: 'Арбитраж',
+  user_trading: 'Авто трейд',
 
   // sidebar
   user_dashboard: 'Главная',
@@ -239,7 +239,7 @@ export default {
   privacy_policy: 'политика конфиденциальности',
   terms_conditions: 'условия',
   read_more: 'подробнее',
-  view_more: 'посмотреть больше',
+  view_more: 'Посмотреть больше',
   // helpers
   password_helper: 'Ваш пароль должен быть не короче 6 символов',
   password_required: 'Необходим пароль!',
