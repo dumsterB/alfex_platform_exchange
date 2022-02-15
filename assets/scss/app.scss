@@ -8,8 +8,7 @@ a {
 }
 
 button,
-select,
-a {
+select {
     cursor: pointer;
     outline: none;
     background-color: transparent;
@@ -61,14 +60,20 @@ img {
     width: 5px !important;
 }
 
+
 /*Apex chart*/
-.apexcharts-legend.apx-legend-position-right{
+
+.apexcharts-legend.apx-legend-position-right {
     display: none;
 }
-.currecyCard{
+
+.currecyCard {
     cursor: pointer;
 }
+
+
 /* Navbar */
-.navLink{
+
+.navLink {
     text-transform: none;
 }
