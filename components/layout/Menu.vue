@@ -6,6 +6,7 @@
     :mini-variant="style_panel_left_minimal"
     mobile-break-point="1"
     mini-variant-width="75"
+    width="280"
     class="elevation-0"
   >
     <div

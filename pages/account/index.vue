@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col :cols="12" :md="8" :lg="8" :sm="12" :xs="12">
-        <v-row>
+        <v-row class="ml-4">
           <v-col
             class="d-flex justify-center"
             v-for="(curr, i) in currencies"
@@ -42,9 +42,13 @@ export default {
     ...mapActions(model, {
       fetchCurrencies: "fetchList",
     }),
+    ...mapActions("data/arbitrage_company", {
+      fetchAC: "fetchList",
+    }),
   },
   async mounted() {
     await this.fetchCurrencies();
+    await this.fetchAC();
   },
 };
 </script>
