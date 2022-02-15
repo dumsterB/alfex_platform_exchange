@@ -34,7 +34,7 @@
               </v-list-item>
               <v-divider></v-divider>
             </div>
-            <div >
+            <div v-if="getLengthArr > 0">
               <v-list-item class="pa-1" >
                   <v-list-item-title>
                     <v-badge class="ml-1 mb-1" dot></v-badge>
@@ -65,35 +65,8 @@ export default {
   name: "Wallet",
   data() {
     return {
-      filteredArr:[],
-      getLengthArr:'',
-      coins: [
-        {
-          color: 'red',
-          currency: 'USD',
-          quantity: '$74.491'
-        },
-        {
-          color: 'pink',
-          currency: 'BNB',
-          quantity: '$134.491'
-        },
-        {
-          color: 'blue',
-          currency: 'ADA',
-          quantity: '$14.421'
-        },
-        {
-          color: 'yellow',
-          currency: 'BTC',
-          quantity: '$74.491'
-        },
-        {
-          color: 'red',
-          currency: 'ETH',
-          quantity: '$74.491'
-        }
-      ],
+      getLengthArr:0,
+      max_items: 5,
       series: [44, 55, 41, 17, 15],
       chartOptions: {
         chart: {
@@ -117,7 +90,15 @@ export default {
     ...mapGetters("data/wallet", {
       wallet: "list",
     }),
-
+    filteredArr() {
+      if (this.wallet.length > this.max_items) {
+        let data = this.wallet.slice(0,5)
+        this.getLengthArr=this.wallet.length-this.max_items
+        return data;
+      }
+      this.getLengthArr=0
+      return this.wallet
+    }
   },
   methods:{
     ...mapActions(wallet, {
@@ -125,10 +106,9 @@ export default {
     })
   },
 
- async mounted() {
+  async mounted() {
     await this.fetchWallet()
-   this.filteredArr=this.wallet.slice(0,5)
-   this.getLengthArr=this.wallet.length-5
+    
  }
 }
 </script>
