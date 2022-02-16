@@ -1,5 +1,8 @@
 <template>
   <div >
+    <template>
+
+    </template>
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-card class="currecyCard" elevation="3" v-bind="attrs" v-on="on" :width="220">
