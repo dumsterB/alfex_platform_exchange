@@ -41,7 +41,7 @@
               <v-list-item class="pa-1">
                 <v-list-item-title>
                   <v-badge class="ml-1 mb-1"  dot></v-badge>
-                  <span class="ml-2"><a href=""> Посмотреть остальные</a> </span></v-list-item-title>
+                  <span class="ml-2"><a href=""> {{$t('others')}}</a> </span></v-list-item-title>
                 <v-spacer></v-spacer>
                 <v-list-item-content class="flexNone">
                   <v-list-item-title> {{ getLengthArr }}</v-list-item-title>

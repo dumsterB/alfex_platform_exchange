@@ -3,7 +3,7 @@
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-card class="currecyCard" elevation="3" v-bind="attrs" v-on="on" :width="220">
-          <v-list-item three-line class="pa-2" @click="$router.push('/')">
+          <v-list-item three-line class="pa-2" @click="$router.push(`/currency?id=${currency.id}`)">
             <v-list-item-content class="pa-1">
               <div class="d-flex">
                 <v-img :src="currency.logo" :max-width="20"></v-img>

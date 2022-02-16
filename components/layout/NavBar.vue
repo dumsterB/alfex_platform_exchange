@@ -35,6 +35,7 @@
       :offset-y="true"
       content-class="elevation-1"
       :close-on-content-click="false"
+      hide-details
     >
       <template v-slot:activator="{ on }">
         <v-card
