@@ -7,11 +7,23 @@
   >
     <a>
       <div class="d-flex justify-space-between">
-        <v-card-title>{{ item.name }}</v-card-title>
+        <v-card-title>{{
+          `${item.name.charAt(0).toUpperCase() + item.name.slice(1)}`
+        }}</v-card-title>
         <v-icon @click="togglerFavorite" class="yellow--text ma-4 pa-1">{{
           isFavorite ? "mdi-star" : "mdi-star-outline"
         }}</v-icon>
       </div>
+
+      <v-list class="mt-4 mr-4 mb-4 ml-4">
+        <v-list-item v-for="(cur, i) in item.currency.slice(0, 5)" :key="i">
+          <v-list-item-avatar>
+            <v-img v-bind:src="cur.logo"></v-img>
+          </v-list-item-avatar>
+          <v-list-item-content v-text="cur.name"></v-list-item-content>
+          <v-list-item-content v-text="cur.symbol"></v-list-item-content>
+        </v-list-item>
+      </v-list>
     </a>
   </v-card>
 </template>

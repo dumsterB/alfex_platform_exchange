@@ -1,7 +1,12 @@
 <template>
-  <v-list tag="section" class="mt-4 mr-4 mb-4 ml-4">
+  <v-list tag="section" class="mt-4 mr-4 mb-4 ml-4 bgColor">
     <v-list-item-group tag="ul" class="pl-0 d-flex flex-wrap">
-      <MarketItem v-for="(company, i) in companies" :key="i" :item="company" />
+      <MarketItem
+        v-for="(company, i) in companies"
+        :key="i"
+        :item="company"
+        v-if="company.currency.length > 0"
+      />
     </v-list-item-group>
   </v-list>
 </template>
@@ -30,3 +35,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.bgColor {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+</style>

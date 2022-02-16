@@ -54,7 +54,6 @@ export default {
   },
   methods: {},
   mounted() {
-    console.log(this.arbitrage_company)
   },
 };
 </script>

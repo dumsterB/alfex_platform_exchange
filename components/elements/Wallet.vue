@@ -1,18 +1,21 @@
 <template>
   <div class="ma-4">
     <div class="d-flex mdc-form-field--space-between">
-      <p class="text-h6">{{$t('my_wallet')}}</p>
-      <a href="">{{$t('view_more')}}</a>
+      <p class="text-h6">{{ $t('my_wallet') }}</p>
+      <a href="">{{ $t('view_more') }}</a>
     </div>
     <v-card class="pa-3">
       <div class="justify-center">
-        <div class="text-center pa-4">
-          <div>Всего</div>
-          <div id="chart">
-            <apexchart width="300" type="donut" :options="chartOptions" :series="series"></apexchart>
+        <div class="text-center justify-center d-flex pa-4">
+          <div>
+            <div>Всего</div>
+            <div id="chart ">
+              <apexchart class="apexchart"  type="donut" :options="chartOptions" :series="series"></apexchart>
+            </div>
+            <strong class="text-h4">$380.787</strong>
+            <div>≈ 0.00870 BTC</div>
           </div>
-          <strong class="text-h4">$380.787</strong>
-          <div>≈ 0.00870 BTC</div>
+
         </div>
         <div class="mt-10">
           <v-card
@@ -21,10 +24,10 @@
             tile
           >
             <div v-for="(coin,i) of filteredArr" :key="i">
-              <v-list-item class="pa-1" >
+              <v-list-item class="pa-1">
                 <v-list-item-content>
                   <v-list-item-title>
-                    <v-badge class="ml-1 mb-1" dot></v-badge>
+                    <v-badge class="ml-1 mb-1"   dot></v-badge>
                     <span class="ml-2">{{ coin.currency.symbol }}</span></v-list-item-title>
                 </v-list-item-content>
                 <v-spacer></v-spacer>
@@ -35,13 +38,13 @@
               <v-divider></v-divider>
             </div>
             <div v-if="getLengthArr > 0">
-              <v-list-item class="pa-1" >
-                  <v-list-item-title>
-                    <v-badge class="ml-1 mb-1" dot></v-badge>
-                    <span class="ml-2" ><a href=""> Посмотреть остальные</a> </span></v-list-item-title>
+              <v-list-item class="pa-1">
+                <v-list-item-title>
+                  <v-badge class="ml-1 mb-1"  dot></v-badge>
+                  <span class="ml-2"><a href=""> Посмотреть остальные</a> </span></v-list-item-title>
                 <v-spacer></v-spacer>
                 <v-list-item-content class="flexNone">
-                  <v-list-item-title> {{getLengthArr}}</v-list-item-title>
+                  <v-list-item-title> {{ getLengthArr }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-divider></v-divider>
@@ -57,18 +60,30 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import apexchart from 'vue-apexcharts'
+
 const wallet = 'data/wallet'
+const currencies ='data/currency'
 export default {
-  components:{
+  components: {
     apexchart
   },
   name: "Wallet",
   data() {
     return {
-      getLengthArr:0,
+      apexArrBalance:[],
+      apexArrSymbol:[],
+      getLengthArr: 0,
       max_items: 5,
-      series: [44, 55, 41, 17, 15],
+      series: [1],
+      dataLabels: {
+        formatter(val, opts) {
+          const name = opts.w.globals.labels[opts.seriesIndex]
+          return [name, val.toFixed(1) + '%']
+        }
+      },
       chartOptions: {
+        //colors:['#F44336', '#E91E63', '#9C27B0'],
+        labels: [],
         chart: {
           type: 'donut',
         },
@@ -76,7 +91,8 @@ export default {
           breakpoint: 480,
           options: {
             chart: {
-              width: 200
+              width: 200,
+              height:300
             },
             legend: {
               position: 'bottom'
@@ -90,26 +106,33 @@ export default {
     ...mapGetters("data/wallet", {
       wallet: "list",
     }),
+    ...mapGetters("data/currency", {
+      currencies: "list",
+    }),
     filteredArr() {
-      if (this.wallet.length > this.max_items) {
-        let data = this.wallet.slice(0,5)
-        this.getLengthArr=this.wallet.length-this.max_items
-        return data;
-      }
-      this.getLengthArr=0
-      return this.wallet
+    return  this.wallet
     }
   },
-  methods:{
+  methods: {
     ...mapActions(wallet, {
       fetchWallet: "fetchList",
-    })
+    }),
+    ...mapActions(currencies, {
+      fetchCurrencies: "fetchList",
+    }),
   },
+
 
   async mounted() {
     await this.fetchWallet()
-    
- }
+    this.fetchCurrencies()
+    this.apexArrSymbol=this.filteredArr.map(e=> `${e.currency.symbol}`)
+    this.apexArrBalance=this.filteredArr.map(e=> e.balance)
+    console.log(this.filteredArr.map(e=> e.balance))
+    this.chartOptions.labels=this.apexArrSymbol
+    this.series=this.apexArrBalance
+    this.chartOptions = Object.assign({}, this.chartOptions)
+  }
 }
 </script>
 

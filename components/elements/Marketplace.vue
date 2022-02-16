@@ -1,11 +1,21 @@
 <template>
   <v-card tag="section" class="mx-auto ml-4 mr-4 mb-4">
-    <v-img class="white--text align-end" height="200px" :src="item.logo">
-    </v-img>
-    <v-card-title tag="h2">{{ item.name }}</v-card-title>
-    <v-card-subtitle tag="h3"> {{ item.created_at }}</v-card-subtitle>
+    <div class="d-flex align-center">
+      <v-card-title tag="h2">{{
+        `${item.name.charAt(0).toUpperCase() + item.name.slice(1)}`
+      }}</v-card-title>
+      <v-img
+        contain="true"
+        height="auto"
+        max-width="200px"
+        v-bind:src="item.logo"
+        class=""
+      >
+      </v-img>
+    </div>
+    <v-card-subtitle tag="h3" v-text="item.created_at"> </v-card-subtitle>
     <v-card-text tag="p" class="text--primary">
-      <div>{{ item.name }}</div>
+      <div v-text="item.name"></div>
     </v-card-text>
   </v-card>
 </template>
@@ -16,12 +26,12 @@ export default {
   props: {
     item: {
       type: Object,
-      default: {},
+      default: () => {
+        return {};
+      },
     },
   },
-  mounted() {
-    console.log(this.props);
-  },
+  mounted() {},
 };
 </script>
 

@@ -4,7 +4,7 @@
     v-model="drawer"
     :permanent="permanent"
     :mini-variant="style_panel_left_minimal"
-    mobile-break-point="1"
+    mobile-breakpoint="1"
     mini-variant-width="75"
     width="280"
     class="elevation-0"
