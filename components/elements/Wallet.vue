@@ -27,7 +27,7 @@
               <v-list-item class="pa-1">
                 <v-list-item-content>
                   <v-list-item-title>
-                    <v-badge class="ml-1 mb-1" :color="chartOptions.colors[i]" dot></v-badge>
+                    <v-badge class="ml-1 mb-1" :color="chartOptions.colors[i]"  dot></v-badge>
                     <span class="ml-2">{{ coin.currency.symbol }}</span></v-list-item-title>
                 </v-list-item-content>
                 <v-spacer></v-spacer>
@@ -123,9 +123,9 @@ export default {
     this.fetchCurrencies()
     this.apexArrSymbol = this.filteredArr.map(e => `${e.currency.symbol}`)
     this.apexArrBalance = this.filteredArr.map(e => e.balance)
-    console.log(this.filteredArr.map(e => e.balance))
     this.chartOptions.labels = this.apexArrSymbol
     this.series=this.apexArrBalance
+    console.log(this.series)
     this.chartOptions = Object.assign({}, this.chartOptions)
   }
 }
