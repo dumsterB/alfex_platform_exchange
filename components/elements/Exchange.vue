@@ -12,17 +12,18 @@
             class="mr-2"
             solo
           ></v-text-field>
-        <v-select
+        <v-autocomplete
           :items="currencies"
           label="BNB"
           class="ml-2"
           item-text="name"
           solo
+          hide-details
         >
           <template v-slot:item="{ item }">
             <img height="20" width="20" :src="item.logo"> <p class="ml-4 mt-3">{{ item.name }}</p>
           </template>
-        </v-select>
+        </v-autocomplete>
       </div>
       <div class="pa-1 mt-2 justify-space-between d-flex"  >
         <v-text-field
@@ -30,17 +31,18 @@
           class="mr-2"
           solo
         ></v-text-field>
-        <v-select
+        <v-autocomplete
           :items="currencies"
           label="BNB"
           class="ml-2"
           item-text="name"
           solo
+          hide-details
         >
           <template v-slot:item="{ item }">
             <img height="20" width="20" :src="item.logo"> <p class="ml-4 mt-3">{{ item.name }}</p>
           </template>
-        </v-select>
+        </v-autocomplete>
       </div>
       <v-btn x-large class="success-btn" elevation="0">{{$t('trade')}}</v-btn>
     </div>

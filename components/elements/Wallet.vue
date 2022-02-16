@@ -8,7 +8,7 @@
       <div class="justify-center">
         <div class="text-center justify-center d-flex pa-4">
           <div>
-            <div>Всего</div>
+            <div>{{$t('total')}}</div>
             <div id="chart ">
               <apexchart class="apexchart" type="donut" :options="chartOptions" :series="series"></apexchart>
             </div>
