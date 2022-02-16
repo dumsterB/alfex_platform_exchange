@@ -1,21 +1,23 @@
 <template>
   <v-app>
     <LoadingScreen :isLoading="isLoading" />
-    <div v-if="!isLoading" class="main-page">
+    <div v-if="!isLoading" class="main-page mb-16">
       <Menu />
       <NavBar />
-      <v-main fluid>
+      <v-main fluid class="mb-16">
         <v-container fluid class="layout_default__content mt-5 ma-0 pa-0">
           <nuxt />
         </v-container>
       </v-main>
     </div>
+    <Footer />
   </v-app>
 </template>
 
 <script>
 import NavBar from "~/components/layout/NavBar";
 import Menu from "~/components/layout/Menu";
+import Footer from "~/components/layout/Footer";
 import LoadingScreen from "~/components/layout/LoadingScreen";
 import { mapActions, mapGetters } from "vuex";
 
@@ -44,6 +46,7 @@ export default {
     NavBar,
     Menu,
     LoadingScreen,
+    Footer,
   },
 };
 </script>
