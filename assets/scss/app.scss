@@ -47,7 +47,9 @@ img {
 
 
 /*CURRENCY*/
-
+.currencyNavbar .v-input__control{
+  width: 40%!important;
+}
 .currency-chip {
     width: 10px !important;
 }
@@ -71,4 +73,8 @@ img {
 /* Navbar */
 .navLink{
     text-transform: none;
+}
+/*Copy*/
+.copyClibpboard{
+  width: 100%;
 }

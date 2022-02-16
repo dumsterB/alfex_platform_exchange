@@ -47,6 +47,17 @@
       <v-btn x-large class="success-btn" elevation="0">{{$t('trade')}}</v-btn>
     </div>
   </v-card>
+  <div class="copyClibpboard mt-2">
+    <h5 class="">{{$t('for_depositing_Bitcoin')}}</h5>
+    <a :href="link_url" class="text-dark" target="_blank" rel="noopener noreferrer" ref="mylink">
+      {{ link_url}}
+    </a>
+    <v-btn v-if="!copied" elevation="0" @click="copyURL">{{$t('copy')}}</v-btn>
+    <v-btn v-if="copied" elevation="0" @click="copyURL">{{$t('copied')}}</v-btn>
+
+  </div>
+
+  <br>
 </div>
 </template>
 
@@ -57,6 +68,8 @@ export default {
   name: "Exchange",
   data(){
     return{
+      link_url:'bc1qu75kr9s9j0hpuf5qugqdastwwhzglz3gfwcz06',
+      copied:false,
       items: [
         {currency:'Foo',img:'https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png'},
         { currency:'Bar',img:'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png'},
@@ -68,6 +81,11 @@ export default {
     ...mapActions(currencies, {
       fetchCurrencies: "fetchList",
     }),
+    copyURL() {
+     navigator.clipboard.writeText(this.link_url)
+      this.copied=true
+      setTimeout(()=>{this.copied=false},6000)
+    }
   },
   computed:{
     ...mapGetters("data/currency", {

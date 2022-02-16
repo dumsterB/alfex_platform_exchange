@@ -1,7 +1,22 @@
 <template>
-  <div>
+  <div class="">
     <v-row>
       <v-col :cols="12" :md="8" :lg="8" :sm="12" :xs="12">
+        <div class="d-flex mdc-form-field--space-between justify-content-beetween currencyNavbar">
+          <div>
+            <p class="text-h6 ml-5">{{$t('markets')}}</p>
+          </div>
+          <div class="d-flex">
+            <p elevation="0" class="mr-4 mt-2"> <v-icon>mdi-filter</v-icon> Фильтры</p>
+            <v-text-field
+              label="Search"
+              outlined
+              class="searchCurrency "
+              dense
+              prepend-inner-icon="mdi-magnify"
+            ></v-text-field>
+          </div>
+        </div>
         <v-row class="ml-4">
           <v-col
             class="d-flex justify-center"

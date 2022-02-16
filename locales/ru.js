@@ -113,7 +113,7 @@ export default {
   // headers
   orLog: 'Или Войдите с помощью',
   questions: 'вопросы',
-  markets: 'все рынки',
+  markets: 'Все рынки',
   trading: 'торговля',
   cryptocurrency: 'вся криптовалюта',
   news_page: 'блог',
