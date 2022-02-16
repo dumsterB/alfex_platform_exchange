@@ -11,6 +11,7 @@
             label="0"
             class="mr-2"
             solo
+            hide-details
           ></v-text-field>
         <v-autocomplete
           :items="currencies"
@@ -25,11 +26,12 @@
           </template>
         </v-autocomplete>
       </div>
-      <div class="pa-1 mt-2 justify-space-between d-flex"  >
+      <div class="pa-1 mt-2 mb-4 justify-space-between d-flex"  >
         <v-text-field
-          label="Оплатить в"
+          :label="$t('pay_with')"
           class="mr-2"
           solo
+          hide-details
         ></v-text-field>
         <v-autocomplete
           :items="currencies"
@@ -47,16 +49,22 @@
       <v-btn x-large class="success-btn" elevation="0">{{$t('trade')}}</v-btn>
     </div>
   </v-card>
-  <div class="copyClibpboard mt-2">
-    <h5 class="">{{$t('for_depositing_Bitcoin')}}</h5>
-    <a :href="link_url" class="text-dark" target="_blank" rel="noopener noreferrer" ref="mylink">
-      {{ link_url}}
-    </a>
-    <v-btn v-if="!copied" elevation="0" @click="copyURL">{{$t('copy')}}</v-btn>
-    <v-btn v-if="copied" elevation="0" @click="copyURL">{{$t('copied')}}</v-btn>
-
-  </div>
-
+  <v-row class="mt-10">
+    <v-col :cols="8">
+      <v-text-field
+        v-model="link_url"
+        :label="$t('for_depositing_Bitcoin')"
+        readonly
+        outlined
+        dense
+        hide-details
+      ></v-text-field>
+    </v-col>
+    <v-col :cols="3">
+      <v-btn v-if="!copied" elevation="0" @click="copyURL">{{$t('copy')}}</v-btn>
+      <v-btn v-if="copied" elevation="0" @click="copyURL">{{$t('copied')}}</v-btn>
+    </v-col>
+  </v-row>
   <br>
 </div>
 </template>

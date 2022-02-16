@@ -19,7 +19,7 @@
         $t("user_trading")
       }}</v-btn>
       <v-text-field
-        label="Search"
+        :label="$t('market_search_bar_placeholder')"
         outlined
         class="ml-2"
         dense

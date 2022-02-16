@@ -77,7 +77,7 @@ export default {
       max_items: 5,
       series: [1,2,3,3],
       chartOptions: {
-        colors:['#F44336', '#E91E63', '#9C27B0'],
+        colors:['#53d923', '#d9a823', '#0fb7d9', '#7762a8', '#b52d9c', '#04151a'],
         labels: [],
         chart: {
           type: 'donut',
@@ -94,7 +94,8 @@ export default {
             }
           }
         }]
-      }
+      },
+      
     }
   },
   computed: {
