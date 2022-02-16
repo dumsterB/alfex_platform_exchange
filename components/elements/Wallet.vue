@@ -10,7 +10,7 @@
           <div>
             <div>Всего</div>
             <div id="chart ">
-              <apexchart class="apexchart"  type="donut" :options="chartOptions" :series="series"></apexchart>
+              <apexchart class="apexchart" type="donut" :options="chartOptions" :series="series"></apexchart>
             </div>
             <strong class="text-h4">$380.787</strong>
             <div>≈ 0.00870 BTC</div>
@@ -27,7 +27,7 @@
               <v-list-item class="pa-1">
                 <v-list-item-content>
                   <v-list-item-title>
-                    <v-badge class="ml-1 mb-1"   dot></v-badge>
+                    <v-badge class="ml-1 mb-1" :color="chartOptions.colors[i]"  dot></v-badge>
                     <span class="ml-2">{{ coin.currency.symbol }}</span></v-list-item-title>
                 </v-list-item-content>
                 <v-spacer></v-spacer>
@@ -41,7 +41,7 @@
               <v-list-item class="pa-1">
                 <v-list-item-title>
                   <v-badge class="ml-1 mb-1"  dot></v-badge>
-                  <span class="ml-2"><a href=""> Посмотреть остальные</a> </span></v-list-item-title>
+                  <span class="ml-2"><a href=""> {{$t('others')}}</a> </span></v-list-item-title>
                 <v-spacer></v-spacer>
                 <v-list-item-content class="flexNone">
                   <v-list-item-title> {{ getLengthArr }}</v-list-item-title>
@@ -62,7 +62,7 @@ import {mapActions, mapGetters} from "vuex";
 import apexchart from 'vue-apexcharts'
 
 const wallet = 'data/wallet'
-const currencies ='data/currency'
+const currencies = 'data/currency'
 export default {
   components: {
     apexchart
@@ -70,19 +70,14 @@ export default {
   name: "Wallet",
   data() {
     return {
-      apexArrBalance:[],
-      apexArrSymbol:[],
+      apexArrBalance: [],
+      apexArrSymbol: [],
+      someArray:[],
       getLengthArr: 0,
       max_items: 5,
-      series: [1],
-      dataLabels: {
-        formatter(val, opts) {
-          const name = opts.w.globals.labels[opts.seriesIndex]
-          return [name, val.toFixed(1) + '%']
-        }
-      },
+      series: [1,2,3,3],
       chartOptions: {
-        //colors:['#F44336', '#E91E63', '#9C27B0'],
+        colors:['#F44336', '#E91E63', '#9C27B0'],
         labels: [],
         chart: {
           type: 'donut',
@@ -92,7 +87,7 @@ export default {
           options: {
             chart: {
               width: 200,
-              height:300
+              height: 300
             },
             legend: {
               position: 'bottom'
@@ -110,7 +105,7 @@ export default {
       currencies: "list",
     }),
     filteredArr() {
-    return  this.wallet
+      return this.wallet
     }
   },
   methods: {
@@ -126,11 +121,11 @@ export default {
   async mounted() {
     await this.fetchWallet()
     this.fetchCurrencies()
-    this.apexArrSymbol=this.filteredArr.map(e=> `${e.currency.symbol}`)
-    this.apexArrBalance=this.filteredArr.map(e=> e.balance)
-    console.log(this.filteredArr.map(e=> e.balance))
-    this.chartOptions.labels=this.apexArrSymbol
+    this.apexArrSymbol = this.filteredArr.map(e => `${e.currency.symbol}`)
+    this.apexArrBalance = this.filteredArr.map(e => e.balance)
+    this.chartOptions.labels = this.apexArrSymbol
     this.series=this.apexArrBalance
+    console.log(this.series)
     this.chartOptions = Object.assign({}, this.chartOptions)
   }
 }
