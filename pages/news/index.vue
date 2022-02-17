@@ -30,13 +30,13 @@ export default {
       news: "news",
     }),
   },
-  // methods: {
-  //   ...mapActions(model, {
-  //     fetchNews: "fetchNews",
-  //   }),
-  // },
-  // async mounted() {
-  //   await this.fetchNews();
-  // },
+  methods: {
+    ...mapActions(model, {
+      fetchNews: "fetchNews",
+    }),
+  },
+  async mounted() {
+    await this.fetchNews();
+  },
 };
 </script>

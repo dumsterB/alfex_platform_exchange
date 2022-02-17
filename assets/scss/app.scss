@@ -1,107 +1,118 @@
 /* BASE */
 
 a {
-  text-decoration: none;
-  color: #23ad41 !important;
-  display: block;
-  outline: none;
-  text-transform: capitalize;
+    text-decoration: none;
+    color: #23ad41 !important;
+    display: block;
+    outline: none;
+    text-transform: capitalize;
 }
 
 button,
 select,
 a {
-  cursor: pointer;
-  outline: none;
-  background-color: transparent;
-  border: none;
-  color: inherit;
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    color: inherit;
 }
 
 ul,
 ol,
 li {
-  list-style: none;
+    list-style: none;
 }
 
 img {
-  display: block;
+    display: block;
 }
 
 .flexNone {
-  flex: none;
+    flex: none;
 }
 
 .text-gray {
-  color: #717e95;
+    color: #717e95;
 }
+
 
 /* CUSTOM BUTTONS AND TEXTS*/
 
 .success-btn {
-  width: 100%;
-  background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
-  color: white !important;
-  border-radius: 12px;
+    width: 100%;
+    background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
+    color: white !important;
+    border-radius: 12px;
 }
 
 .success-btn-half {
-  background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
-  color: white !important;
-  border-radius: 12px;
-  width: 150px;
+    background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
+    color: white !important;
+    border-radius: 12px;
+    width: 150px;
 }
 
 .simple-btn-half {
-  color: black;
-  border-radius: 12px;
-  border: 1px solid #23ad41;
-  background: transparent;
-  width: 150px;
+    color: black;
+    border-radius: 12px;
+    border: 1px solid #23ad41;
+    background: transparent;
+    width: 150px;
 }
 
 .success-text {
-  color: #23ad41;
+    color: #23ad41;
 }
 
 
 /*CURRENCY*/
+
 .currencyNavbar .v-input__control {
-  width: 40% !important;
+    width: 40% !important;
 }
 
 .currency-chip {
-  width: 10px !important;
+    width: 10px !important;
 }
 
 .coinList .chip {
-  background: lightgray;
-  padding: 1px;
-  text-align: center;
-  font-size: 13px;
-  border-radius: 20px;
-  width: 5px !important;
+    background: lightgray;
+    padding: 1px;
+    text-align: center;
+    font-size: 13px;
+    border-radius: 20px;
+    width: 5px !important;
 }
 
+
 /*Apex chart*/
+
 .apexcharts-legend.apx-legend-position-right {
-  display: none;
+    display: none;
 }
 
 .currecyCard {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 
 /* Navbar */
+
 .navLink {
-  text-transform: none;
+    text-transform: none;
 }
 
+
 /*Copy*/
+
 .copyClibpboard {
-  width: 100%;
+    width: 100%;
 }
+
+
 /*Check*/
-.check-card{
-  border:2px solid #23ad41!important;
+
+.check-card {
+    border: 2px solid #23ad41 !important;
 }
