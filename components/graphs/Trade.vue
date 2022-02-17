@@ -13,12 +13,14 @@
     :color-candle-dw="colors.candle_dw"
     :color-wick-dw="colors.wick_dw"
     :color-title="colors.tvTitle"
+    ref="tvjschart"
   ></trading-vue>
 </template>
 <script>
-import { DataCube } from 'trading-vue-js'
+import { DataCube } from "trading-vue-js";
 import TradingVue from "trading-vue-js";
-import Data from './data.json'
+import Data from "./data.json";
+import TestOverlay from "./TestOverlay";
 
 export default {
   name: "app",
@@ -35,12 +37,16 @@ export default {
     height: {
       type: Number,
       default: 500,
-    }
+    },
+    ovls: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       chart: new DataCube(Data),
-      overlays: []
+      overlays: [],
     };
   },
   computed: {
@@ -61,7 +67,17 @@ export default {
             candle_dw: "black",
             wick_dw: "black",
           };
-    }
+    },
+  },
+  watch: {
+    ovls() {
+      if (this.ovls) {
+        this.overlays = [TestOverlay];
+      } else {
+        this.overlays = [];
+      }
+      this.$refs.tvjschart.resetChart();
+    },
   },
 };
 </script>

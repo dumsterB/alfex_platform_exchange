@@ -97,7 +97,6 @@ export default {
     },
   },
   async created() {
-    await this.fetchList();
     this.resetList();
     this.interv = setInterval(() => {
       this.resetList();

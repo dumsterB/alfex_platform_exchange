@@ -10,13 +10,19 @@
       :key="i"
     >
       <p class="ma-0 pa-0 mt-3">{{ val.title }}</p>
-      <p class="ma-0 pa-0 mt-1">{{ val.value }}</p>
+      <p class="ma-0 pa-0 mt-1">{{ val.value.toFixed(4) }}</p>
     </v-col>
   </v-row>
 </template>
 
 <script>
 export default {
+  props: {
+    currency: {
+      type: String,
+      default: "btc",
+    },
+  },
   data() {
     return {
       indicators: [
@@ -46,6 +52,15 @@ export default {
         },
       ],
     };
+  },
+  watch: {
+    currency() {
+      let indicator = this.indicators;
+      indicator.forEach((el) => {
+        el.value = (0.5 + Math.random()) * el.value;
+      });
+      this.indicators = Object.assign([], indicator);
+    },
   },
 };
 </script>
