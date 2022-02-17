@@ -36,6 +36,11 @@
             <TradeGraph :width="graphWidth" :height="graphHeight"></TradeGraph>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col>
+            <TableTrades></TableTrades>
+          </v-col>
+        </v-row>
       </v-col>
       <v-col :cols="12" :md="4" :lg="4" :sm="12" :xs="12"> </v-col>
     </v-row>
@@ -46,12 +51,14 @@
 import { mapGetters, mapActions } from "vuex";
 import Indicators from "~/components/elements/currencies/Indicators";
 import TradeGraph from "~/components/graphs/Trade";
+import TableTrades from "~/components/data/TableTrades";
 const model = "data/currency";
 
 export default {
   components: {
     Indicators,
     TradeGraph,
+    TableTrades,
   },
   data() {
     return {
@@ -87,9 +94,7 @@ export default {
     onResize(event) {
       this.graphWidth = (window.innerWidth * 2) / 3 - 250;
     },
-    initGrpaphWidth() {
-        
-    }
+    initGrpaphWidth() {},
   },
   created() {},
   async mounted() {
