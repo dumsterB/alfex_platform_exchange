@@ -15,7 +15,7 @@
               class="crypto-select ml-4 mt-4"
               v-model="curr_id"
               :items="currencies"
-              item-text="short_name"
+              item-text="name"
               item-value="id"
               outlined
               dense
@@ -57,8 +57,8 @@ export default {
     return {
       is_switched: false,
       curr_id: null,
-      graphWidth: window.innerWidth * 2 / 3 - 300,
-      graphHeight: 600,
+      graphWidth: (window.innerWidth * 2) / 3 - 250,
+      graphHeight: 500,
     };
   },
   computed: {
@@ -71,8 +71,8 @@ export default {
         this.$router.currentRoute.query &&
         this.$router.currentRoute.query.id
       ) {
-        this.curr_id = this.$router.currentRoute.query.id;
-        return this.curr_by_id(this.curr_id);
+        let curr_id = parseInt(this.$router.currentRoute.query.id);
+        return this.curr_by_id(curr_id);
       }
       return {};
     },
@@ -85,13 +85,19 @@ export default {
       fetchAC: "fetchList",
     }),
     onResize(event) {
-      this.graphWidth = window.innerWidth * 2 / 3 - 400;
+      this.graphWidth = (window.innerWidth * 2) / 3 - 250;
     },
+    initGrpaphWidth() {
+        
+    }
   },
   created() {},
-  mounted() {
-    this.fetchCurrencies();
+  async mounted() {
+    await this.fetchCurrencies();
     this.fetchAC();
+    if (this.$router.currentRoute.query && this.$router.currentRoute.query.id) {
+      this.curr_id = parseInt(this.$router.currentRoute.query.id);
+    }
     window.addEventListener("resize", this.onResize);
   },
   beforeDestroy() {

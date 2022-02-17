@@ -5,10 +5,12 @@ a {
     color: #23ad41 !important;
     display: block;
     outline: none;
+    text-transform: capitalize;
 }
 
 button,
-select {
+select,
+a {
     cursor: pointer;
     outline: none;
     background-color: transparent;
@@ -30,6 +32,10 @@ img {
     flex: none;
 }
 
+.text-gray {
+    color: #717e95;
+}
+
 
 /* CUSTOM BUTTONS AND TEXTS*/
 
@@ -40,12 +46,31 @@ img {
     border-radius: 12px;
 }
 
+.success-btn-half {
+    background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
+    color: white !important;
+    border-radius: 12px;
+    width: 150px;
+}
+
+.simple-btn-half {
+    color: black;
+    border-radius: 12px;
+    border: 1px solid #23ad41;
+    background: transparent;
+    width: 150px;
+}
+
 .success-text {
     color: #23ad41;
 }
 
 
 /*CURRENCY*/
+
+.currencyNavbar .v-input__control {
+    width: 40% !important;
+}
 
 .currency-chip {
     width: 10px !important;
@@ -76,4 +101,18 @@ img {
 
 .navLink {
     text-transform: none;
+}
+
+
+/*Copy*/
+
+.copyClibpboard {
+    width: 100%;
+}
+
+
+/*Check*/
+
+.check-card {
+    border: 2px solid #23ad41 !important;
 }

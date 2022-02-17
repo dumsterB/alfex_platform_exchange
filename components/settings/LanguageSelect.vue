@@ -5,6 +5,7 @@
     outlined
     dense
     hide-details
+    @change="modeChange"
     item-text="text"
     item-value="value"
     :label="$t('CurrentLanguage')"
@@ -30,10 +31,14 @@ export default {
     },
     ...mapGetters("config/data", {
       langs: "languages",
+      default_language: "default_language"
     }),
   },
 
   methods: {
+    modeChange() {
+      localStorage.setItem("language", this.CURRENT_LOCALE);
+    }
   },
 };
 </script>

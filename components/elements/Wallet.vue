@@ -2,13 +2,13 @@
   <div class="ma-4">
     <div class="d-flex mdc-form-field--space-between">
       <p class="text-h6">{{ $t('my_wallet') }}</p>
-      <a href="">{{ $t('view_more') }}</a>
+      <a @click="$router.push('/wallet')">{{ $t('view_more') }}</a>
     </div>
     <v-card class="pa-3">
       <div class="justify-center">
         <div class="text-center justify-center d-flex pa-4">
           <div>
-            <div>Всего</div>
+            <div>{{$t('total')}}</div>
             <div id="chart ">
               <apexchart class="apexchart" type="donut" :options="chartOptions" :series="series"></apexchart>
             </div>
@@ -77,7 +77,7 @@ export default {
       max_items: 5,
       series: [1,2,3,3],
       chartOptions: {
-        colors:['#F44336', '#E91E63', '#9C27B0'],
+        colors:['#53d923', '#d9a823', '#0fb7d9', '#7762a8', '#b52d9c', '#04151a'],
         labels: [],
         chart: {
           type: 'donut',
@@ -94,7 +94,8 @@ export default {
             }
           }
         }]
-      }
+      },
+
     }
   },
   computed: {
@@ -125,7 +126,6 @@ export default {
     this.apexArrBalance = this.filteredArr.map(e => e.balance)
     this.chartOptions.labels = this.apexArrSymbol
     this.series=this.apexArrBalance
-    console.log(this.series)
     this.chartOptions = Object.assign({}, this.chartOptions)
   }
 }

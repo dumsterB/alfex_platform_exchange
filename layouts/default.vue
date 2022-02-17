@@ -27,10 +27,35 @@ export default {
       isLoading: true,
     };
   },
-  computed: {},
-  methods: {},
+  computed: {
+    ...mapGetters("config/data", {
+      default_language: "default_language"
+    }),
+  },
+  methods: {
+    preload_models() {
+      if (this.$store.state.auth.user) {
+        let htmlElement = document.documentElement;
+        let theme = localStorage.getItem("theme");
+        if (!theme) {
+          theme = "light";
+        }
+        let lang = localStorage.getItem("language");
+        if (!lang) {
+          lang = this.default_language;
+        }
+        if (theme == "dark") {
+          this.$vuetify.theme.dark = true;
+        }
+        localStorage.setItem("theme", theme);
+        localStorage.setItem("language", lang);
+        htmlElement.setAttribute("theme", theme);
+      }
+    },
+  },
   async created() {
     if (this.$store.state.auth.user) {
+      this.preload_models();
     } else {
       if (this.$router.history.current.path != "/auth/registration") {
         this.$router.push({
