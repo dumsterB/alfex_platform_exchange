@@ -10,7 +10,9 @@
         <span :style="diffColor(item.difference)">{{ item.difference }}</span>
       </template>
       <template v-slot:[`item.difference_perc`]="{ item }">
-        <span :style="diffColor(item.difference)">{{ item.difference_perc }}</span>
+        <span :style="diffColor(item.difference)">{{
+          item.difference_perc
+        }}</span>
       </template>
     </v-data-table>
   </div>
