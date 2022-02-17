@@ -96,11 +96,19 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .ac-toolltip {
   width: 160px;
 }
 .coinList {
   width: 80px;
+}
+.chip {
+  background-color: #3d3d3d;
+}
+html[theme="light"] {
+  .chip {
+    background-color: #ebebeb;
+  }
 }
 </style>
