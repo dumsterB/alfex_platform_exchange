@@ -95,7 +95,7 @@ export default {
           }
         }]
       },
-      
+
     }
   },
   computed: {
@@ -126,7 +126,6 @@ export default {
     this.apexArrBalance = this.filteredArr.map(e => e.balance)
     this.chartOptions.labels = this.apexArrSymbol
     this.series=this.apexArrBalance
-    console.log(this.series)
     this.chartOptions = Object.assign({}, this.chartOptions)
   }
 }
