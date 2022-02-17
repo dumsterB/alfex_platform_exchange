@@ -40,11 +40,11 @@
             <div v-if="getLengthArr > 0">
               <v-list-item class="pa-1">
                 <v-list-item-title>
-                  <v-badge class="ml-1 mb-1"  dot></v-badge>
-                  <span class="ml-2"><a href=""> {{$t('others')}}</a> </span></v-list-item-title>
+                  <v-badge class="ml-1 mb-1"  dot :color="chartOptions.colors[5]"></v-badge>
+                  <span class="ml-2"> {{getLengthArr + " " + $t('others')}}</span></v-list-item-title>
                 <v-spacer></v-spacer>
                 <v-list-item-content class="flexNone">
-                  <v-list-item-title> {{ getLengthArr }}</v-list-item-title>
+                  <v-list-item-title> {{ other_sum }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-divider></v-divider>
@@ -74,6 +74,7 @@ export default {
       apexArrSymbol: [],
       someArray:[],
       getLengthArr: 0,
+      other_sum: 0,
       max_items: 5,
       series: [1,2,3,3],
       chartOptions: {
@@ -106,7 +107,17 @@ export default {
       currencies: "list",
     }),
     filteredArr() {
-      return this.wallet
+      if (this.wallet && this.wallet.length > 5) {
+        this.getLengthArr = this.wallet.length - 5;
+        let other_sum = 0;
+        for (let i = 5; i < this.wallet.length; i++) {
+          console.log(this.wallet[i].balance)
+          other_sum += this.wallet[i].balance;
+        }
+        this.other_sum = other_sum;
+        return this.wallet.slice(0, 5);
+      }
+      return this.wallet;
     }
   },
   methods: {
@@ -124,6 +135,10 @@ export default {
     this.fetchCurrencies()
     this.apexArrSymbol = this.filteredArr.map(e => `${e.currency.symbol}`)
     this.apexArrBalance = this.filteredArr.map(e => e.balance)
+    if (this.getLengthArr > 0) {
+      this.apexArrBalance.push(this.other_sum);
+      this.apexArrSymbol.push(this.$t('others'));
+    }
     this.chartOptions.labels = this.apexArrSymbol
     this.series=this.apexArrBalance
     this.chartOptions = Object.assign({}, this.chartOptions)
