@@ -2,7 +2,7 @@
 <div>
   <v-card
     class="mx-auto pa-2"
-    max-width="350"
+    max-width="380"
     outlined
   >
     <v-list-item three-line>
