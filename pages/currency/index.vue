@@ -44,7 +44,7 @@
         <v-row>
           <v-col>
             <TableTrades v-if="!is_switched"></TableTrades>
-            <div v-else></div>
+            <TableASession v-else></TableASession>
           </v-col>
         </v-row>
       </v-col>
@@ -62,6 +62,7 @@ import Indicators from "~/components/elements/currencies/Indicators";
 import TradeGraph from "~/components/graphs/Trade";
 import TableTrades from "~/components/data/TableTrades";
 import TableAC from "~/components/data/TableAC";
+import TableASession from "~/components/data/TableASession";
 import Platforms from "~/components/elements/currencies/Platforms";
 const model = "data/currency";
 
@@ -72,6 +73,7 @@ export default {
     TableTrades,
     TableAC,
     Platforms,
+    TableASession
   },
   data() {
     return {
@@ -105,6 +107,9 @@ export default {
     ...mapActions("data/trade", {
       fetchTrades: "fetchList",
     }),
+    ...mapActions("data/arbitrage_session", {
+      fetchAS: "fetchList",
+    }),
     onResize(event) {
       this.graphWidth = (window.innerWidth * 2) / 3 - 250;
     },
@@ -113,6 +118,7 @@ export default {
   async created() {
     await this.fetchCurrencies();
     this.fetchAC();
+    this.fetchAS();
     this.fetchTrades();
   },
   async mounted() {
