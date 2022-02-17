@@ -528,4 +528,5 @@ export default {
   for_depositing_Bitcoin: "Do wpłacania Bitcoina:",
   copy: "kopiuj",
   copied: "skopiowane",
+  no_market_place: "Obecnie nie ma aktywnych rynków giełdowych",
 };

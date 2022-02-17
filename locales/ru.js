@@ -565,4 +565,5 @@ export default {
   for_depositing_Bitcoin: "Для внесения Bitcoin:",
   copy: "копировать",
   copied: "скопировано",
+  no_market_place: "Сегодня, нет активных биржевых рынков",
 };

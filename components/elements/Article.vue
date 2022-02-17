@@ -24,9 +24,7 @@ export default {
     },
   },
 
-  mounted() {
-    // console.log(`Article: `, this.item);
-  },
+  mounted() {},
 };
 </script>
 <style lang="scss" scoped></style>

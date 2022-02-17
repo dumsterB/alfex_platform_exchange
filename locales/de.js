@@ -567,4 +567,5 @@ export default {
   for_depositing_Bitcoin: "Für die Einzahlung von Bitcoin:",
   copy: "kopieren",
   copied: "kopiert",
+  no_market_place: "Heute gibt es keine aktiven Börsenmärkte",
 };

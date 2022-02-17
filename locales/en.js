@@ -522,4 +522,5 @@ export default {
   for_depositing_Bitcoin: "For depositing Bitcoin:",
   copy: "copy",
   copied: "copied",
+  no_market_place: "Today, there are no active exchange markets",
 };

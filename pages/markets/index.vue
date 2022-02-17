@@ -7,6 +7,9 @@
         :item="company"
         v-if="company.currency.length > 0"
       />
+      <p v-if="!companies.length">
+        {{ $t("no_market_place") }}
+      </p>
     </v-list-item-group>
   </v-list>
 </template>

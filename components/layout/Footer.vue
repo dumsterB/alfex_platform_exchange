@@ -3,7 +3,7 @@
     <v-card flat tile width="100%" class="text-center">
       <v-card-text class="pa-1">
         <v-btn v-for="icon in icons" :key="icon" class="mx-2" icon>
-          <v-icon size="24px">
+          <v-icon color="#9D9D9D" size="24px">
             {{ icon }}
           </v-icon>
         </v-btn>

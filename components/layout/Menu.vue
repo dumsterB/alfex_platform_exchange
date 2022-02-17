@@ -62,7 +62,7 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-list-item-action v-on="on">
-                    <v-icon color="#444351" size="24">{{ item.icon }}</v-icon>
+                    <v-icon color="#9D9D9D" size="24">{{ item.icon }}</v-icon>
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title v-text="$t(item.title)" />
