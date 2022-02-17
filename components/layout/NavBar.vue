@@ -40,7 +40,7 @@
       <template v-slot:activator="{ on }">
         <v-card
           flat
-          class="d-flex flex-columns align-center mt-2 py-2 pr-2 pl-4"
+          class="account-menu d-flex flex-columns align-center mt-2 py-2 pr-2 pl-4"
           style="width: 200px"
           v-on="on"
         >
@@ -160,4 +160,15 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.account-menu {
+  background-color: rgb(39, 39, 39) !important;
+}
+
+html[theme="light"] {
+  .account-menu {
+    background-color: rgb(245, 245, 245) !important;
+  }
+}
+
+</style>

@@ -2,7 +2,7 @@
 <div class="ma-4">
   <div class="d-flex mdc-form-field--space-between">
     <p class="text-h6">{{$t('exchange')}}</p>
-    <a href="">{{$t('view_more')}}</a>
+    <a href="#">{{$t('view_more')}}</a>
   </div>
   <v-card class="pa-3">
     <div class="justify-center text-center">
@@ -12,10 +12,11 @@
             class="mr-2"
             solo
             hide-details
+            type="number"
           ></v-text-field>
         <v-autocomplete
           :items="currencies"
-          label="BNB"
+          label="BTC"
           class="ml-2"
           item-text="name"
           solo
@@ -32,10 +33,11 @@
           class="mr-2"
           solo
           hide-details
+          type="number"
         ></v-text-field>
         <v-autocomplete
-          :items="currencies"
-          label="BNB"
+          :items="available_currs"
+          label="USD"
           class="ml-2"
           item-text="name"
           solo
@@ -58,11 +60,12 @@
         outlined
         dense
         hide-details
+        ref="clone" 
       ></v-text-field>
     </v-col>
     <v-col :cols="3">
       <v-btn v-if="!copied" elevation="0" @click="copyURL">{{$t('copy')}}</v-btn>
-      <v-btn v-if="copied" elevation="0" @click="copyURL">{{$t('copied')}}</v-btn>
+      <v-btn v-if="copied" elevation="0" disabled @click="copyURL">{{$t('copied')}}</v-btn>
     </v-col>
   </v-row>
   <br>
@@ -77,28 +80,33 @@ export default {
   data(){
     return{
       link_url:'bc1qu75kr9s9j0hpuf5qugqdastwwhzglz3gfwcz06',
-      copied:false,
-      items: [
-        {currency:'Foo',img:'https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png'},
-        { currency:'Bar',img:'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png'},
-        {currency:'Fizz',img:'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png'},
-        {currency:'Buzz',img:'https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png'}],
+      copied:false
     }
   },
   methods:{
     ...mapActions(currencies, {
       fetchCurrencies: "fetchList",
     }),
-    copyURL() {
-     navigator.clipboard.writeText(this.link_url)
-      this.copied=true
-      setTimeout(()=>{this.copied=false},6000)
+    async copyURL() {
+      try {
+        await navigator.clipboard.writeText(this.link_url);
+        this.copied = true;
+        setTimeout(()=>{this.copied=false},6000)
+      } catch(e) {
+        console.log(e);
+      }
     }
   },
   computed:{
-    ...mapGetters("data/currency", {
+    ...mapGetters(currencies, {
       currencies: "list",
     }),
+    ...mapGetters("data/wallet", {
+      wallets: "list",
+    }),
+    available_currs() {
+      return this.wallets.map(el => el.currency);
+    }
   }
 }
 </script>

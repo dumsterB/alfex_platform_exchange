@@ -7,7 +7,6 @@
     hide-details
     @change="modeChange"
     :label="$t('Theme')"
-    :readonly="readonly"
   ></v-select>
 </template>
 <script>
