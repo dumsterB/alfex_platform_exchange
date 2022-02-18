@@ -28,6 +28,14 @@ img {
     display: block;
 }
 
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+    display: none;
+}
+
 .flexNone {
     flex: none;
 }

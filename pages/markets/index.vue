@@ -35,6 +35,7 @@ export default {
   },
   async mounted() {
     await this.fetchAC();
+    console.log("this.companies :>> ", this.companies);
   },
 };
 </script>
