@@ -13,7 +13,7 @@
     </div>
     <v-card-subtitle tag="h3" v-text="item.created_at"> </v-card-subtitle>
     <v-card-text tag="p" class="text--primary">
-      <div v-text="item.name"></div>
+      <div v-text="item.desc"></div>
     </v-card-text>
   </v-card>
 </template>
