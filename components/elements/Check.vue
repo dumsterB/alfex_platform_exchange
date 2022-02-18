@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-card
-      class="mx-auto  check-card"
-      max-width="380"
-      outlined
+      class="mx-auto  check-card pa-3"
+      max-width="430"
+      elevation="1"
     >
       <v-list-item three-line>
         <v-list-item-content>
@@ -12,7 +12,7 @@
               <strong>{{title}}</strong>
             </v-list-item-title>
             <v-chip
-              color="blue"
+              color="green"
               outlined
               class="historyChip"
             >
@@ -21,7 +21,7 @@
           </div>
 
           <br><br>
-          <v-row>
+          <v-row class="mt-10">
             <v-col>
               <p class="text-gray">{{$t('total_equity')}}</p>
               <p class="text-h6"> <strong>{{totalEquity}}</strong></p>

@@ -1,14 +1,19 @@
 <template>
   <div class="wallet">
       <v-row>
-        <v-col md="4" class="ma-2">
+        <v-col md="4" >
+          <div class="ma-2">
           <GeneralCapital></GeneralCapital>
           <br>
           <Check :title="spot_title" :totalEquity="spot_total_equity" :total_equity_usdt="spot_total_equity_usdt" :available_balance="spot_available_balance" :available_balance_usdt="spot_available_balance_usdt" ></Check>
           <br>
           <Check :title="fiat_title" :totalEquity="fiat_total_equity" :total_equity_usdt="fiat_total_equity_usdt" :available_balance="fiat_available_balance" :available_balance_usdt="fiat_available_balance_usdt" > </Check>
+          </div>
         </v-col>
         <v-col md="8">
+          <div class="ma-2">
+            <TableTransactions></TableTransactions>
+          </div>
         </v-col>
       </v-row>
   </div>
@@ -17,9 +22,11 @@
 <script>
 import GeneralCapital from "@/components/elements/GeneralCapital";
 import Check from "@/components/elements/Check";
+import TableTransactions from "@/components/elements/TableTransactions";
+
 
 export default {
-  components: {GeneralCapital,Check},
+  components: {GeneralCapital,Check,TableTransactions},
   mounted() {},
   data(){
     return{

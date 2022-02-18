@@ -17,7 +17,9 @@ a {
     border: none;
     color: inherit;
 }
-
+.v-application p {
+  margin-bottom: 10px;
+}
 ul,
 ol,
 li {
@@ -62,7 +64,7 @@ img {
 }
 
 .success-text {
-    color: #23ad41;
+    color: #23ad41!important;
 }
 
 
@@ -118,4 +120,14 @@ img {
 .historyChip{
   position: absolute;
   right: 5px;
+}
+/*Data table*/
+.theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(.v-data-table__expanded__content):not(.v-data-table__empty-wrapper) {
+  height: 70px;
+}
+.text-start{
+  font-size: 1rem!important;
+}
+.v-data-table-header__icon{
+  display: none!important;
 }
