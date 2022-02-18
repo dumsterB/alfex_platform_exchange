@@ -1,5 +1,6 @@
 <template>
-  <!-- <trading-vue
+  <div>
+    <!-- <trading-vue
       :data="chart"
       :width="width"
       :height="height"
@@ -15,12 +16,23 @@
       :color-title="colors.tvTitle"
       ref="tvjschart"
     ></trading-vue> -->
-  <!-- TradingView Widget BEGIN -->
-  <div class="tradingview-widget-container" id="root-tradingview">
-    <div id="tradingview_22087"></div>
-    <div class="tradingview-widget-copyright"></div>
+    <!-- TradingView Widget BEGIN -->
+    <div v-if="!theme" class="tradingview-widget-container" id="root-tradingview">
+      <div id="tradingview_22087"></div>
+      <div class="tradingview-widget-copyright"></div>
+    </div>
+    <!-- TradingView Widget BEGIN -->
+    <div
+      v-if="theme"
+      class="tradingview-widget-container"
+      id="root-tradingview-dark"
+    >
+      <div id="tradingview_aaf06"></div>
+      <div class="tradingview-widget-copyright"></div>
+    </div>
+    <!-- TradingView Widget END -->
+    <!-- TradingView Widget END -->
   </div>
-  <!-- TradingView Widget END -->
 </template>
 <script>
 import { DataCube } from "trading-vue-js";
@@ -48,6 +60,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    currency: {
+      type: String,
+      default: "BTC"
+    },
+    platform: {
+      type: String,
+      default: "BINANCE"
+    }
   },
   data() {
     return {
@@ -74,6 +94,9 @@ export default {
             wick_dw: "black",
           };
     },
+    theme() {
+      return this.$vuetify.theme.dark;
+    },
   },
   watch: {
     ovls() {
@@ -86,34 +109,78 @@ export default {
         this.$refs.tvjschart.resetChart();
       }
     },
+    theme() {
+      this.initTV();
+    },
+    currency() {
+      this.initTV();
+    },
+    platform() {
+      this.initTV();
+    }
   },
   mounted() {
-    let dcr = document.createElement("script");
-    dcr.setAttribute("type", "text/javascript");
-    dcr.setAttribute("src", "https://s3.tradingview.com/tv.js");
-    document.getElementById("root-tradingview").appendChild(dcr);
-    setTimeout(() => {
-      let crtobj = document.createElement("script");
-      crtobj.setAttribute("type", "text/javascript");
-      crtobj.innerHTML = `new TradingView.widget(
-      {
-        "width": 980,
-        "height": 610,
-        "symbol": "BYBIT:BTCUSD",
-        "interval": "D",
-        "timezone": "Etc/UTC",
-        "theme": "light",
-        "style": "1",
-        "locale": "ru",
-        "toolbar_bg": "#f1f3f6",
-        "enable_publishing": false,
-        "hide_side_toolbar": false,
-        "allow_symbol_change": true,
-        "container_id": "tradingview_22087"
-      }
-      );`;
-      document.getElementById("root-tradingview").appendChild(crtobj);
-    }, 1000);
+    this.initTV();
+  },
+  methods: {
+    initTV() {
+      setTimeout(() => {
+        let dcr = document.createElement("script");
+        dcr.setAttribute("type", "text/javascript");
+        dcr.setAttribute("src", "https://s3.tradingview.com/tv.js");
+        if (this.theme) {
+          document.getElementById("root-tradingview-dark").appendChild(dcr);
+          setTimeout(() => {
+            let crtobj = document.createElement("script");
+            crtobj.setAttribute("type", "text/javascript");
+            crtobj.innerHTML = `new TradingView.widget(
+            {
+              "width": 980,
+              "height": 610,
+              "symbol": "` + this.platform.toUpperCase() + `:` + this.currency.toUpperCase() + `USDT",
+              "interval": "D",
+              "timezone": "Etc/UTC",
+              "theme": "dark",
+              "style": "1",
+              "locale": "ru",
+              "toolbar_bg": "#f1f3f6",
+              "enable_publishing": false,
+              "hide_side_toolbar": false,
+              "allow_symbol_change": true,
+              "container_id": "tradingview_aaf06"
+            }
+          );`;
+            document
+              .getElementById("root-tradingview-dark")
+              .appendChild(crtobj);
+          }, 500);
+        } else {
+          document.getElementById("root-tradingview").appendChild(dcr);
+          setTimeout(() => {
+            let crtobj = document.createElement("script");
+            crtobj.setAttribute("type", "text/javascript");
+            crtobj.innerHTML = `new TradingView.widget(
+          {
+            "width": 980,
+            "height": 610,
+            "symbol":  "` + this.platform + `:` + this.currency.toUpperCase() + `USDT",
+            "interval": "D",
+            "timezone": "Etc/UTC",
+            "theme": "light",
+            "style": "1",
+            "locale": "ru",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_side_toolbar": false,
+            "allow_symbol_change": true,
+            "container_id": "tradingview_22087"
+          }
+          );`;
+            document.getElementById("root-tradingview").appendChild(crtobj);
+          }, 500);
+        }
+      }, 100);
+    },
   },
 };
 </script>

@@ -102,7 +102,7 @@ export default {
     this.resetList();
     this.interv = setInterval(() => {
       this.resetList();
-    }, 1000);
+    }, 2000);
   },
   beforeDestroy() {
     if (this.interv) {
