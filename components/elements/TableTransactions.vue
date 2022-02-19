@@ -40,25 +40,24 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-       <v-btn elevation="0" class="success-text">Депозит</v-btn>
+       <v-btn elevation="0" class="success-text" @click="depositChanger" >Депозит</v-btn>
       </template>
       <template v-slot:no-data>
-        <v-btn
-          color="primary"
-          @click="initialize"
-        >
-          Reset
-        </v-btn>
+     <p>No data</p>
       </template>
     </v-data-table>
+    <Deposit :dialog="dialog" @depositChanger="depositChanger"></Deposit>
   </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-
+import Deposit from "@/components/modals/Deposit";
 export default {
   name: "TableTransactions",
+  components:{
+    Deposit
+  },
   data() {
     return {
       dialog: false,
@@ -117,6 +116,9 @@ export default {
         this.fetchWallet()
   },
   methods: {
+    depositChanger(){
+      this.dialog=!this.dialog
+    },
     initialize() {
     },
     ...mapActions("data/wallet", {

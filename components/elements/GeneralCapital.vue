@@ -30,6 +30,7 @@
           rounded
           class="success-btn-half"
           color="white"
+          @click="depositChanger"
         >
           {{ $t('deposit_title') }}
         </v-btn>
@@ -38,27 +39,45 @@
           large
           rounded
           class="simple-btn-half"
+          @click="depositChanger"
         >
           {{ $t('withdraw') }}
         </v-btn>
       </v-card-actions>
     </v-card>
+    <Deposit :dialog="dialog" @depositChanger="depositChanger"></Deposit>
 
   </div>
 </template>
 
 <script>
+import Deposit from "@/components/modals/Deposit";
 export default {
   name: "GeneralCapital",
+  components:{
+    Deposit
+  },
   data() {
     return {
-      hideBalancer: false
+      hideBalancer: false,
+      dialog:false,
     }
   },
   methods: {
     hideBalance() {
       this.hideBalancer = !this.hideBalancer
+    },
+    depositChanger(){
+      this.dialog=!this.dialog
     }
+  },
+  watch:{
+    dialog(newVal,oldVal){
+      console.log(newVal,oldVal)
+    }
+  },
+  mounted() {
+    console.log(this.dialog)
   }
 }
 </script>

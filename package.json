@@ -15,6 +15,7 @@
     "apexcharts": "^3.33.1",
     "axios": "^0.25.0",
     "balm-ui": "^8.46.6",
+    "card": "^2.5.4",
     "core-js": "^3.19.3",
     "nuxt": "^2.15.8",
     "trading-vue-js": "^1.0.2",
@@ -22,6 +23,7 @@
     "vue-moment": "^4.1.0",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
+    "vuetify-credit-card": "^1.0.1",
     "vuex-crud": "^0.3.2",
     "webpack": "^4.46.0"
   },
