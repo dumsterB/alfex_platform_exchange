@@ -44,7 +44,7 @@
           class="mt-8 mb-2 mx-10"
           _click="auth"
           :disabled="sended"
-          color="blue"
+          color="green"
           @click="auth_registration"
         >
           {{ $t("SendRequest") }}
@@ -66,11 +66,9 @@
 </template>
 
 <script>
-
 export default {
   layout: "auth",
-  watch: {
-  },
+  watch: {},
   // ..
   auth: false,
   data() {
@@ -86,16 +84,14 @@ export default {
   },
 
   methods: {
-    async auth_registration() {
-      
-    },
+    async auth_registration() {},
   },
 
   computed: {
     // input validation
     CURRENT_LOCALE() {
       return this.$i18n.locale;
-    }
+    },
   },
 
   components: {
@@ -103,4 +99,3 @@ export default {
   },
 };
 </script>
-

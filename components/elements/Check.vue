@@ -1,17 +1,27 @@
 <template>
   <div>
     <v-card
-      class="mx-auto pa-2 ml-2 check-card"
-      max-width="400"
-      outlined
+      class="mx-auto  check-card pa-3"
+      max-width="430"
+      elevation="1"
     >
       <v-list-item three-line>
         <v-list-item-content>
-          <v-list-item-title class="text-h5 mb-1">
-            <strong>{{title}}</strong>
-          </v-list-item-title>
+          <div class="d-flex">
+            <v-list-item-title class="text-h5 mb-1">
+              <strong>{{title}}</strong>
+            </v-list-item-title>
+            <v-chip
+              color="green"
+              outlined
+              class="historyChip"
+            >
+            <v-icon>mdi-history</v-icon>  History
+            </v-chip>
+          </div>
+
           <br><br>
-          <v-row>
+          <v-row class="mt-10">
             <v-col>
               <p class="text-gray">{{$t('total_equity')}}</p>
               <p class="text-h6"> <strong>{{totalEquity}}</strong></p>

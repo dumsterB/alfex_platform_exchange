@@ -56,7 +56,7 @@ export default {
   // dashboard
   user_balance: "Ваш баланс эквивалентен",
   deposit: "депозит",
-  withdraw: "вывод", // изъять
+  withdraw: "Вывод", // изъять
   history_button: "история",
   exchange: "Обмен",
   // commodities

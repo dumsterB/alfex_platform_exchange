@@ -2,16 +2,20 @@
   <div class="">
     <v-row>
       <v-col :cols="12" :md="8" :lg="8" :sm="12" :xs="12">
-        <div class="d-flex mt-2 mdc-form-field--space-between justify-content-beetween currencyNavbar">
+        <div
+          class="d-flex mt-2 mdc-form-field--space-between justify-content-beetween currencyNavbar"
+        >
           <div>
-            <p class="text-h6 ml-10">{{$t('markets')}}</p>
+            <p class="text-h6 ml-10">{{ $t("markets") }}</p>
           </div>
           <div class="d-flex">
-            <p elevation="0" class="mr-4 mt-2"> <v-icon>mdi-filter</v-icon> {{$t('filters')}}</p>
+            <p elevation="0" class="mr-4 mt-2">
+              <v-icon>mdi-filter</v-icon> {{ $t("filters") }}
+            </p>
             <v-text-field
               :label="$t('market_search_bar_placeholder')"
               outlined
-              class="searchCurrency "
+              class="searchCurrency"
               dense
               prepend-inner-icon="mdi-magnify"
             ></v-text-field>

@@ -3,15 +3,7 @@
     <div style="width: 350px">
       <v-card
         elevation="4"
-        class="
-          d-flex
-          flex-column
-          justify-center
-          _align-center
-          px-4
-          py-6
-          pt-8
-        "
+        class="d-flex flex-column justify-center _align-center px-4 py-6 pt-8"
       >
         <v-form
           v-model="auth_login_form_valid"
@@ -48,7 +40,7 @@
               outlined
               tile
               class="d-flex mt-2 mb-2 mx-auto"
-              color="blue"
+              color="green"
               type="submit"
             >
               {{ $t("SignIn") }}
@@ -136,7 +128,6 @@ export default {
     },
   },
 
-  mounted() {
-  },
+  mounted() {},
 };
 </script>

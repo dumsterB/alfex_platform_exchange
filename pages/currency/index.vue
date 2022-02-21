@@ -27,7 +27,7 @@
       </v-col>
       <v-col :cols="12" :md="9" :lg="9" :sm="12" :xs="12">
         <Indicators v-if="!is_switched" :currency="curr_code"></Indicators>
-        <Platforms v-else :currency="curr_code"></Platforms>
+        <Platforms v-else :currency="curr_code" @clicked="platform_changed"></Platforms>
       </v-col>
     </v-row>
     <v-row>
@@ -38,6 +38,8 @@
               :width="graphWidth"
               :height="graphHeight"
               :ovls="is_switched"
+              :currency="curr_code ? curr_code : undefined"
+              :platform="selected_platform"
             ></TradeGraph>
           </v-col>
         </v-row>
@@ -83,6 +85,7 @@ export default {
       current: {},
       graphWidth: (window.innerWidth * 2) / 3 - 250,
       graphHeight: 500,
+      selected_platform: "binance"
     };
   },
   computed: {
@@ -114,6 +117,9 @@ export default {
       this.graphWidth = (window.innerWidth * 2) / 3 - 250;
     },
     initGrpaphWidth() {},
+    platform_changed(platform) {
+      this.selected_platform = platform;
+    }
   },
   async created() {
     await this.fetchCurrencies();

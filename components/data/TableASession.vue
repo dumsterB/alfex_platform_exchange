@@ -25,7 +25,7 @@
             class="green accent-3"
             :value="item"
           >
-            {{ "X" }}
+            <v-icon class="white--text">{{ "mdi-close" }}</v-icon>
           </v-btn>
         </v-row>
       </template>
@@ -40,9 +40,6 @@ import { mapGetters, mapActions } from "vuex";
 import ClosePosition from "~/components/elements/modals/ClosePosition";
 const model = "data/arbitrage_session";
 
-// const convertProfit = exchangeRate
-//   ? (exchangeRate / buy_price - 1) * amount
-//   : NaN;
 export default {
   components: {
     ClosePosition,
@@ -143,8 +140,6 @@ export default {
   },
   async created() {
     this.resetList();
-    console.log(this.selectedItem);
-    console.log(this.arbitrage_sessions);
     this.interv = setInterval(() => {
       this.resetList();
     }, 1000);

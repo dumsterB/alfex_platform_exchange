@@ -84,8 +84,7 @@ export default {
   },
   mounted() {
     this.fetchList();
-    this.receivedItem();
-    console.log("this.companies :>> ", this.companies);
+    // this.receivedItem();
   },
 };
 </script>

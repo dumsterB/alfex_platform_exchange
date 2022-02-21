@@ -12,7 +12,7 @@
             <div id="chart ">
               <apexchart class="apexchart" type="donut" :options="chartOptions" :series="series"></apexchart>
             </div>
-            <strong class="text-h4">$380.787</strong>
+            <strong class="text-h4">$111380.787</strong>
             <div>≈ 0.00870 BTC</div>
           </div>
 
@@ -82,6 +82,9 @@ export default {
         labels: [],
         chart: {
           type: 'donut',
+        },
+        stroke:{
+         width: 0,
         },
         responsive: [{
           breakpoint: 480,
