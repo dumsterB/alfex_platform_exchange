@@ -83,6 +83,9 @@ export default {
         chart: {
           type: 'donut',
         },
+        stroke:{
+         width: 0,
+        },
         responsive: [{
           breakpoint: 480,
           options: {
