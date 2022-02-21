@@ -83,5 +83,17 @@ export default {
 </script>
 
 <style scoped>
-
+.simple-btn-half {
+  color: black;
+  border-radius: 12px;
+  border: 1px solid #23ad41;
+  background: transparent;
+  width: 150px;
+}
+.success-btn-half {
+  background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
+  color: white !important;
+  border-radius: 12px;
+  width: 150px;
+}
 </style>

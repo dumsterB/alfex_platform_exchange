@@ -2,10 +2,7 @@
 
 a {
     text-decoration: none;
-    color: #23ad41 !important;
     display: block;
-    outline: none;
-    text-transform: capitalize;
 }
 
 button,
@@ -45,128 +42,14 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .text-gray {
-    color: #717e95;
-}
-
-
-/* CUSTOM BUTTONS AND TEXTS*/
-
-.theme--light.v-btn.v-btn--has-bg {
-    background-color: transparent !important;
-}
-
-.v-application .primary--text {
-    caret-color: #23ad41 !important;
-    color: #23ad41 !important;
+    // color: #717e95;
 }
 
 .success-btn {
-    width: 100%;
     background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
-    color: white !important;
-    border-radius: 12px;
-}
-
-.success-btn-half {
-    background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
-    color: white !important;
-    border-radius: 12px;
-    width: 150px;
-}
-
-.simple-btn-half {
-    color: black;
-    border-radius: 12px;
-    border: 1px solid #23ad41;
-    background: transparent;
-    width: 150px;
+    // color: white !important;
 }
 
 .success-text {
-    color: #23ad41 !important;
+    // color: #23ad41 !important;
 }
-
-
-/*CURRENCY*/
-
-.currencyNavbar .v-input__control {
-    width: 40% !important;
-}
-
-.currency-chip {
-    width: 10px !important;
-}
-
-.coinList .chip {
-    padding: 1px;
-    text-align: center;
-    font-size: 13px;
-    border-radius: 20px;
-    width: 5px !important;
-}
-
-
-/*Apex chart*/
-
-.apexcharts-legend.apx-legend-position-right {
-    display: none;
-}
-
-.currecyCard {
-    cursor: pointer;
-}
-
-
-/* Navbar */
-
-.navLink {
-    text-transform: none;
-}
-
-
-/*Copy*/
-
-.copyClibpboard {
-    width: 100%;
-}
-
-
-/*Check*/
-
-.check-card {
-    position: relative;
-}
-
-.historyChip {
-    position: absolute;
-    right: 5px;
-}
-
-
-/*Data table*/
-
-.theme--light.v-data-table>.v-data-table__wrapper>table>tbody>tr:not(.v-data-table__expanded__content):not(.v-data-table__empty-wrapper) {
-    height: 70px;
-}
-
-.text-start {
-    font-size: 1rem !important;
-}
-
-.v-data-table-header__icon {
-    display: none !important;
-}
-
-
-/*Credit card */
-
-.credit-card-add {
-    width: 400px;
-    height: 220px;
-    background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-
-/*card*/

@@ -22,10 +22,11 @@
           <v-btn
             name="closeOrder"
             @click="toggleModal"
-            class="green accent-3"
+            class="green--text"
             :value="item"
+            outlined
           >
-            <v-icon class="white--text">{{ "mdi-close" }}</v-icon>
+            <v-icon>{{ "mdi-close" }}</v-icon>
           </v-btn>
         </v-row>
       </template>
