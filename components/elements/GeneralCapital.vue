@@ -90,4 +90,10 @@ export default {
   background: transparent;
   width: 150px;
 }
+.success-btn-half {
+  background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
+  color: white !important;
+  border-radius: 12px;
+  width: 150px;
+}
 </style>
