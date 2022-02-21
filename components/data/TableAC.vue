@@ -7,10 +7,10 @@
       class="elevation-1 ma-4 ml-8"
     >
       <template v-slot:[`item.action`]="{ item }">
-        <v-btn @click="buy(item)" class="ml-3 green accent-3">
+        <v-btn @click="buy(item)" class="ml-3 green--text" outlined>
           {{ $t("buy") }}
         </v-btn>
-        <v-btn @click="sell(item)" class="ml-3 red accent-3">
+        <v-btn @click="sell(item)" class="ml-3 red--text" outlined>
           {{ $t("sell") }}
         </v-btn>
       </template>

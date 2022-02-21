@@ -1,35 +1,32 @@
 /* BASE */
 
 a {
-  text-decoration: none;
-  color: #23ad41 !important;
-  display: block;
-  outline: none;
-  text-transform: capitalize;
+    text-decoration: none;
+    display: block;
 }
 
 button,
 select,
 a {
-  cursor: pointer;
-  outline: none;
-  background-color: transparent;
-  border: none;
-  color: inherit;
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    color: inherit;
 }
 
 .v-application p {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 ul,
 ol,
 li {
-  list-style: none;
+    list-style: none;
 }
 
 img {
-  display: block;
+    display: block;
 }
 
 input[type="number"] {
@@ -41,23 +38,18 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .flexNone {
-  flex: none;
+    flex: none;
 }
 
 .text-gray {
-  color: #717e95;
-}
-
-.v-application .primary--text {
-  caret-color: #23ad41 !important;
-  color: #23ad41 !important;
+    // color: #717e95;
 }
 
 .success-btn {
-  background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
-  color: white !important;
+    background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
+    // color: white !important;
 }
 
 .success-text {
-  color: #23ad41 !important;
+    // color: #23ad41 !important;
 }
