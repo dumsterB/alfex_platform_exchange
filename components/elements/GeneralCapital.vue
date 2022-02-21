@@ -28,7 +28,7 @@
           elevation="0"
           large
           rounded
-          class="success-btn-half"
+          class="success-btn-half mr-6"
           color="white"
           @click="depositChanger"
         >

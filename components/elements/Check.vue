@@ -15,8 +15,9 @@
               color="green"
               outlined
               class="historyChip"
+              small
             >
-            <v-icon>mdi-history</v-icon>  History
+            <v-icon x-small>mdi-history</v-icon><span class="history-btn-cl">History</span>
             </v-chip>
           </div>
 
@@ -50,6 +51,10 @@ export default {
 </script>
 
 <style scoped>
+.history-btn-cl {
+  font-size: 12px;
+  padding-left: 5px;
+}
 .check-card {
   position: relative;
 }

@@ -7,67 +7,52 @@
       <v-card>
 
         <div
-          class="blue d-flex darken-1 pa-5 white--text font-weight-black title"
+          class="d-flex darken-1 pa-5 white--text font-weight-black title"
         >
-          PAYMENT<br>
-          DETAILS
           <v-spacer></v-spacer>
-
-          <v-img
-            aspect-ratio="3.075" max-height="40" :src="URL_IMAGE" position="right" contain
-          />
          <v-btn icon @click="$emit('cardDialogChanger')"><v-icon >mdi-close</v-icon></v-btn>
         </div>
 
-        <v-card-text class='pb-10'>
+        <v-card-text class='pb-6'>
           <v-row>
-            <v-col cols='6'>
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader">CARDHOLDER’S NAME</v-subheader>
-              <v-text-field
-                single-line outlined label="Johny Relative" hide-details
-              />
-            </v-col>
+            
 
-            <v-col cols='6'>
+            <v-col cols='12'>
               <v-subheader class="grey--text text--lighten-1 pl-0 subheader">CARD NUMBER</v-subheader>
               <v-text-field
-                single-line outlined mask="credit-card" v-model="valueOfCardNumber" hide-details
+                single-line outlined mask="credit-card" v-model="valueOfCardNumber" hide-details dense
               />
             </v-col>
 
-            <v-col col='4'>
+            <v-col cols='12'>
+              <v-subheader class="grey--text text--lighten-1 pl-0 subheader">CARDHOLDER’S NAME</v-subheader>
+              <v-text-field
+                single-line outlined label="" hide-details dense
+              />
+            </v-col>
+
+            <v-col cols='8'>
               <v-subheader class="grey--text text--lighten-1 pl-0 subheader">EXPIRY DATE</v-subheader>
-              <v-select
-                :items="MonthList" label="Month" outlined
-                append-icon='keyboard_arrow_down' hide-details
+              <v-text-field
+                label="MM/DD" outlined hide-details dense
               />
             </v-col>
 
-            <v-col col='4'>
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader"></v-subheader>
-              <v-select
-                :items="YearList" label="Year" outlined
-                append-icon='keyboard_arrow_down' hide-details
-              />
-            </v-col>
-
-            <v-col col='4'>
+            <v-col cols='4'>
               <v-subheader class="grey--text text--lighten-1 pl-0 subheader">CVV</v-subheader>
-              <v-text-field single-line outlined hide-details/>
+              <v-text-field single-line outlined hide-details dense/>
             </v-col>
 
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-btn elevation="0" large class="success-btn">{{$t('add_card')}}</v-btn>
+          <v-btn elevation="0" large class="success-btn mb-4 ml-2">{{$t('add_card')}}</v-btn>
         </v-card-actions>
       </v-card>
-      <pre>{{years}}</pre>
     </v-dialog>
   </div>
 </template>
 <script>
-const URL_IMAGE = 'https://i.imgur.com/lY1wk82.png';
 export default {
   name: "BankCard",
   props: {
@@ -83,7 +68,6 @@ export default {
     }
   },
   mounted() {
-    this.URL_IMAGE = URL_IMAGE;
     this.YearList = ['2030', '2029', '2028', '2017', 'whatever'];
     this.MonthList = ["January", "February", "March", "April", "May", "June", "Jully", "August", "September", "October", "November", "December"
     ];
@@ -100,19 +84,8 @@ export default {
 }
 </script>
 <style scoped>
-.demo-container {
-  width: 100%;
-  max-width: 350px;
-  margin: 50px auto;
-}
-
-form {
-  margin: 30px;
-}
-
-input {
-  width: 200px;
-  margin: 10px auto;
-  display: block;
+.v-subheader {
+    height: 32px;
+    margin-left: 6px;
 }
 </style>
