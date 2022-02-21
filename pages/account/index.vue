@@ -67,3 +67,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.currencyNavbar .v-input__control {
+  width: 40% !important;
+}
+</style>

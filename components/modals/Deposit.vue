@@ -92,5 +92,11 @@ export default {
 </script>
 
 <style scoped>
-
+.credit-card-add {
+  width: 400px;
+  height: 220px;
+  background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
+  border-radius: 20px;
+  cursor: pointer;
+}
 </style>

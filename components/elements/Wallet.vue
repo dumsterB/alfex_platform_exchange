@@ -150,5 +150,7 @@ export default {
 </script>
 
 <style scoped>
-
+.apexcharts-legend.apx-legend-position-right {
+  display: none;
+}
 </style>

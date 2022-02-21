@@ -83,5 +83,11 @@ export default {
 </script>
 
 <style scoped>
-
+.simple-btn-half {
+  color: black;
+  border-radius: 12px;
+  border: 1px solid #23ad41;
+  background: transparent;
+  width: 150px;
+}
 </style>
