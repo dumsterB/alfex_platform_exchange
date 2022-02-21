@@ -50,5 +50,11 @@ export default {
 </script>
 
 <style scoped>
-
+.check-card {
+  position: relative;
+}
+.historyChip {
+  position: absolute;
+  right: 5px;
+}
 </style>

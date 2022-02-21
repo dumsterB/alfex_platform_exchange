@@ -165,6 +165,10 @@ export default {
   background-color: rgb(39, 39, 39) !important;
 }
 
+.navLink {
+  text-transform: none;
+}
+
 html[theme="light"] {
   .account-menu {
     background-color: rgb(245, 245, 245) !important;

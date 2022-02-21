@@ -103,8 +103,16 @@ export default {
 .coinList {
   width: 80px;
 }
-.chip {
+.coinList .chip {
   background-color: #3d3d3d;
+  padding: 1px;
+  text-align: center;
+  font-size: 13px;
+  border-radius: 20px;
+  width: 5px !important;
+}
+.currecyCard {
+  cursor: pointer;
 }
 html[theme="light"] {
   .chip {

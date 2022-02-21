@@ -83,6 +83,9 @@ export default {
         chart: {
           type: 'donut',
         },
+        stroke:{
+         width: 0,
+        },
         responsive: [{
           breakpoint: 480,
           options: {
@@ -146,6 +149,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.apexcharts-legend.apx-legend-position-right {
+  display: none;
+}
 </style>
