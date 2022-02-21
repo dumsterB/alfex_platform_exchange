@@ -10,7 +10,7 @@ export default {
   footer_copyright: "Все права защищены ",
   transfer: "перевод",
   // settings
-  security: "безопасность",
+  security: "Безопасность",
   security_description:
     "Этим устройствам в настоящее время разрешен доступ к вашему аккаунту",
   security_keys: "ключ безопастности",
@@ -355,13 +355,13 @@ export default {
   automatic_trading_page: "Страница автоматической торговли",
   agree_with_policy: "Я согласен с Условиями и Политикой конфиденциальности",
   //new
-  settings_notification: "оповещения",
+  settings_notification: "Оповещения",
   settings_notification_description: "тестовый текст для описания уведомлений", // not for translate
-  identity_verification: "проверка личности",
-  unverified: "непроверенный",
-  verified: "проверено",
+  identity_verification: "Проверка личности",
+  unverified: "Непроверенный",
+  verified: "Проверено",
   password_and_2mfa: "Изменение пароля, 2MFA",
-  account_settings: "настройки аккаунта",
+  account_settings: "Настройки аккаунта",
   personal_information: "Личная информация",
   personal_information_description: " текст для описания секции",
   on: "вкл.",
