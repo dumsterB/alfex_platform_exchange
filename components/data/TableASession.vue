@@ -19,66 +19,25 @@
       </template>
       <template v-slot:[`item.action`]="{ item }">
         <v-row justify="center">
-          <v-dialog v-model="dialog" max-width="600px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                name="closeOrder"
-                @click="close(item, $event)"
-                class="green accent-3"
-              >
-                {{ "X" }}
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title class="d-flex">
-                <span class="text-h5">{{ $t("close_order") }}</span>
-                <span class="text-h6">{{ $t("choose_marketplace") }}</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container fluid>
-                  <v-radio-group
-                    v-for="(item, i) in list"
-                    :key="i"
-                    v-model="radios"
-                    column
-                  >
-                    <v-radio
-                      :label="item.arbitrage_company.name"
-                      :value="item.amount"
-                    ></v-radio>
-                  </v-radio-group>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="green darken-1"
-                  name="goBack"
-                  text
-                  @click="close(item, $event)"
-                >
-                  {{ $t("go_back") }}
-                </v-btn>
-                <v-btn
-                  color="green darken-3"
-                  name="agree"
-                  text
-                  @click="close(item, $event)"
-                  type="submit"
-                >
-                  {{ $t("ok") }}
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <v-btn
+            name="closeOrder"
+            @click="toggleModal"
+            class="green accent-3"
+            :value="item"
+          >
+            {{ "X" }}
+          </v-btn>
         </v-row>
       </template>
     </v-data-table>
+    <v-dialog v-model="dialog" max-width="600px">
+      <ClosePosition :item="JSON.parse(selectedItem)" @close="dialog = false" />
+    </v-dialog>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-// import ClosePosition from "~/components/elements/modals/ClosePosition";
+import ClosePosition from "~/components/elements/modals/ClosePosition";
 const model = "data/arbitrage_session";
 
 // const convertProfit = exchangeRate
@@ -86,13 +45,13 @@ const model = "data/arbitrage_session";
 //   : NaN;
 export default {
   components: {
-    // ClosePosition,
+    ClosePosition,
   },
   data() {
     return {
-      radios: "",
       dialog: false,
       perpage: 5,
+      selectedItem: null,
       headers: [
         {
           text: "Market",
@@ -154,6 +113,10 @@ export default {
     ...mapActions(model, {
       fetchList: "fetchList",
     }),
+    toggleModal(evt) {
+      this.dialog = true;
+      this.selectedItem = evt.currentTarget.value;
+    },
     resetList() {
       this.list = this.arbitrage_sessions.map((el) => {
         let diff =
@@ -168,11 +131,7 @@ export default {
         return el;
       });
     },
-    close(item, event) {
-      if (event.currentTarget.name === "closeOrder") this.dialog = true;
-      if (event.currentTarget.name === "goBack") this.dialog = false;
-      if (event.currentTarget.name === "agree") this.dialog = false;
-    },
+
     diffColor(diff) {
       let nm = parseFloat(diff);
       if (nm < 0) {
@@ -184,6 +143,7 @@ export default {
   },
   async created() {
     this.resetList();
+    console.log(this.selectedItem);
     console.log(this.arbitrage_sessions);
     this.interv = setInterval(() => {
       this.resetList();
