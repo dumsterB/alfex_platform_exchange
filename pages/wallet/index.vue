@@ -38,7 +38,6 @@ export default {
       fiat_available_balance:'93.179434 BTC',
       fiat_available_balance_usdt:'≈ 4,064,102.564 USD',
       fiat_total_equity_usdt:'≈ 4,064,102.564 USD',
-
     }
   },
   computed:{

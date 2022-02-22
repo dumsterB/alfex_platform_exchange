@@ -5,7 +5,7 @@
         <v-col cols="12" lg="4" md="4">
           <SettingsTab></SettingsTab>
         </v-col>
-        <v-col cols="12" lg="4" md="4">
+        <v-col cols="12" lg="8" md="8">
        <component  :is="component"></component>
         </v-col>
       </v-row>
