@@ -109,7 +109,7 @@ export default {
   spot_account: "konto spot",
   fiat_account: "konto fiat",
   total_equity: "całkowity kapitał własny",
-  available_balance: "dostępne saldo",
+  available_balance: "Dostępne saldo",
   account_created: "Konto utworzone!",
   account_created_successfully: "Twoje konto zostało pomyślnie utworzone!",
   hottest_news_heading_text: "Najgorętsze wiadomości o walucie:",

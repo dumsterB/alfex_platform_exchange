@@ -121,7 +121,7 @@ export default {
   spot_account: "Спотовый счет",
   fiat_account: "Фатный счет",
   total_equity: "Общий капитал",
-  available_balance: "доступный баланс",
+  available_balance: "Доступный баланс",
   account_created: "Аккаунт создан!",
   account_created_successfully: "Ваша учетная запись успешно создана!",
   hottest_news_heading_text: "Самые горячие новости о валюте:",

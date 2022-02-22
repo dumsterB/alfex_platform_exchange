@@ -123,7 +123,7 @@ export default {
   spot_account: "spot-konto",
   fiat_account: "fiat-konto",
   total_equity: "Gesamtkapital",
-  available_balance: "verfügbares guthaben",
+  available_balance: "Verfügbares guthaben",
   account_created: "Account erstellt!",
   account_created_successfully: "Ihr Konto wurde erfolgreich erstellt!",
   hottest_news_heading_text: "Die heißesten Nachrichten über die Währung:",
