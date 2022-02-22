@@ -3,7 +3,13 @@
     <v-row>
       <v-col :cols="12" :md="8" :lg="8" :sm="12" :xs="12">
         <div
-          class="d-flex mt-2 mdc-form-field--space-between justify-content-beetween currencyNavbar"
+          class="
+            d-flex
+            mt-2
+            mdc-form-field--space-between
+            justify-content-beetween
+            currencyNavbar
+          "
         >
           <div>
             <p class="text-h6 ml-10">{{ $t("markets") }}</p>
@@ -68,6 +74,32 @@ export default {
   async mounted() {
     await this.fetchCurrencies();
     await this.fetchAC();
+  },
+  created() {
+    let me = this;
+    // let socket = new WebSocket("ws://192.168.50.236:5006");
+    // socket.onopen = function (e) {
+    //   socket.send(`{
+    //     "method": "subscribe",
+    //     "data": ["binance_all@ticker_10s"]
+    //   }`);
+    // };
+    // socket.onmessage = function (event) {
+    //   console.log(`[message] Data received from server: ${event.data}`);
+    // };
+    // socket.onclose = function (event) {
+    //   if (event.wasClean) {
+    //     console.log(
+    //       `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
+    //     );
+    //   } else {
+    //     console.log("[close] Connection died");
+    //   }
+    // };
+
+    // socket.onerror = function (error) {
+    //   console.log(`[error] ${error.message}`);
+    // };
   },
 };
 </script>

@@ -49,11 +49,19 @@ export default {
       type: Object,
       default: {},
     },
+    cost: {
+      type: Number,
+      default: 0,
+    },
+    diff: {
+      type: Number,
+      default: 0,
+    }
   },
   data() {
     return {
       cost: (Math.random() * 1000).toFixed(4),
-      diff: "0",
+      diff_proc: "0",
       interv: null,
     };
   },
