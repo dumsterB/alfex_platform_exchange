@@ -60,8 +60,6 @@ export default {
   },
   data() {
     return {
-      cost: (Math.random() * 1000).toFixed(4),
-      diff_proc: "0",
       interv: null,
     };
   },
@@ -73,19 +71,17 @@ export default {
     ...mapGetters("data/arbitrage_company", {
       arbitrage_company: "list",
     }),
+    diff_str() {
+      let diff_proc = (this.diff * 100) / this.cost;
+      return this.diff_proc.toFixed(4);
+    },
+    cost_str() {
+      return this.cost.toFixed(4);
+    }
   },
   methods: {
-    calc_cost() {
-      let cost = parseFloat(this.cost);
-      let diff = (Math.random() * cost) / 10 - (Math.random() * cost) / 10;
-      let curr_cost = cost + diff;
-      this.cost = curr_cost.toFixed(4);
-      let diff_proc = (diff * 100) / curr_cost;
-      this.diff = diff_proc.toFixed(4);
-    },
     diffColor(diff) {
-      let nm = parseFloat(diff);
-      if (nm < 0) {
+      if (diff < 0) {
         return "color: red;";
       } else {
         return "color: green;";
@@ -93,14 +89,6 @@ export default {
     },
   },
   mounted() {
-    this.interv = setInterval(() => {
-      this.calc_cost();
-    }, 1000);
-  },
-  beforeDestroy() {
-    if (this.interv) {
-      clearInterval(this.interv);
-    }
   },
 };
 </script>
