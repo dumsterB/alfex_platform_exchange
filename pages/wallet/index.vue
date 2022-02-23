@@ -11,7 +11,7 @@
           </div>
         </v-col>
         <v-col md="8">
-          <div class="ma-2">
+          <div class="ma-2 mr-8">
             <TableTransactions></TableTransactions>
           </div>
         </v-col>

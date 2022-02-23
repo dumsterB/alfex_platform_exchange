@@ -26,7 +26,7 @@ export default {
   devices_activities: "Действия устройств",
   device_title: "устройства",
   date_title: "дата",
-  Действие: "Действие",
+  action_title: "Действие",
   location_title: "место расположения",
   address_title: "адрес",
   new_email_verify: "новая проверка электронной почты",

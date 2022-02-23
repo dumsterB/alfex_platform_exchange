@@ -6,6 +6,9 @@
       :items-per-page="perpage"
       class="elevation-1 ma-4 ml-8"
     >
+      <template v-slot:[`item.amount`]="{ item }">
+        <span>{{ item.amount + " " + item.wallet.currency.name }}</span>
+      </template>
       <template v-slot:[`item.difference`]="{ item }">
         <span :style="diffColor(item.difference)">{{ item.difference }}</span>
       </template>
@@ -15,33 +18,48 @@
         }}</span>
       </template>
       <template v-slot:[`item.action`]="{ item }">
-        <v-btn @click="close(item)" class="ml-3">
-          {{ $t("close") }}
-        </v-btn>
+        <v-row justify="center">
+          <v-btn
+            name="closeOrder"
+            @click="toggleModal"
+            class="green--text"
+            :value="item"
+            outlined
+          >
+            <v-icon>{{ "mdi-close" }}</v-icon>
+          </v-btn>
+        </v-row>
       </template>
     </v-data-table>
+    <v-dialog v-model="dialog" max-width="600px">
+      <ClosePosition :item="JSON.parse(selectedItem)" @close="dialog = false" />
+    </v-dialog>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import ClosePosition from "~/components/elements/modals/ClosePosition";
 const model = "data/arbitrage_session";
-// const convertProfit = exchangeRate
-//   ? (exchangeRate / buy_price - 1) * amount
-//   : NaN;
+
 export default {
+  components: {
+    ClosePosition,
+  },
   data() {
     return {
+      dialog: false,
       perpage: 5,
+      selectedItem: null,
       headers: [
         {
-          text: "Name",
+          text: "Market",
           value: "arbitrage_company.name",
-          // width: 40,
+          // width: 80,
         },
         {
           text: "Position",
           value: "session_start_type.name",
-          width: 100,
+          // width: 100,
         },
         {
           text: "Date & Time",
@@ -51,30 +69,30 @@ export default {
         {
           text: "Amount",
           value: "amount",
-          width: 100,
+          // width: 100,
         },
         {
           text: "Start price",
           value: "start_exchange_rate",
-          width: 120,
+          // width: 120,
         },
         {
           text: "Current price",
           value: "current_cost",
-          width: 130,
+          // width: 130,
         },
         {
           text: "Profit/loss",
           value: "difference",
-          width: 116,
+          // width: 116,
         },
         {
           text: "Profit/loss %",
           value: "difference_perc",
-          width: 128,
+          // width: 128,
         },
         {
-          text: "",
+          text: "Close",
           value: "action",
           // width: 80,
         },
@@ -88,10 +106,15 @@ export default {
       arbitrage_sessions: "list",
     }),
   },
+
   methods: {
     ...mapActions(model, {
       fetchList: "fetchList",
     }),
+    toggleModal(evt) {
+      this.dialog = true;
+      this.selectedItem = evt.currentTarget.value;
+    },
     resetList() {
       this.list = this.arbitrage_sessions.map((el) => {
         let diff =
@@ -106,7 +129,7 @@ export default {
         return el;
       });
     },
-    close(item) {},
+
     diffColor(diff) {
       let nm = parseFloat(diff);
       if (nm < 0) {
@@ -118,11 +141,11 @@ export default {
   },
   async created() {
     this.resetList();
-    console.log(this.arbitrage_sessions);
     this.interv = setInterval(() => {
       this.resetList();
     }, 1000);
   },
+
   beforeDestroy() {
     if (this.interv) {
       clearInterval(this.interv);

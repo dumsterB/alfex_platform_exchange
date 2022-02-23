@@ -42,18 +42,17 @@
       <v-btn
         icon
         class="ml-auto"
-        color="#aaa"
         @click.stop="style_panel_left_minimal = !style_panel_left_minimal"
       >
         <v-icon size="28">{{ "mdi-chevron-left" }}</v-icon>
       </v-btn>
     </v-row>
 
-    <v-divider color="#21212B"></v-divider>
+    <v-divider></v-divider>
     <v-list class="ma-0 pa-0">
       <v-list-item-group v-model="menu_active">
         <div v-for="(item, i) in menu" :key="i">
-          <v-list-item :key="i" nuxt :to="item.to" active-class="_nav-active">
+          <v-list-item :key="i" nuxt :to="item.to" active-class="primary--text">
             <template v-slot:default="{}">
               <v-tooltip
                 right
