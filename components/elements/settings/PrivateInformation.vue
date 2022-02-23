@@ -1,6 +1,6 @@
 <template>
   <div class="privateInformation">
-    <p class="text-h6">Настройки</p>
+    <p class="text-h6">{{$t('settings_page')}}</p>
     <v-card class="mainCard">
       <div class="text-center">
         <div class="selecImage">
