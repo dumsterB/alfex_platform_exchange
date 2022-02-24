@@ -70,7 +70,7 @@
               v-model="VerificationNumberCheckbox"
               :label="$t('unset')"
             ></v-checkbox>
-          <password style="align-items: center;display: flex"></password>
+          <confirmPassword style="display:flex;align-items: center "></confirmPassword>
           </div>
       </v-card>
     </div>
@@ -81,11 +81,12 @@
 import password from '../modals/security/Password'
 import email from '../modals/security/Email'
 import phone from '../modals/security/Phone'
+import confirmPassword from '../modals/security/СonfirmPassword'
 
 export default {
   name: "privateInformation",
   components:{
-    password,email,phone
+    password,email,phone,confirmPassword
   },
   data(){
     return{

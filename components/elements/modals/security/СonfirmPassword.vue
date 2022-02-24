@@ -7,40 +7,31 @@
       <template v-slot:activator="{ on, attrs }">
         <div    v-bind="attrs"
                 v-on="on" >
-          <v-btn dark elevation="0"  class="success-btn" >{{ $t('change') }}</v-btn>
+          <v-btn dark elevation="0"   class="success-btn" >{{ $t('change') }}</v-btn>
         </div>
       </template>
       <v-card>
         <v-card-title class="text-h5 grey lighten-2">
-          {{$t('email_change')}}
+          {{$t('change_your_password')}}
         </v-card-title>
         <div class="pa-5">
-          <h4>{{$t('new_email_verify')}}</h4>
           <v-divider></v-divider>
           <v-col>
             <v-text-field
-              :label="$t('new_email_address')"
-            ></v-text-field>
-          </v-col>
-          <v-col>
-            <v-text-field
-              :label="$t('new_email_verification_code')"
-              :suffix="$t('get_code')"
+              :label="$t('old_password')"
               @click:suffix="GetCodePhoneNumber"
             ></v-text-field>
           </v-col>
           <h4>{{$t('security_check')}}</h4>
           <v-col>
             <v-text-field
-              :label="$t('email_verification_code')"
-              :suffix="$t('get_code')"
+              :label="$t('new_password')"
               @click:suffix="GetCodePhoneNumber"
             ></v-text-field>
           </v-col>
           <v-col>
             <v-text-field
-              :label="$t('phone_verification_code')"
-              :suffix="$t('get_code')"
+              :label="$t('confirm_password')"
               @click:suffix="GetCodePhoneNumber"
             ></v-text-field>
           </v-col>
