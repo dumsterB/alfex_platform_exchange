@@ -27,7 +27,11 @@
       </v-col>
       <v-col :cols="12" :md="9" :lg="9" :sm="12" :xs="12">
         <Indicators v-if="!is_switched" :currency="curr_code"></Indicators>
-        <Platforms v-else :currency="curr_code" @clicked="platform_changed"></Platforms>
+        <Platforms
+          v-else
+          :currency="curr_code"
+          @clicked="platform_changed"
+        ></Platforms>
       </v-col>
     </v-row>
     <v-row>
@@ -52,7 +56,12 @@
       </v-col>
       <v-col :cols="12" :md="4" :lg="4" :sm="12" :xs="12">
         <SpotCard v-if="!is_switched"></SpotCard>
-        <TableAC v-else></TableAC>
+        <TableAC
+          v-else
+          :currency="curr_code ? curr_code : undefined"
+          :currencies="currencies"
+          :current="current"
+        ></TableAC>
       </v-col>
     </v-row>
   </div>
@@ -76,8 +85,12 @@ export default {
     TableTrades,
     TableAC,
     Platforms,
+<<<<<<< HEAD
     SpotCard,
     TableASession
+=======
+    TableASession,
+>>>>>>> origin/platforms
   },
   data() {
     return {
@@ -87,7 +100,7 @@ export default {
       current: {},
       graphWidth: (window.innerWidth * 2) / 3 - 250,
       graphHeight: 500,
-      selected_platform: "binance"
+      selected_platform: "binance",
     };
   },
   computed: {
@@ -121,7 +134,7 @@ export default {
     initGrpaphWidth() {},
     platform_changed(platform) {
       this.selected_platform = platform;
-    }
+    },
   },
   async created() {
     await this.fetchCurrencies();

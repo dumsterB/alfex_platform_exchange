@@ -106,7 +106,7 @@ export default {
   spot_account: "spot account",
   fiat_account: "fiat account",
   total_equity: "total equity",
-  available_balance: "available balance",
+  available_balance: "Available balance",
   account_created: "Account Created!",
   account_created_successfully: "Your account has been created successfully!",
   hottest_news_heading_text: "The hottest news about the currency:",
