@@ -85,12 +85,8 @@ export default {
     TableTrades,
     TableAC,
     Platforms,
-<<<<<<< HEAD
     SpotCard,
     TableASession
-=======
-    TableASession,
->>>>>>> origin/platforms
   },
   data() {
     return {
