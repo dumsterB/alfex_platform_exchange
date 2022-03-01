@@ -5,7 +5,6 @@
         v-for="(company, i) in companies"
         :key="i"
         :item="company"
-        v-if="company.currency.length > 0"
       />
       <p v-if="!companies.length">
         {{ $t("no_market_place") }}

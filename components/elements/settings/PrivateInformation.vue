@@ -166,7 +166,7 @@ export default {
       imageData: null,
       selectGender: '',
       selectCountry:'',
-      name:'',
+      name: this.$auth.user.name,
       surname:'',
       email:'',
       date:'',
@@ -190,6 +190,9 @@ export default {
         this.$emit('input', files[0])
       }
     }
+  },
+  mounted() {
+    console.log(this.$auth.user);
   },
   computed:{
     disableBtn(){

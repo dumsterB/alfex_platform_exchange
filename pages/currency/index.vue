@@ -51,7 +51,7 @@
         </v-row>
       </v-col>
       <v-col :cols="12" :md="4" :lg="4" :sm="12" :xs="12">
-        <div v-if="!is_switched"></div>
+        <SpotCard v-if="!is_switched"></SpotCard>
         <TableAC v-else></TableAC>
       </v-col>
     </v-row>
@@ -65,6 +65,7 @@ import TradeGraph from "~/components/graphs/Trade";
 import TableTrades from "~/components/data/TableTrades";
 import TableAC from "~/components/data/TableAC";
 import TableASession from "~/components/data/TableASession";
+import SpotCard from "~/components/elements/currencies/SpotCard";
 import Platforms from "~/components/elements/currencies/Platforms";
 const model = "data/currency";
 
@@ -75,6 +76,7 @@ export default {
     TableTrades,
     TableAC,
     Platforms,
+    SpotCard,
     TableASession
   },
   data() {
