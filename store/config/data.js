@@ -17,6 +17,7 @@ export const state = () => ({
         }
     ],
     default_language: "ru",
+    preload_models: ["currency", "arbitrage_company", "trade", "wallet", "arbitrage_session"],
     themes: ["Dark", "Light"],
     news: [{
             date: new Date(+new Date() - Math.floor(Math.random() * 10000000000), ).toDateString(),

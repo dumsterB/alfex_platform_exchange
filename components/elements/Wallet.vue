@@ -68,6 +68,14 @@ export default {
     apexchart
   },
   name: "Wallet",
+  props: {
+    currency: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       apexArrBalance: [],

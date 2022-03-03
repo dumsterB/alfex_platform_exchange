@@ -33,7 +33,7 @@ export default {
     }),
   },
   methods: {
-    preload_models() {
+    async preload_models() {
       if (this.$store.state.auth.user) {
         let htmlElement = document.documentElement;
         let theme = localStorage.getItem("theme");
@@ -55,7 +55,8 @@ export default {
   },
   async created() {
     if (this.$store.state.auth.user) {
-      this.preload_models();
+      global.socket = new WebSocket("ws://getaway-ws-server.herokuapp.com");
+      await this.preload_models();
     } else {
       if (this.$router.history.current.path != "/auth/registration") {
         this.$router.push({

@@ -84,6 +84,12 @@ import { mapActions, mapGetters } from "vuex";
 const currencies = "data/currency";
 export default {
   name: "Exchange",
+  currency: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
   data() {
     return {
       link_url: "bc1qu75kr9s9j0hpuf5qugqdastwwhzglz3gfwcz06",

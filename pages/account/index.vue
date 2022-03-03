@@ -30,7 +30,7 @@
         <v-row class="ml-4">
           <v-col
             class="d-flex justify-center"
-            v-for="(curr, i) in currencies"
+            v-for="(curr, i) in currs"
             :key="i"
           >
             <Currency :currency="curr" />
@@ -38,8 +38,8 @@
         </v-row>
       </v-col>
       <v-col :cols="12" :md="4" :lg="4" :sm="12" :xs="12">
-        <Wallet></Wallet>
-        <Exchange></Exchange>
+        <Wallet :currency="currs"></Wallet>
+        <Exchange :currency="currs"></Exchange>
       </v-col>
     </v-row>
   </div>
@@ -58,6 +58,11 @@ export default {
     Wallet,
     Exchange,
   },
+  data() {
+    return {
+      currs: [],
+    }
+  },
   computed: {
     ...mapGetters(model, {
       currencies: "list",
@@ -71,22 +76,37 @@ export default {
       fetchAC: "fetchList",
     }),
   },
-  async mounted() {
+  async created() {
+    let me = this;
     await this.fetchCurrencies();
     await this.fetchAC();
-  },
-  created() {
-    let me = this;
-    // let socket = new WebSocket("ws://192.168.50.236:5006");
-    // socket.onopen = function (e) {
-    //   socket.send(`{
-    //     "method": "subscribe",
-    //     "data": ["binance_all@ticker_10s"]
-    //   }`);
-    // };
-    // socket.onmessage = function (event) {
-    //   console.log(`[message] Data received from server: ${event.data}`);
-    // };
+    let socket = global.socket;
+    socket.send(`{
+      "method": "subscribe",
+      "data": ["binance_all@ticker_10s"]
+    }`);
+    socket.onmessage = function (event) {
+      if (event.data) {
+        let json_d = JSON.parse(event.data);
+        let data = json_d.data ? json_d.data.data || [] : [];
+        me.currs = me.currencies.map(el => {
+          let res = {
+            id: el.id,
+            symbol: el.symbol,
+            name: el.name,
+            logo: el.logo
+          }
+          let fnd = data.find(e => e && e.base == el.symbol);
+          if (fnd) {
+            res.price = fnd.price;
+            res.change = fnd.change;
+            res.change_p = (parseFloat(fnd.change) / parseFloat(fnd.price)).toFixed(4);
+          }
+          return res;
+        })
+        console.log('me.currs', me.currs)
+      }
+    };
     // socket.onclose = function (event) {
     //   if (event.wasClean) {
     //     console.log(
@@ -101,6 +121,13 @@ export default {
     //   console.log(`[error] ${error.message}`);
     // };
   },
+  destroyed() {
+    let socket = global.socket;
+    socket.send(`{
+      "method": "unsubscribe",
+      "data": ["binance_all@ticker_10s"]
+    }`);
+  }
 };
 </script>
 <style scoped>

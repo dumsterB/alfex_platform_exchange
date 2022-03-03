@@ -19,14 +19,14 @@
               <div class="d-flex">
                 <v-img :src="currency.logo" :max-width="20"></v-img>
                 <span class="mt-1 ml-1">{{
-                  currency.short_name.toUpperCase()
+                  currency.symbol
                 }}</span>
               </div>
-              <span>{{ cost }}$</span>
+              <span>{{ currency.price }}$</span>
             </v-list-item-content>
             <v-list-item-content class="coinList pa-1 flexNone">
               <div class="chip">24H</div>
-              <span :style="diffColor(diff)">{{ diff }}%</span>
+              <span :style="diffColor(currency.change_p)">{{ currency.change_p }}%</span>
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -46,17 +46,11 @@ import { mapGetters } from "vuex";
 export default {
   props: {
     currency: {
-      type: Object,
-      default: {},
+      type: Array,
+      default: () => {
+        return []
+      },
     },
-    cost: {
-      type: Number,
-      default: 0,
-    },
-    diff: {
-      type: Number,
-      default: 0,
-    }
   },
   data() {
     return {
@@ -71,13 +65,6 @@ export default {
     ...mapGetters("data/arbitrage_company", {
       arbitrage_company: "list",
     }),
-    diff_str() {
-      let diff_proc = (this.diff * 100) / this.cost;
-      return this.diff_proc.toFixed(4);
-    },
-    cost_str() {
-      return this.cost.toFixed(4);
-    }
   },
   methods: {
     diffColor(diff) {
