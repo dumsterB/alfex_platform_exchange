@@ -13,17 +13,36 @@
                 <v-card-subtitle><p><strong>{{ coin.balance }}</strong></p></v-card-subtitle>
               </div>
             </div>
-            <div class="d-flex justify-end pa-5">
-              <v-btn @click="buy(coin)" class="ml-3 green--text" outlined>
-                {{ $t("buy") }}
-              </v-btn>
-              <v-btn @click="sell(coin)" class="ml-3 red--text" outlined>
-                {{ $t("sell") }}
-              </v-btn>
+            <div class="d-flex justify-space-between pa-1" v-for="(item ,i) of arbitrage_company" :key="item.id">
+              <div>
+                <p>{{ item.name }}</p>
+              </div>
+              <div>
+                <p>{{ i * 100 }}</p>
+              </div>
+              <div class="d-block">
+
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs"
+                            v-on="on" class="ml-3 green--text" @click="buy(coin)">mdi-minus-box</v-icon>
+                  </template>
+                  <span>{{$t('buy')}}</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs"
+                            v-on="on" class="ml-3 red--text" @click="sell(coin)">mdi-minus-box
+                    </v-icon>
+                  </template>
+                  <span>{{$t('sell')}}</span>
+                </v-tooltip>
+              </div>
             </div>
           </v-card>
         </v-col>
       </v-row>
+      <pre>{{ arbitrage_company }}</pre>
       <v-dialog v-model="dialog" max-width="600px">
         <TradePosition
           :tradeItem="selectedCurrency"
@@ -41,14 +60,22 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import TradePosition from '../../components/elements/modals/TradePosition'
+
 const modelCompanies = "data/arbitrage_company";
 const wallet = 'data/wallet'
 export default {
   name: "Arbitage",
-  data(){
-    return{
-     dialog:false,
-      action:'',
+  components: {
+    TradePosition
+  },
+  data() {
+    return {
+      dialog: false,
+      action: '',
+      selectedCurrency: {},
+      selectedArbitrageCompany: {},
+      userWallet: '',
     }
   },
   methods: {
@@ -58,8 +85,8 @@ export default {
     ...mapActions(modelCompanies, {
       fetchList: "fetchList",
     }),
-    closeTrade(){
-      this.dialog=false
+    closeTrade() {
+      this.dialog = false
     },
     buy(item) {
       this.action = "Buy";
@@ -95,6 +122,9 @@ export default {
     }),
     ...mapGetters(modelCompanies, {
       ac: "list",
+    }),
+    ...mapGetters("data/arbitrage_company", {
+      arbitrage_company: "list",
     }),
   },
   async mounted() {
