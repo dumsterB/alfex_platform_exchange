@@ -12,9 +12,7 @@ export default {
     port: 3061,
     host: "0.0.0.0",
   },
-
   mode: "spa",
-
   head: {
     title: "vue-platform",
     meta: [
@@ -25,7 +23,6 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
-
   auth: {
     strategies: {
       local: {
