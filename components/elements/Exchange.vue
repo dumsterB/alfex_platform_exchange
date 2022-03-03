@@ -8,6 +8,7 @@
       <div class="justify-center text-center">
         <div class="pa-1 mt-2 justify-space-between d-flex">
           <v-text-field
+            v-model="buy"
             label="0"
             class="mr-2"
             solo
@@ -15,10 +16,12 @@
             type="number"
           ></v-text-field>
           <v-autocomplete
+            v-model="buy_curr"
             :items="currencies"
-            label="BTC"
+            label=""
             class="ml-2"
             item-text="name"
+            item-value="symbol"
             solo
             hide-details
           >
@@ -30,18 +33,20 @@
         </div>
         <div class="pa-1 mt-2 mb-4 justify-space-between d-flex">
           <v-text-field
+            v-model="pay"
             :label="$t('pay_with')"
             class="mr-2"
-            disabled
             solo
             hide-details
             type="number"
           ></v-text-field>
           <v-autocomplete
+            v-model="pay_curr"
             :items="available_currs"
-            label="USD"
+            label=""
             class="ml-2"
             item-text="name"
+            item-value="symbol"
             solo
             hide-details
           >
@@ -51,7 +56,7 @@
             </template>
           </v-autocomplete>
         </div>
-        <v-btn x-large class="success-btn" elevation="0">{{
+        <v-btn block large class="success-btn mb-3" elevation="0">{{
           $t("trade")
         }}</v-btn>
       </div>
@@ -84,16 +89,24 @@ import { mapActions, mapGetters } from "vuex";
 const currencies = "data/currency";
 export default {
   name: "Exchange",
-  currency: {
+  props: {
+    currency: {
       type: Array,
       default: () => {
         return []
       }
-    },
+    }
+  },
   data() {
     return {
       link_url: "bc1qu75kr9s9j0hpuf5qugqdastwwhzglz3gfwcz06",
       copied: false,
+      pay: null,
+      buy: null,
+      pay_curr: "USD",
+      buy_curr: "BTC",
+      buy_checker: false,
+      pay_checker: false
     };
   },
   methods: {
@@ -112,6 +125,56 @@ export default {
         console.log(e);
       }
     },
+  },
+  watch: {
+    pay() {
+      if (this.pay_checker) {
+        this.pay_checker = false;
+      } else {
+        let fl_p = parseFloat(this.pay);
+        let pp = this.currency.find(el => el.symbol == this.pay_curr);
+        let pp_n = pp && pp.price ? parseFloat(pp.price) : 1;
+        let bb = this.currency.find(el => el.symbol == this.buy_curr);
+        let bb_n = bb && bb.price ? parseFloat(bb.price) : 1;
+        let sum = fl_p * pp_n / bb_n;
+        this.buy_checker = true;
+        this.buy = sum;
+      }
+    },
+    buy() {
+      if (this.buy_checker) {
+        this.buy_checker = false;
+      } else {
+        let fl_p = parseFloat(this.buy);
+        let pp = this.currency.find(el => el.symbol == this.pay_curr);
+        let pp_n = pp && pp.price ? parseFloat(pp.price) : 1;
+        let bb = this.currency.find(el => el.symbol == this.buy_curr);
+        let bb_n = bb && bb.price ? parseFloat(bb.price) : 1;
+        let sum = fl_p * bb_n / pp_n;
+        this.pay_checker = true;
+        this.pay = sum;
+      }
+    },
+    pay_curr() {
+      let fl_p = parseFloat(this.buy);
+      let pp = this.currency.find(el => el.symbol == this.pay_curr);
+      let pp_n = pp && pp.price ? parseFloat(pp.price) : 1;
+      let bb = this.currency.find(el => el.symbol == this.buy_curr);
+      let bb_n = bb && bb.price ? parseFloat(bb.price) : 1;
+      let sum = fl_p * bb_n / pp_n;
+      this.pay_checker = true;
+      this.pay = sum;
+    },
+    buy_curr() {
+      let fl_p = parseFloat(this.pay);
+      let pp = this.currency.find(el => el.symbol == this.pay_curr);
+      let pp_n = pp && pp.price ? parseFloat(pp.price) : 1;
+      let bb = this.currency.find(el => el.symbol == this.buy_curr);
+      let bb_n = bb && bb.price ? parseFloat(bb.price) : 1;
+      let sum = fl_p * pp_n / bb_n;
+      this.buy_checker = true;
+      this.buy = sum;
+    }
   },
   computed: {
     ...mapGetters(currencies, {

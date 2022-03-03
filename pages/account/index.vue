@@ -104,7 +104,7 @@ export default {
           }
           return res;
         })
-        console.log('me.currs', me.currs)
+        // console.log('me.currs', me.currs)
       }
     };
     // socket.onclose = function (event) {

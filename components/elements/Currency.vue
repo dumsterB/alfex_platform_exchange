@@ -1,9 +1,9 @@
 <template>
   <div>
-    <template> </template>
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-card
+          :id="`ttp-${currency.symbol}`"
           class="currecyCard"
           elevation="3"
           v-bind="attrs"
@@ -18,22 +18,27 @@
             <v-list-item-content class="pa-1">
               <div class="d-flex">
                 <v-img :src="currency.logo" :max-width="20"></v-img>
-                <span class="mt-1 ml-1">{{
-                  currency.symbol
-                }}</span>
+                <span class="mt-1 ml-1">{{ currency.symbol }}</span>
               </div>
-              <span>{{ currency.price }}$</span>
+              <span>${{ currency.price }}</span>
             </v-list-item-content>
             <v-list-item-content class="coinList pa-1 flexNone">
               <div class="chip">24H</div>
-              <span :style="diffColor(currency.change_p)">{{ currency.change_p }}%</span>
+              <span :style="diffColor(currency.change_p)"
+                >{{ currency.change_p }}%</span
+              >
             </v-list-item-content>
           </v-list-item>
         </v-card>
       </template>
       <div class="ac-toolltip">
-        <span v-for="(item, i) in arbitrage_company" :key="i">
-          {{ item.name }}
+        <span v-for="(item, i) in currs" :key="i">
+          <span>
+            {{ item.name }}
+          </span>
+          <span style="float:right">
+            ${{ item.price }}
+          </span>
           <br />
         </span>
       </div>
@@ -46,15 +51,16 @@ import { mapGetters } from "vuex";
 export default {
   props: {
     currency: {
-      type: Array,
+      type: Object,
       default: () => {
-        return []
+        return {};
       },
     },
   },
   data() {
     return {
       interv: null,
+      currs: [],
     };
   },
   watch: {},
@@ -76,6 +82,51 @@ export default {
     },
   },
   mounted() {
+    let me = this;
+    let sym = me.currency.symbol;
+    let test = document.getElementById(`ttp-${sym}`);
+    let socket = global.socket;
+    test.addEventListener(
+      "mouseenter",
+      function (event) {
+        socket.send(`{
+          "method": "subscribe",
+          "data": ["all_${sym}-USDT@ticker_10s"]
+        }`);
+        socket.onmessage = function (event) {
+          if (event.data) {
+            let json_d = JSON.parse(event.data);
+            let data = json_d.data ? json_d.data.data || [] : [];
+            let crs = me.arbitrage_company.map((el) => {
+              let res = {
+                id: el.id,
+                name: el.name,
+              };
+              let fnd = data.find((e) => e && e.company == el.name);
+              if (fnd) {
+                res.price = fnd.price;
+              }
+              return res;
+            })
+            me.currs = crs.filter((el) => {
+              return el.price ? true : false;
+            });
+          }
+        };
+      },
+      false
+    );
+
+    test.addEventListener(
+      "mouseleave",
+      function (event) {
+        socket.send(`{
+          "method": "unsubscribe",
+          "data": ["all_${sym}-USDT@ticker_10s"]
+        }`);
+      },
+      false
+    );
   },
 };
 </script>
