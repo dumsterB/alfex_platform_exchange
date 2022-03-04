@@ -67,6 +67,7 @@ export default {
       currs: [],
       companies: [],
       platform: "binance",
+      waiter: {},
     };
   },
   computed: {
@@ -169,12 +170,15 @@ export default {
             "mouseenter",
             function (event) {
               me.companies = [];
+              me.waiter[sym] = true;
               setTimeout(() => {
-                socket.send(`{
-                  "method": "subscribe",
-                  "data": ["all_${sym}-USDT@ticker_10s"]
-                }`);
-              }, 400);
+                if (me.waiter[sym]) {
+                  socket.send(`{
+                    "method": "subscribe",
+                    "data": ["all_${sym}-USDT@ticker_10s"]
+                  }`);
+                }
+              }, 500);
             },
             false
           );
@@ -182,6 +186,7 @@ export default {
           test.addEventListener(
             "mouseleave",
             function (event) {
+              me.waiter[sym] = false;
               socket.send(`{
                 "method": "unsubscribe",
                 "data": ["all_${sym}-USDT@ticker_10s"]
