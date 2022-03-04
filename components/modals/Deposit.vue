@@ -20,7 +20,7 @@
             <v-list-item >
               <v-list-item-content>
                 <v-list-item-title>
-                  <v-icon class="mr-5">mdi-credit-card-outline</v-icon>{{ items.card_number }}</v-list-item-title
+                  <v-icon class="mr-5">mdi-credit-card-outline</v-icon>{{ items ? items.card_number : "" }}</v-list-item-title
                 >
               </v-list-item-content>
             </v-list-item>

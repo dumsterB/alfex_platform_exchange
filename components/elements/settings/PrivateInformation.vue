@@ -40,7 +40,7 @@
               ></v-text-field>
 
               <v-text-field
-                v-model="surname"
+                v-model="email"
                 :rules="[v => !!v || $t('email_not_standart')]"
                 :label="$t('email')"
                 required
@@ -107,7 +107,7 @@
             <v-col cols="12" md="6" sm="6" lg="6">
 
               <v-text-field
-                v-model="email"
+                v-model="surname"
                 outlined
                 filled
                 dense
