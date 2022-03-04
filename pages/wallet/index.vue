@@ -122,9 +122,15 @@ export default {
           me.total_sum_usdt = sum_t.toFixed(4);
           me.spot_available_balance_usdt = sum_spot.toFixed(4);
           me.fiat_available_balance_usdt = sum_fiat.toFixed(4);
-          let fnd_btc = this.data.find((el) => el.base == "BTC");
+          me.spot_total_equity_usdt = me.spot_available_balance_usdt;
+          me.fiat_total_equity_usdt = me.fiat_available_balance_usdt;
+          let fnd_btc = data.find((el) => el.base == "BTC");
           if (fnd_btc) {
-            this.total_sum_btc = this.total_sum / parseFloat(fnd_btc.price);
+            me.total_sum = (sum_t/ parseFloat(fnd_btc.price)).toFixed(4);
+            me.spot_available_balance = (sum_spot/ parseFloat(fnd_btc.price)).toFixed(4);
+            me.fiat_available_balance = (sum_fiat/ parseFloat(fnd_btc.price)).toFixed(4);
+            me.spot_total_equity = me.spot_available_balance;
+            me.fiat_total_equity = me.fiat_available_balance;
           }
           console.log("sums", sum_t, sum_spot, sum_fiat);
         }

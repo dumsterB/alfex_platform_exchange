@@ -99,7 +99,7 @@ export default {
       total_sum: 0,
       total_sum_btc: 0,
       max_items: 5,
-      series: [1, 2, 3, 3],
+      series: [1],
       filteredArr: [],
       counter: 0,
       chartOptions: {

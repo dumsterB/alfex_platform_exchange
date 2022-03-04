@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       currs: [],
+      platform: "binance"
     };
   },
   computed: {
@@ -83,13 +84,13 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "subscribe",
-      "data": ["binance_all@ticker_10s"]
+      "data": ["${me.platform}_all@ticker_10s"]
     }`);
     socket.onmessage = function (event) {
       if (event.data) {
         let json_d = JSON.parse(event.data);
-        if (json_d && json_d.method == `binance_all@ticker_10s`) {
-          console.log(json_d.method)
+        if (json_d && json_d.method == `${me.platform}_all@ticker_10s`) {
+          console.log(json_d.method, json_d)
           let data = json_d.data ? json_d.data.data || [] : [];
           me.currs = me.currencies.map((el) => {
             let res = {
@@ -103,7 +104,7 @@ export default {
               res.price = fnd.price;
               res.change = fnd.change;
               res.change_p = (
-                parseFloat(fnd.change) / parseFloat(fnd.price)
+                parseFloat(fnd.change) * 100 / parseFloat(fnd.price)
               ).toFixed(4);
             }
             return res;
@@ -130,7 +131,7 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["binance_all@ticker_10s"]
+      "data": ["${this.platform}_all@ticker_10s"]
     }`);
   },
 };

@@ -27,7 +27,7 @@
         <span>{{ $t("available_balance_title") }}</span>
       </v-col>
       <v-col :cols="3">
-        <span>{{ 100 }}</span>
+        <span>{{ av_bal }} {{ curr }}</span>
       </v-col>
     </v-row>
     <v-row>
@@ -40,6 +40,8 @@
           outlined
           dense
           hide-details
+          readonly
+          suffix="USD"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -53,20 +55,22 @@
           outlined
           dense
           hide-details
+          :suffix="currency"
+          type="number"
         ></v-text-field>
       </v-col>
     </v-row>
     <v-row>
       <v-col :cols="12">
-        <v-slider hide-details max="100" min="0" value="50"></v-slider>
+        <v-slider hide-details max="100" min="0" v-model="slider_v"></v-slider>
       </v-col>
     </v-row>
     <v-row>
-      <v-col :cols="9">
+      <v-col :cols="6">
         <span>{{ $t("total") }}</span>
       </v-col>
-      <v-col :cols="3">
-        <span>{{ 100 }}</span>
+      <v-col :cols="6">
+        <span>{{ t_price }} {{t_price ? curr : ""}}</span>
       </v-col>
     </v-row>
     <v-row>
@@ -94,19 +98,87 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  props: {},
+  props: {
+    currency: {
+      type: String,
+      default: "BTC",
+    },
+    price: 0,
+  },
   data() {
     return {
-      price: 100,
+      t_price: null,
       amount: null,
       buy_sell: true,
+      slider_v: "0",
     };
   },
-  computed: {},
-  methods: {},
-  watch: {},
-  async created() {},
-  beforeDestroy() {},
+  computed: {
+    ...mapGetters("data/wallet", {
+      wallet: "list",
+    }),
+    av_bal() {
+      let usd_bal;
+      if (this.buy_sell) {
+        usd_bal = this.wallet.find((el) => el.currency.symbol == "USD");
+      } else {
+        usd_bal = this.wallet.find((el) => el.currency.symbol == this.currency);
+      }
+      if (usd_bal) {
+        return usd_bal.balance;
+      }
+      return 0;
+    },
+    curr() {
+      if (this.buy_sell) {
+        return "USD";
+      } else {
+        return this.currency;
+      }
+    },
+  },
+  methods: {
+    ...mapActions("data/wallet", {
+      fetchWallet: "fetchList",
+    }),
+    am_def() {
+      if (this.amount) {
+        let t_price;
+        if (this.buy_sell) {
+          t_price = parseFloat(this.price) * parseFloat(this.amount);
+        } else {
+          t_price = parseFloat(this.amount);
+        }
+        this.t_price = t_price.toFixed(4);
+      } else {
+        this.t_price = null;
+      }
+    },
+    sl_def() {
+      let v_n = parseFloat(this.slider_v);
+      let amount;
+      if (this.buy_sell) {
+        amount = (this.av_bal * v_n) / parseFloat(this.price) / 100;
+      } else {
+        amount = (this.av_bal * v_n) / 100;
+      }
+      this.amount = Math.round(amount * 1000000) / 1000000;
+    }
+  },
+  watch: {
+    amount() {
+      this.am_def();
+    },
+    slider_v() {
+      this.sl_def();
+    },
+    price() {
+      this.am_def();
+    }
+  },
+  created() {
+    this.fetchWallet();
+  },
 };
 </script>
 <style lang="scss" scoped>
