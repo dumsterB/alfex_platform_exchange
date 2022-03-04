@@ -31,7 +31,7 @@
           </v-list-item>
         </v-card>
       </template>
-      <div class="ac-toolltip">
+      <div class="ac-toolltip" >
         <span v-for="(item, i) in currs" :key="i">
           <span>
             {{ item.name }}
