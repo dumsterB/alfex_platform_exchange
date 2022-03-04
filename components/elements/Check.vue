@@ -25,13 +25,13 @@
           <v-row class="mt-10">
             <v-col>
               <p class="text-gray">{{$t('total_equity')}}</p>
-              <p class="text-h6"> <strong>{{totalEquity}}</strong></p>
-              <p class="text-gray">{{total_equity_usdt}}</p>
+              <p class="text-h6"> <strong>{{totalEquity}} BTC</strong></p>
+              <p class="text-gray">≈ {{total_equity_usdt}} USD</p>
             </v-col>
             <v-col>
               <p class="text-gray">{{$t('available_balance')}}</p>
-             <p class="text-h6"><strong>{{available_balance}}</strong></p>
-              <p class="text-gray">{{available_balance_usdt}}</p>
+             <p class="text-h6"><strong>{{available_balance}} BTC</strong></p>
+              <p class="text-gray">≈ {{available_balance_usdt}} USD</p>
             </v-col>
           </v-row>
         </v-list-item-content>

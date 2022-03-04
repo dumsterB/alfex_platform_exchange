@@ -36,9 +36,7 @@
           <span>
             {{ item.name }}
           </span>
-          <span style="float:right">
-            ${{ item.price }}
-          </span>
+          <span style="float: right"> ${{ item.price }} </span>
           <br />
         </span>
       </div>
@@ -96,21 +94,23 @@ export default {
         socket.onmessage = function (event) {
           if (event.data) {
             let json_d = JSON.parse(event.data);
-            let data = json_d.data ? json_d.data.data || [] : [];
-            let crs = me.arbitrage_company.map((el) => {
-              let res = {
-                id: el.id,
-                name: el.name,
-              };
-              let fnd = data.find((e) => e && e.company == el.name);
-              if (fnd) {
-                res.price = fnd.price;
-              }
-              return res;
-            })
-            me.currs = crs.filter((el) => {
-              return el.price ? true : false;
-            });
+            if (json_d && json_d.method == `all_${sym}-USDT@ticker_10s`) {
+              let data = json_d.data ? json_d.data.data || [] : [];
+              let crs = me.arbitrage_company.map((el) => {
+                let res = {
+                  id: el.id,
+                  name: el.name,
+                };
+                let fnd = data.find((e) => e && e.company == el.name);
+                if (fnd) {
+                  res.price = fnd.price;
+                }
+                return res;
+              });
+              me.currs = crs.filter((el) => {
+                return el.price ? true : false;
+              });
+            }
           }
         };
       },

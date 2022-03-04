@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       currs: [],
-    }
+    };
   },
   computed: {
     ...mapGetters(model, {
@@ -88,22 +88,27 @@ export default {
     socket.onmessage = function (event) {
       if (event.data) {
         let json_d = JSON.parse(event.data);
-        let data = json_d.data ? json_d.data.data || [] : [];
-        me.currs = me.currencies.map(el => {
-          let res = {
-            id: el.id,
-            symbol: el.symbol,
-            name: el.name,
-            logo: el.logo
-          }
-          let fnd = data.find(e => e && e.base == el.symbol);
-          if (fnd) {
-            res.price = fnd.price;
-            res.change = fnd.change;
-            res.change_p = (parseFloat(fnd.change) / parseFloat(fnd.price)).toFixed(4);
-          }
-          return res;
-        })
+        if (json_d && json_d.method == `binance_all@ticker_10s`) {
+          console.log(json_d.method)
+          let data = json_d.data ? json_d.data.data || [] : [];
+          me.currs = me.currencies.map((el) => {
+            let res = {
+              id: el.id,
+              symbol: el.symbol,
+              name: el.name,
+              logo: el.logo,
+            };
+            let fnd = data.find((e) => e && e.base == el.symbol);
+            if (fnd) {
+              res.price = fnd.price;
+              res.change = fnd.change;
+              res.change_p = (
+                parseFloat(fnd.change) / parseFloat(fnd.price)
+              ).toFixed(4);
+            }
+            return res;
+          });
+        }
         // console.log('me.currs', me.currs)
       }
     };
@@ -127,7 +132,7 @@ export default {
       "method": "unsubscribe",
       "data": ["binance_all@ticker_10s"]
     }`);
-  }
+  },
 };
 </script>
 <style scoped>

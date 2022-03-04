@@ -12,10 +12,10 @@
           </v-list-item-title>
           <br><br>
           <v-list-item-title class="text-h5 mb-1">
-            <strong v-if="hideBalancer">93.173529 </strong>
+            <strong v-if="hideBalancer">{{total_sum_btc}} </strong>
             <strong v-if="!hideBalancer">******</strong> BTC
           </v-list-item-title>
-          <p v-if="hideBalancer" class="mt-2 text-gray">≈ 4,064,351.997 USD</p>
+          <p v-if="hideBalancer" class="mt-2 text-gray">≈ {{total_sum}} USD</p>
           <p v-if="!hideBalancer" class="mt-2 text-gray">******</p>
         </v-list-item-content>
 
@@ -56,6 +56,10 @@ export default {
   name: "GeneralCapital",
   components:{
     Deposit
+  },
+  props: {
+    total_sum_btc: "",
+    total_sum: ""
   },
   data() {
     return {
