@@ -33,7 +33,11 @@
             v-for="(curr, i) in currs"
             :key="i"
           >
-            <Currency :currency="curr" />
+            <Currency
+              :currency="curr"
+              :companies="companies"
+              :id="`ttp-${curr.symbol}`"
+            />
           </v-col>
         </v-row>
       </v-col>
@@ -61,12 +65,16 @@ export default {
   data() {
     return {
       currs: [],
-      platform: "binance"
+      companies: [],
+      platform: "binance",
     };
   },
   computed: {
     ...mapGetters(model, {
       currencies: "list",
+    }),
+    ...mapGetters("data/arbitrage_company", {
+      arbitrage_company: "list",
     }),
   },
   methods: {
@@ -91,7 +99,7 @@ export default {
         let json_d = JSON.parse(event.data);
         if (json_d && json_d.method == `${me.platform}_all@ticker_10s`) {
           let data = json_d.data ? json_d.data.data || [] : [];
-          me.currs = me.currencies.map((el) => {
+          let currs = me.currencies.map((el) => {
             let res = {
               id: el.id,
               symbol: el.symbol,
@@ -103,11 +111,32 @@ export default {
               res.price = fnd.price;
               res.change = fnd.change;
               res.change_p = (
-                parseFloat(fnd.change) * 100 / parseFloat(fnd.price)
+                (parseFloat(fnd.change) * 100) /
+                parseFloat(fnd.price)
               ).toFixed(4);
             }
             return res;
           });
+          me.currs = currs;
+        }
+        let s_method = json_d.method.slice(0, 3);
+        if (json_d && s_method == "all") {
+          let data = json_d.data ? json_d.data.data || [] : [];
+          let crs = me.arbitrage_company.map((el) => {
+            let res = {
+              id: el.id,
+              name: el.name,
+            };
+            let fnd = data.find((e) => e && e.company == el.name);
+            if (fnd) {
+              res.price = fnd.price;
+            }
+            return res;
+          });
+          let companies = crs.filter((el) => {
+            return el.price ? true : false;
+          });
+          me.companies = companies;
         }
         // console.log('me.currs', me.currs)
       }
@@ -125,6 +154,45 @@ export default {
     // socket.onerror = function (error) {
     //   console.log(`[error] ${error.message}`);
     // };
+  },
+  mounted() {
+    let me = this;
+    let int = setInterval(() => {
+      let test = document.getElementById(`ttp-BTC`);
+      if (test) {
+        me.currencies.forEach((currency) => {
+          let sym = currency.symbol;
+          let test = document.getElementById(`ttp-${sym}`);
+          let socket = global.socket;
+
+          test.addEventListener(
+            "mouseenter",
+            function (event) {
+              me.companies = [];
+              setTimeout(() => {
+                socket.send(`{
+                  "method": "subscribe",
+                  "data": ["all_${sym}-USDT@ticker_10s"]
+                }`);
+              }, 400);
+            },
+            false
+          );
+
+          test.addEventListener(
+            "mouseleave",
+            function (event) {
+              socket.send(`{
+                "method": "unsubscribe",
+                "data": ["all_${sym}-USDT@ticker_10s"]
+              }`);
+            },
+            false
+          );
+        });
+        clearInterval(int);
+      }
+    }, 1000);
   },
   destroyed() {
     let socket = global.socket;

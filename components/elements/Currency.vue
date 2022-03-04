@@ -3,7 +3,6 @@
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-card
-          :id="`ttp-${currency.symbol}`"
           class="currecyCard"
           elevation="3"
           v-bind="attrs"
@@ -31,14 +30,24 @@
           </v-list-item>
         </v-card>
       </template>
-      <div class="ac-toolltip" >
-        <span v-for="(item, i) in currs" :key="i">
-          <span>
-            {{ item.name }}
+      <div class="ac-toolltip">
+        <div v-if="companies && companies.length > 0">
+          <span v-for="(item, i) in companies" :key="i">
+            <span>
+              {{ item.name }}
+            </span>
+            <span style="float: right"> ${{ item.price }} </span>
+            <br />
           </span>
-          <span style="float: right"> ${{ item.price }} </span>
-          <br />
-        </span>
+        </div>
+        <v-progress-circular
+          v-else
+          :size="25"
+          :width="3"
+          color="green"
+          indeterminate
+          style="left: 64px;"
+        ></v-progress-circular>
       </div>
     </v-tooltip>
   </div>
@@ -54,11 +63,16 @@ export default {
         return {};
       },
     },
+    companies: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
   },
   data() {
     return {
       interv: null,
-      currs: [],
     };
   },
   watch: {},
@@ -79,55 +93,7 @@ export default {
       }
     },
   },
-  mounted() {
-    let me = this;
-    let sym = me.currency.symbol;
-    let test = document.getElementById(`ttp-${sym}`);
-    let socket = global.socket;
-    test.addEventListener(
-      "mouseenter",
-      function (event) {
-        socket.send(`{
-          "method": "subscribe",
-          "data": ["all_${sym}-USDT@ticker_10s"]
-        }`);
-        socket.onmessage = function (event) {
-          if (event.data) {
-            let json_d = JSON.parse(event.data);
-            if (json_d && json_d.method == `all_${sym}-USDT@ticker_10s`) {
-              let data = json_d.data ? json_d.data.data || [] : [];
-              let crs = me.arbitrage_company.map((el) => {
-                let res = {
-                  id: el.id,
-                  name: el.name,
-                };
-                let fnd = data.find((e) => e && e.company == el.name);
-                if (fnd) {
-                  res.price = fnd.price;
-                }
-                return res;
-              });
-              me.currs = crs.filter((el) => {
-                return el.price ? true : false;
-              });
-            }
-          }
-        };
-      },
-      false
-    );
-
-    test.addEventListener(
-      "mouseleave",
-      function (event) {
-        socket.send(`{
-          "method": "unsubscribe",
-          "data": ["all_${sym}-USDT@ticker_10s"]
-        }`);
-      },
-      false
-    );
-  },
+  mounted() {},
 };
 </script>
 <style lang="scss" scoped>
