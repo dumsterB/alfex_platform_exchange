@@ -2,16 +2,16 @@
   <div>
     <v-container>
       <v-row>
-        <v-col :cols="12" :md="3" :lg="3" :sm="12" :xs="12">
+        <v-col :cols="12" :md="3" :lg="3">
           <v-row>
-            <v-col :cols="12" :md="5" :lg="5" :sm="12" :xs="12">
+            <v-col :cols="12" :md="5" :lg="5">
               <v-switch
                 v-model="is_switched"
                 class="ml-6 mt-4"
                 :label="is_switched ? $t('Arbitrage') : $t('Spot')"
               ></v-switch>
             </v-col>
-            <v-col :cols="12" :md="7" :lg="7" :sm="12" :xs="12">
+            <v-col :cols="12" :md="7" :lg="7">
               <v-autocomplete
                 class="crypto-select ml-4 mt-4"
                 v-model="curr_id"
@@ -26,7 +26,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col :cols="12" :md="9" :lg="9" :sm="12" :xs="12">
+        <v-col :cols="12" :md="9" :lg="9">
           <Indicators
             v-if="!is_switched"
             :currency="curr_code"
@@ -36,12 +36,13 @@
           <Platforms
             v-else
             :currency="curr_code"
+            :prices="arb_data"
             @clicked="platform_changed"
           ></Platforms>
         </v-col>
       </v-row>
       <v-row>
-        <v-col :cols="12" :md="8" :lg="8" :sm="12" :xs="12">
+        <v-col :cols="12" :xl="8">
           <v-row class="ml-4">
             <v-col class="d-flex justify-center">
               <TradeGraph
@@ -55,17 +56,25 @@
           </v-row>
           <v-row>
             <v-col>
-              <TableTrades v-if="!is_switched"></TableTrades>
-              <TableASession v-else></TableASession>
+              <TableTrades v-if="!is_switched" :prices="prices"></TableTrades>
+              <TableASession
+                v-else
+                :prices="prices"
+                :platform="selected_platform"
+              ></TableASession>
             </v-col>
           </v-row>
         </v-col>
-        <v-col :cols="12" :md="4" :lg="4" :sm="12" :xs="12">
-          <SpotCard v-if="!is_switched" :currency="curr_code" :price="price"></SpotCard>
+        <v-col :cols="12" :md="12" :lg="4">
+          <SpotCard
+            v-if="!is_switched"
+            :currency="curr_code"
+            :price="price"
+          ></SpotCard>
           <TableAC
             v-else
             :currency="curr_code ? curr_code : undefined"
-            :currencies="currencies"
+            :prices="arb_data"
             :current="current"
           ></TableAC>
         </v-col>
@@ -104,8 +113,11 @@ export default {
       graphWidth: parseInt(((window.innerWidth - 250) * 2) / 3),
       graphHeight: 500,
       selected_platform: "binance",
+      platform: "binance",
       price: null,
       change: null,
+      prices: [],
+      arb_data: [],
     };
   },
   computed: {
@@ -120,31 +132,22 @@ export default {
       this.curr_code = this.current.symbol;
     },
     curr_code() {
-      let me = this;
-      if (this.curr_code) {
-        socket.send(`{
-          "method": "subscribe",
-          "data": ["binance_${me.curr_code}-USDT@ticker_5s"]
-        }`);
-        socket.onmessage = function (event) {
-          if (event.data) {
-            let json_d = JSON.parse(event.data);
-            if (
-              json_d &&
-              json_d.method == `binance_${me.curr_code}-USDT@ticker_5s`
-            ) {
-              let data = json_d.data ? json_d.data.data || [] : [];
-              if (data && data[0] && data[0].price) {
-                me.price = data[0].price;
-                me.change = data[0].change;
-              } else {
-                me.price = 1;
-                me.change = 0;
-              }
-            }
-          }
-        };
+      if (this.curr_code && !this.is_switched) {
+        this.spot_sockets();
       }
+      if (this.curr_code && this.is_switched) {
+        this.arbitrage_sockets();
+      }
+    },
+    is_switched() {
+      if (!this.is_switched) {
+        this.spot_sockets();
+      } else {
+        this.arbitrage_sockets();
+      }
+    },
+    selected_platform() {
+      this.arbitrage_sockets();
     },
   },
   methods: {
@@ -167,14 +170,75 @@ export default {
     platform_changed(platform) {
       this.selected_platform = platform;
     },
-  },
-  created() {
-    this.fetchAC();
-    this.fetchAS();
-    this.fetchTrades();
+    spot_sockets() {
+      let me = this;
+      let socket = global.socket;
+      socket.send(`{
+        "method": "unsubscribe",
+        "data": ["all_${me.curr_code}-USDT@ticker_5s"]
+      }`);
+      socket.send(`{
+        "method": "subscribe",
+        "data": ["binance_${me.curr_code}-USDT@ticker_5s", "${me.platform}_all@ticker_10s"]
+      }`);
+      socket.onmessage = function (event) {
+        if (event.data) {
+          let json_d = JSON.parse(event.data);
+          if (
+            json_d &&
+            json_d.method == `binance_${me.curr_code}-USDT@ticker_5s`
+          ) {
+            let data = json_d.data ? json_d.data.data || [] : [];
+            if (data && data[0] && data[0].price) {
+              me.price = data[0].price;
+              me.change = data[0].change;
+            } else {
+              me.price = 1;
+              me.change = 0;
+            }
+          }
+          if (json_d && json_d.method == `${me.platform}_all@ticker_10s`) {
+            let data = json_d.data ? json_d.data.data || [] : [];
+            me.prices = data;
+          }
+        }
+      };
+    },
+    arbitrage_sockets() {
+      let me = this;
+      let socket = global.socket;
+      socket.send(`{
+        "method": "unsubscribe",
+        "data": ["binance_${me.curr_code}-USDT@ticker_5s", "${me.platform}_all@ticker_10s"]
+      }`);
+      socket.send(`{
+        "method": "subscribe",
+        "data": ["all_${me.curr_code}-USDT@ticker_5s", "${me.selected_platform}_all@ticker_10s"]
+      }`);
+      
+      socket.onmessage = function (event) {
+        if (event.data) {
+          let json_d = JSON.parse(event.data);
+          if (json_d && json_d.method == `all_${me.curr_code}-USDT@ticker_5s`) {
+            let data = json_d.data ? json_d.data.data || [] : [];
+            me.arb_data = data;
+          }
+          if (
+            json_d &&
+            json_d.method == `${me.selected_platform}_all@ticker_10s`
+          ) {
+            let data = json_d.data ? json_d.data.data || [] : [];
+            me.prices = data;
+          }
+        }
+      };
+    },
   },
   async mounted() {
     await this.fetchCurrencies();
+    await this.fetchTrades();
+    this.fetchAC();
+    this.fetchAS();
     if (this.$router.currentRoute.query && this.$router.currentRoute.query.id) {
       this.curr_id = parseInt(this.$router.currentRoute.query.id);
     }
@@ -187,7 +251,8 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["binance_${this.curr_code}-USDT@ticker_5s"]
+      "data": ["binance_${this.curr_code}-USDT@ticker_5s", "${this.platform}_all@ticker_10s", 
+      "all_${this.curr_code}-USDT@ticker_5s", "${this.selected_platform}__all@ticker_10s"]
     }`);
   },
 };

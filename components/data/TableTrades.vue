@@ -22,6 +22,14 @@ import { mapGetters, mapActions } from "vuex";
 const model = "data/trade";
 
 export default {
+  props: {
+    prices: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    }
+  },
   data() {
     return {
       perpage: 5,
@@ -65,6 +73,7 @@ export default {
       ],
       list: [],
       interv: null,
+      platform: "binance"
     };
   },
   computed: {
@@ -76,14 +85,18 @@ export default {
     ...mapActions(model, {
       fetchList: "fetchList",
     }),
-    resetList() {
+    resetList(prices) {
       this.list = this.trades.map((el) => {
-        let diff =
-          (Math.random() * el.source_amount) / 10 -
-          (Math.random() * el.source_amount) / 10;
-        let curr_cost = el.source_amount + diff;
+        let fnd_b = prices.find(e => e && e.base == el.dest_currency.symbol);
+        let pr_b = 1;
+        if (fnd_b && fnd_b.price) pr_b = fnd_b.price;
+        let fnd_p = prices.find(e => e && e.base == el.source_currency.symbol);
+        let pr_p = 1;
+        if (fnd_p && fnd_p.price) pr_p = fnd_p.price;
+        let curr_cost = el.source_amount * pr_b / pr_p;
         el.current_cost = curr_cost.toFixed(4);
-        let diff_proc = (diff * 100) / curr_cost;
+        let diff = curr_cost - el.source_amount;
+        let diff_proc = (diff * 100) / el.source_amount;
         el.difference = diff.toFixed(4);
         el.difference_perc = `${diff_proc.toFixed(4)} %`;
         return el;
@@ -98,16 +111,12 @@ export default {
       }
     },
   },
-  async created() {
-    this.resetList();
-    this.interv = setInterval(() => {
-      this.resetList();
-    }, 2000);
-  },
-  beforeDestroy() {
-    if (this.interv) {
-      clearInterval(this.interv);
+  watch: {
+    prices() {
+      this.resetList(this.prices)
     }
+  },
+  async created() {
   },
 };
 </script>

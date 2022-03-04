@@ -19,7 +19,7 @@
     </v-data-table>
     <v-dialog v-model="dialog" max-width="600px">
       <TradePosition
-        :tradeItem="selectedCurrency"
+        :tradeItem="current"
         :action="action"
         :userWallet="
           userWallet ? userWallet : { balance: $t('wallet_balance') }
@@ -43,7 +43,7 @@ export default {
       type: String,
       default: "BTC",
     },
-    currencies: {
+    prices: {
       type: Array,
       default: () => {
         return [];
@@ -79,7 +79,6 @@ export default {
       ],
       list: [],
       interv: null,
-      selectedCurrency: null,
       action: null,
       selectedArbitrageCompany: null,
       userWallet: null,
@@ -93,18 +92,22 @@ export default {
       wallets: "list",
     }),
   },
+  watch: {
+    prices() {
+      this.resetList(this.prices);
+    }
+  },
   methods: {
     ...mapActions(modelCompanies, {
       fetchList: "fetchList",
     }),
-    // ...mapActions("data/arbitrage_session", {
-    //   create: "create",
-    // }),
 
-    resetList() {
+    resetList(prices) {
       this.list = this.ac.map((el) => {
-        let curr_cost = Math.random() * 1000;
-        el.price = curr_cost.toFixed(2);
+        let fnd = prices.find(e => e && e.company == el.name);
+        let pr = 0;
+        if (fnd && fnd.price) pr = fnd.price;
+        el.price = pr.toFixed(2);
         return el;
       });
     },
@@ -119,49 +122,33 @@ export default {
     buy(item) {
       this.action = "Buy";
       this.dialog = true;
-      this.selectedCurrency = this.currencies.filter(
-        (curr) => curr.short_name === this.currency
-      )[0];
-      this.selectedArbitrageCompany = this.list.filter(
+      this.selectedArbitrageCompany = this.list.find(
         (elem) => elem.name === item.name
-      )[0];
+      );
 
-      this.userWallet = this.wallets.filter(
-        (el) => el.currency.symbol === this.selectedCurrency.symbol
-      )[0];
+      this.userWallet = this.wallets.find(
+        (el) => el.currency.symbol === this.current.symbol
+      );
     },
     sell(item) {
       this.action = "Sell";
       this.dialog = true;
-      this.selectedCurrency = this.currencies.filter(
-        (curr) => curr.short_name === this.currency
-      )[0];
       this.selectedArbitrageCompany = this.list.filter(
         (elem) => elem.name === item.name
-      )[0];
-      this.userWallet = this.wallets.filter(
-        (el) => el.currency.symbol === this.selectedCurrency.symbol
-      )[0];
+      );
+      this.userWallet = this.wallets.find(
+        (el) => el.currency.symbol === this.current.symbol
+      );
     },
     closeTrade() {
       this.action = null;
       this.dialog = false;
-      this.selectedCurrency = null;
       this.selectedArbitrageCompany = null;
       this.userWallet = null;
     },
   },
   async created() {
     // this.create({ data: {} });
-    this.resetList();
-    this.interv = setInterval(() => {
-      this.resetList();
-    }, 2000);
-  },
-  beforeDestroy() {
-    if (this.interv) {
-      clearInterval(this.interv);
-    }
   },
 };
 </script>

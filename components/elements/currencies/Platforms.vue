@@ -19,7 +19,7 @@
       >
         <div>
           <p class="ma-0 pa-3 pb-0 mt-0">{{ val.name }}</p>
-          <p class="price ma-0 pa-3 pt-0 mt-1">{{ val.price }}</p>
+          <p class="price ma-0 pa-3 pt-0 mt-1">${{ val.price }}</p>
         </div>
       </v-btn>
     </v-col>
@@ -34,13 +34,20 @@ export default {
   props: {
     currency: {
       type: String,
-      default: "btc",
+      default: "BTC",
+    },
+    prices: {
+      type: Array,
+      default: () => {
+        return [];
+      },
     },
   },
   data() {
     return {
       list: [],
       interv: null,
+      first: false,
     };
   },
   computed: {
@@ -49,12 +56,24 @@ export default {
     }),
   },
   methods: {
-    resetList() {
+    resetList(prices) {
       let list = this.ac.map((el, i) => {
-        let curr_cost = Math.random() * 1000;
-        el.price = curr_cost.toFixed(2);
+        let fnd = prices.find(e => e && e.company == el.name);
+        let pr = 0;
+        if (fnd && fnd.price) pr = fnd.price;
+        el.price = pr.toFixed(4);
         return el;
       });
+      if (!this.first) {
+        this.first = true;
+        list.forEach((el, i) => {
+          if (i == 0) {
+            el.clicked = true;
+          } else {
+            el.clicked = false;
+          }
+        });
+      }
       if (list.length > 5) {
         this.list = list.slice(0, 5);
       } else {
@@ -75,36 +94,12 @@ export default {
     },
   },
   watch: {
-    currency() {
-      let indicator = this.list;
-      indicator.forEach((el) => {
-        el.price = (0.5 + Math.random()) * el.value;
-      });
-      let list = Object.assign([], indicator);
-      if (list.length > 5) {
-        this.list = list.slice(0, 5);
-      } else {
-        this.list = list;
-      }
+    prices() {
+      this.resetList(this.prices)
     },
   },
   async created() {
-    this.resetList();
-    this.list.forEach((el, i) => {
-      if (i == 0) {
-        el.clicked = true;
-      } else {
-        el.clicked = false;
-      }
-    });
-    this.interv = setInterval(() => {
-      this.resetList();
-    }, 2000);
-  },
-  beforeDestroy() {
-    if (this.interv) {
-      clearInterval(this.interv);
-    }
+    
   },
 };
 </script>

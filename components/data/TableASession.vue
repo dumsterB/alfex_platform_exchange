@@ -45,6 +45,18 @@ export default {
   components: {
     ClosePosition,
   },
+  props: {
+    prices: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    platform: {
+      type: String,
+      default: "binance",
+    },
+  },
   data() {
     return {
       dialog: false,
@@ -115,19 +127,24 @@ export default {
       this.dialog = true;
       this.selectedItem = evt.currentTarget.value;
     },
-    resetList() {
-      this.list = this.arbitrage_sessions.map((el) => {
-        let diff =
-          (Math.random() * el.source_amount) / 10 -
-          (Math.random() * el.source_amount) / 10;
-        let curr_cost = el.source_amount + diff;
-        el.current_cost = curr_cost.toFixed(4);
-        let diff_proc = (diff * 100) / curr_cost;
-        el.difference = diff.toFixed(4);
-        el.difference_perc = `${diff_proc.toFixed(4)} %`;
-
-        return el;
+    resetList(prices) {
+      let list = [];
+      this.arbitrage_sessions.forEach(element => {
+        if (element.arbitrage_company.name == this.platform) {
+          let fnd = prices.find(e => e && e.base == element.wallet.currency.name);
+          if (fnd && fnd.price) {
+            let pr = fnd.price;
+            let curr_cost = element.amount * pr;
+            element.current_cost = curr_cost.toFixed(3);
+            let diff = curr_cost - element.start_exchange_rate;
+            let diff_proc = (diff * 100) / element.start_exchange_rate;
+            element.difference = diff.toFixed(3);
+            element.difference_perc = `${diff_proc.toFixed(3)} %`;
+          };
+          list.push(element)
+        }
       });
+      this.list = list;
     },
 
     diffColor(diff) {
@@ -139,17 +156,13 @@ export default {
       }
     },
   },
-  async created() {
-    this.resetList();
-    this.interv = setInterval(() => {
-      this.resetList();
-    }, 1000);
-  },
-
-  beforeDestroy() {
-    if (this.interv) {
-      clearInterval(this.interv);
+  watch: {
+    prices() {
+      console.log('this.prices', this.prices)
+      this.resetList(this.prices)
     }
+  },
+  async created() {
   },
 };
 </script>

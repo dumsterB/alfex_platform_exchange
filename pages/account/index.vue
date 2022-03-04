@@ -90,7 +90,6 @@ export default {
       if (event.data) {
         let json_d = JSON.parse(event.data);
         if (json_d && json_d.method == `${me.platform}_all@ticker_10s`) {
-          console.log(json_d.method, json_d)
           let data = json_d.data ? json_d.data.data || [] : [];
           me.currs = me.currencies.map((el) => {
             let res = {
