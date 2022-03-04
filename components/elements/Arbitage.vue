@@ -25,14 +25,14 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-bind="attrs"
-                            v-on="on" class="ml-3 green--text" @click="buy(coin)">mdi-minus-box</v-icon>
+                            v-on="on" class="ml-3 green--text" @click="buy(coin,item)">mdi-minus-box</v-icon>
                   </template>
                   <span>{{$t('buy')}}</span>
                 </v-tooltip>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-bind="attrs"
-                            v-on="on" class="ml-3 red--text" @click="sell(coin)">mdi-minus-box
+                            v-on="on" class="ml-3 red--text" @click="sell(item)">mdi-minus-box
                     </v-icon>
                   </template>
                   <span>{{$t('sell')}}</span>
@@ -42,7 +42,6 @@
           </v-card>
         </v-col>
       </v-row>
-      <pre>{{ arbitrage_company }}</pre>
       <v-dialog v-model="dialog" max-width="600px">
         <TradePosition
           :tradeItem="selectedCurrency"
@@ -88,9 +87,14 @@ export default {
     closeTrade() {
       this.dialog = false
     },
-    buy() {
+    buy(coin,item) {
       this.action = "Buy";
       this.dialog = true;
+      console.log(coin)
+      this.userWallet=coin
+      this.selectedCurrency=coin
+      this.selectedArbitrageCompany=item
+      console.log(coin,item)
     },
     sell() {
       this.action = "Sell";

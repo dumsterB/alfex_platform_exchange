@@ -16,12 +16,11 @@
           </v-btn>
         </v-row>
         <v-list flat>
-          <v-list-item-group v-model="selectedItem" color="primary">
-            <v-list-item v-for="(item, i) in items" :key="i">
+          <v-list-item-group  color="primary">
+            <v-list-item >
               <v-list-item-content>
                 <v-list-item-title>
-                  <v-icon class="mr-5" v-text="item.icon"></v-icon
-                  >{{ item.text }}</v-list-item-title
+                  <v-icon class="mr-5">mdi-credit-card-outline</v-icon>{{ items.card_number }}</v-list-item-title
                 >
               </v-list-item-content>
             </v-list-item>
@@ -30,8 +29,8 @@
         <div class="text-center justify-center d-flex">
           <div class="credit-card-add" @click="cardDialogChanger">
             <div class="mt-15">
-              <v-icon size="50">mdi-plus</v-icon>
-              <p>{{ $t("addNewPayment") }}</p>
+              <v-icon size="50" dark>mdi-plus</v-icon>
+              <p style="color: white">{{ $t("addNewPayment") }}</p>
             </div>
           </div>
         </div>
@@ -67,11 +66,7 @@ export default {
     return {
       selectedItem: 1,
       cardDialog: false,
-      items: [
-        { text: "Банковская карта", icon: "mdi-credit-card-outline" },
-        { text: "Банковская карта", icon: "mdi-credit-card-outline" },
-        { text: "Банковская карта", icon: "mdi-credit-card-outline" },
-      ],
+      items: {},
     };
   },
   methods: {
@@ -79,6 +74,9 @@ export default {
       this.cardDialog = !this.cardDialog;
     },
   },
+  mounted() {
+    this.items= JSON.parse(localStorage.getItem('bank_cards' || []))
+  }
 };
 </script>
 
