@@ -88,32 +88,13 @@ export default {
     closeTrade() {
       this.dialog = false
     },
-    buy(item) {
+    buy() {
       this.action = "Buy";
       this.dialog = true;
-      this.selectedCurrency = this.currencies.filter(
-        (curr) => curr.short_name === this.currency
-      )[0];
-      this.selectedArbitrageCompany = this.list.filter(
-        (elem) => elem.name === item.name
-      )[0];
-
-      this.userWallet = this.wallets.filter(
-        (el) => el.currency.symbol === this.selectedCurrency.symbol
-      )[0];
     },
-    sell(item) {
+    sell() {
       this.action = "Sell";
       this.dialog = true;
-      this.selectedCurrency = this.currencies.filter(
-        (curr) => curr.short_name === this.currency
-      )[0];
-      this.selectedArbitrageCompany = this.list.filter(
-        (elem) => elem.name === item.name
-      )[0];
-      this.userWallet = this.wallets.filter(
-        (el) => el.currency.symbol === this.selectedCurrency.symbol
-      )[0];
     },
   },
   computed: {
