@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       isFavorite: false,
+      fav_currs: ["BTC", "ETH", "BCH", "LUNA", "XRP"]
     };
   },
   computed: {},

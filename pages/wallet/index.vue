@@ -78,7 +78,7 @@ export default {
   watch: {},
   async created() {
     let me = this;
-    await this.fetchWallet();
+    this.fetchWallet();
     let socket = global.socket;
     socket.send(`{
       "method": "subscribe",

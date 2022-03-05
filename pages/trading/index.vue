@@ -10,9 +10,4 @@ export default {
 };
 </script>
 <style>
-.uc_text {
-  position: relative;
-  top: 100px;
-  text-align: center;
-}
 </style>

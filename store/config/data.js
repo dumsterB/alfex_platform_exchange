@@ -17,7 +17,7 @@ export const state = () => ({
         }
     ],
     default_language: "ru",
-    preload_models: ["currency", "arbitrage_company"],
+    preload_models: ["currency", "arbitrage_company", "wallet"],
     themes: ["Dark", "Light"]
 })
 
