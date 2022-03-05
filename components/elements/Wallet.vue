@@ -188,25 +188,27 @@ export default {
       } else {
         this.filteredArr = data;
       }
-      
-      this.apexArrSymbol = this.filteredArr.map((e) => `${e.currency} $`);
-      this.apexArrBalance = this.filteredArr.map((e) => e.balance);
-      if (this.getLengthArr > 0) {
-        this.apexArrBalance.push(this.other_sum);
-        this.apexArrSymbol.push(this.$t("others"));
+
+      if (this.counter < 2) {
+        this.counter += 1;
+        this.apexArrSymbol = this.filteredArr.map((e) => `${e.currency} $`);
+        this.apexArrBalance = this.filteredArr.map((e) => e.balance);
+        if (this.getLengthArr > 0) {
+          this.apexArrBalance.push(this.other_sum);
+          this.apexArrSymbol.push(this.$t("others"));
+        }
+        this.chartOptions.labels = this.apexArrSymbol;
+        this.series = this.apexArrBalance;
+        this.chartOptions = Object.assign({}, this.chartOptions);
       }
-      this.chartOptions.labels = this.apexArrSymbol;
-      this.series = this.apexArrBalance;
-      this.chartOptions = Object.assign({}, this.chartOptions);
+      
     },
   },
 
   watch: {
     currency() {
-      if (this.counter < 2) {
-        this.counter += 1;
-        this.filteredArrInit();
-      }
+      this.filteredArrInit();
+      
     },
   },
 

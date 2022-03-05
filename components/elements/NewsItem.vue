@@ -1,17 +1,17 @@
 <template>
-  <v-card class="mx-auto" max-width="320" style="border-radius: 12px">
+  <v-card class="mx-auto" min-height="580" style="border-radius: 12px">
     <v-img
       class="white--text align-end"
       height="200px"
-      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+      :src="item.image_url"
     >
     </v-img>
-    <v-card-title>{{ item.heading }}</v-card-title>
+    <v-card-title>{{ item.title }}</v-card-title>
     <v-card-text class="text--primary">
-      <div>{{ item.excerpt }}</div>
+      <div>{{ item.description }}</div>
     </v-card-text>
-    <v-card-actions class="justify-space-between">
-      <v-card-subtitle> {{ item.date }}</v-card-subtitle>
+    <v-card-actions class="bottom-new">
+      <v-card-subtitle> {{ item.pubDate }}</v-card-subtitle>
       <v-btn @click="handlerOpenArticle" color="#23ad41" text>
         {{ $t("read_more") }}
       </v-btn>
@@ -31,12 +31,15 @@ export default {
 
   methods: {
     handlerOpenArticle: function () {
-      this.$router.push({
-        path: `/news/${this.item.articleId}`,
-      });
+      window.open(this.item.link, '_blank').focus();
     },
   },
   mounted() {},
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss">
+.bottom-new {
+  position: absolute;
+  bottom: 0;
+}
+</style>

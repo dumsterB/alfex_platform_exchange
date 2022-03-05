@@ -25,11 +25,12 @@ export default {
   data() {
     return {
       isLoading: true,
+      interv: null
     };
   },
   computed: {
     ...mapGetters("config/data", {
-      default_language: "default_language"
+      default_language: "default_language",
     }),
   },
   methods: {
@@ -51,11 +52,21 @@ export default {
         localStorage.setItem("language", lang);
         htmlElement.setAttribute("theme", theme);
       }
+      let models = this.$store.state.config.data.preload_models;
+      for (let i = 0; i < models.length; i++) {
+        let res = await this.$store.dispatch(`data/${models[i]}/fetchList`);
+      }
     },
   },
   async created() {
     if (this.$store.state.auth.user) {
       global.socket = new WebSocket("ws://getaway-ws-server.herokuapp.com");
+      this.interv = setInterval(() => {
+        let ws = global.socket;
+        if (ws.readyState !== ws.OPEN) {
+          global.socket = new WebSocket("ws://getaway-ws-server.herokuapp.com");
+        }
+      }, 5000);
       await this.preload_models();
     } else {
       if (this.$router.history.current.path != "/auth/registration") {
@@ -74,6 +85,11 @@ export default {
     LoadingScreen,
     Footer,
   },
+  beforeDestroy() {
+    if (this.interv) {
+      clearInterval(this.interv)
+    }
+  }
 };
 </script>
 

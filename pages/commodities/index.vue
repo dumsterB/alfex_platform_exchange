@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div class="uc_text">
+    {{$t('under_construction')}}
+  </div>
 </template>
 
 <script>

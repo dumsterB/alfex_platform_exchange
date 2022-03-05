@@ -2,13 +2,25 @@
   <div>
     <v-row>
       <v-col>
-        <v-row>
+        <v-row class="ml-4 mr-4">
           <v-col
             class="d-flex justify-center mt-4"
+            :xl="3"
+            :lg="4"
+            :md="6"
             v-for="article in news"
             :key="article.articleId"
           >
             <NewsItem :item="article" />
+          </v-col>
+          <v-col
+            v-if="news && news.length > 0"
+            class="d-flex justify-center mt-4"
+            :xl="3"
+            :lg="4"
+            :md="6"
+          >
+            <v-btn x-large outlined class="btn-load">Load more</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -19,7 +31,7 @@
 <script>
 import NewsItem from "~/components/elements/NewsItem";
 import { mapGetters, mapActions } from "vuex";
-const model = "config/data";
+const model = "data/news";
 
 export default {
   components: {
@@ -36,7 +48,14 @@ export default {
     }),
   },
   async mounted() {
-    await this.fetchNews();
+    if (!this.news || this.news.length == 0) {
+      await this.fetchNews();
+    }
   },
 };
 </script>
+<style>
+.btn-load {
+  top: 200px;
+}
+</style>

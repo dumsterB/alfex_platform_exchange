@@ -235,9 +235,7 @@ export default {
     },
   },
   async mounted() {
-    await this.fetchCurrencies();
     await this.fetchTrades();
-    this.fetchAC();
     this.fetchAS();
     if (this.$router.currentRoute.query && this.$router.currentRoute.query.id) {
       this.curr_id = parseInt(this.$router.currentRoute.query.id);

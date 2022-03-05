@@ -72,8 +72,12 @@ export default {
   },
   computed: {
     ...mapGetters(model, {
-      currencies: "list",
+      currencies_full: "list",
     }),
+    currencies() {
+      let c_f = this.currencies_full;
+      return c_f.filter(el => el.currency_type && el.currency_type.key == "CRYPTO");
+    },
     ...mapGetters("data/arbitrage_company", {
       arbitrage_company: "list",
     }),
@@ -88,8 +92,6 @@ export default {
   },
   async created() {
     let me = this;
-    await this.fetchCurrencies();
-    await this.fetchAC();
     let socket = global.socket;
     socket.send(`{
       "method": "subscribe",
@@ -142,19 +144,6 @@ export default {
         // console.log('me.currs', me.currs)
       }
     };
-    // socket.onclose = function (event) {
-    //   if (event.wasClean) {
-    //     console.log(
-    //       `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
-    //     );
-    //   } else {
-    //     console.log("[close] Connection died");
-    //   }
-    // };
-
-    // socket.onerror = function (error) {
-    //   console.log(`[error] ${error.message}`);
-    // };
   },
   mounted() {
     let me = this;
