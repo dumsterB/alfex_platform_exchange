@@ -19,14 +19,14 @@
         <v-list-item
           class=""
           disabled
-          v-for="(cur, i) in item.currency.slice(0, 5)"
+          v-for="(cur, i) in currencies"
           :key="i"
         >
           <v-list-item-avatar>
             <v-img v-bind:src="cur.logo"></v-img>
           </v-list-item-avatar>
           <v-list-item-content v-text="cur.name"></v-list-item-content>
-          <v-list-item-content v-text="cur.symbol"></v-list-item-content>
+          $<v-list-item-content v-text="prices[cur.symbol]"></v-list-item-content>
         </v-list-item>
       </v-list>
     </a>
@@ -38,16 +38,29 @@ export default {
   name: "MarketItem",
   data() {
     return {
-      isFavorite: false,
-      fav_currs: ["BTC", "ETH", "BCH", "LUNA", "XRP"]
+      isFavorite: false
     };
   },
   computed: {},
   props: {
     item: {
       type: Object,
-      default: {},
+      default: () => {
+        return {}
+      },
     },
+    prices: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+    currencies: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    }
   },
   methods: {
     togglerFavorite() {

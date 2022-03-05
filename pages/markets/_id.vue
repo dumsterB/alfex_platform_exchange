@@ -22,18 +22,20 @@ export default {
     Currency,
   },
 
+  data() {
+    return {
+      currencies: []
+    }
+  },
+
   computed: {
     ...mapGetters(model, {
       companies: "list",
       companyById: "byId",
     }),
-    item() {
-      let item = this.companyById(parseInt(this.$route.params.id));
-      return item ? item : {};
-    },
-    currencies() {
-      return this.item.currency;
-    },
+    ...mapGetters("data/currency", {
+      currs: "list",
+    }),
   },
 
   methods: {
@@ -42,9 +44,49 @@ export default {
       fetchAC: "fetchList",
     }),
   },
-
-  async mounted() {
-    await this.fetchAC();
+  created() {
+    this.item = this.companyById(parseInt(this.$route.params.id));
+    if (this.item) {
+      let me = this;
+      let socket = global.socket;
+      socket.send(`{
+        "method": "subscribe",
+        "data": ["${me.item.name}_all@ticker_10s"]
+      }`);
+      socket.onmessage = function (event) {
+        if (event.data) {
+          let json_d = JSON.parse(event.data);
+          if (json_d && json_d.method == `${me.item.name}_all@ticker_10s`) {
+            let data = json_d.data ? json_d.data.data || [] : [];
+            let currencies = [];
+            me.currs.forEach(el => {
+              let res = el;
+              let fnd = data.find((e) => e && e.base == el.symbol);
+              if (fnd && fnd.price) {
+                res.price = fnd.price;
+                res.change = fnd.change;
+                res.change_p = (
+                  (parseFloat(fnd.change) * 100) /
+                  parseFloat(fnd.price)
+                ).toFixed(4);
+                currencies.push(res);
+              }
+            });
+            me.currencies = currencies;
+          }
+          // console.log('me.currs', me.currs)
+        }
+      };
+    }
+  },
+  destroyed() {
+    let socket = global.socket;
+    if (this.item) {
+      socket.send(`{
+        "method": "unsubscribe",
+        "data": ["${this.item.name}_all@ticker_10s"]
+      }`);
+    }
   },
 };
 </script>

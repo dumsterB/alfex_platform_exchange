@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tooltip bottom>
+    <v-tooltip v-if="companies && companies.length > 0" bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-card
           class="currecyCard"
@@ -46,10 +46,31 @@
           :width="3"
           color="green"
           indeterminate
-          style="left: 64px;"
+          style="left: 64px"
         ></v-progress-circular>
       </div>
     </v-tooltip>
+    <v-card v-else class="currecyCard" elevation="3" :width="220">
+      <v-list-item
+        three-line
+        class="pa-2"
+        @click="$router.push(`/currency?id=${currency.id}`)"
+      >
+        <v-list-item-content class="pa-1">
+          <div class="d-flex">
+            <v-img :src="currency.logo" :max-width="20"></v-img>
+            <span class="mt-1 ml-1">{{ currency.symbol }}</span>
+          </div>
+          <span>${{ currency.price }}</span>
+        </v-list-item-content>
+        <v-list-item-content class="coinList pa-1 flexNone">
+          <div class="chip">24H</div>
+          <span :style="diffColor(currency.change_p)"
+            >{{ currency.change_p }}%</span
+          >
+        </v-list-item-content>
+      </v-list-item>
+    </v-card>
   </div>
 </template>
 <script>
