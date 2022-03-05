@@ -80,7 +80,15 @@ export default {
   },
   methods: {
     addCardNumber() {
-      localStorage.setItem('bank_cards',JSON.stringify(this.data))
+      let cards = localStorage.getItem('bank_cards');
+      let c_json = JSON.parse(cards);
+      let list = [];
+      if (c_json) {
+        list = c_json;
+      }
+      list.push(this.data);
+      localStorage.setItem('bank_cards', JSON.stringify(c_json));
+      this.$emit('save');
       console.log(this.data)
     }
   },

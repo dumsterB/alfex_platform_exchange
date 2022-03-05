@@ -114,6 +114,7 @@ export default {
   },
   async mounted() {
     await this.fetchWallet()
+    console.log(this.wallet)
     this.fetchList()
   }
 }

@@ -11,16 +11,22 @@
               {{ $t("choose_payment_method") }}
             </p>
           </v-col>
-          <v-btn elevation="0" @click="$emit('depositChanger')" icon class="mt-2 mr-2">
+          <v-btn
+            elevation="0"
+            @click="$emit('depositChanger')"
+            icon
+            class="mt-2 mr-2"
+          >
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-row>
         <v-list flat>
-          <v-list-item-group  color="primary">
-            <v-list-item >
+          <v-list-item-group color="primary">
+            <v-list-item v-for="(item, i) in items" :key="i">
               <v-list-item-content>
                 <v-list-item-title>
-                  <v-icon class="mr-5">mdi-credit-card-outline</v-icon>{{ items ? items.card_number : "" }}</v-list-item-title
+                  <v-icon class="mr-5">mdi-credit-card-outline</v-icon
+                  >{{ item ? item.card_number : "" }}</v-list-item-title
                 >
               </v-list-item-content>
             </v-list-item>
@@ -42,10 +48,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <BankCard
-      :cardDialog="cardDialog"
-      @cardDialogChanger="cardDialogChanger"
-    ></BankCard>
+    <BankCard :cardDialog="cardDialog" @save="save" @cardDialogChanger="cardDialogChanger"></BankCard>
   </div>
 </template>
 
@@ -66,17 +69,27 @@ export default {
     return {
       selectedItem: 1,
       cardDialog: false,
-      items: {},
+      items: [],
     };
   },
   methods: {
     cardDialogChanger() {
       this.cardDialog = !this.cardDialog;
     },
+    save() {
+      let d = localStorage.getItem("bank_cards");
+      if (d) {
+        this.items = JSON.parse(d) || [];
+        this.cardDialog = false;
+      }
+    },
   },
   mounted() {
-    this.items= JSON.parse(localStorage.getItem('bank_cards' || []))
-  }
+    let d = localStorage.getItem("bank_cards");
+    if (d) {
+      this.items = JSON.parse(d) || [];
+    }
+  },
 };
 </script>
 
