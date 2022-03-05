@@ -3,7 +3,7 @@
     <Marketplace class="mt-4" :item="item" />
     <v-row class="mx-auto ml-1">
       <v-col class="" v-for="(curr, i) in currencies" :key="i">
-        <Currency :currency="curr" />
+        <Currency :currency="curr" :tooltip="false" />
       </v-col>
     </v-row>
   </div>

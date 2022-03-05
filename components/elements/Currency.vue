@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tooltip v-if="companies && companies.length > 0" bottom>
+    <v-tooltip v-if="tooltip" bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-card
           class="currecyCard"
@@ -90,6 +90,7 @@ export default {
         return [];
       },
     },
+    tooltip: false
   },
   data() {
     return {

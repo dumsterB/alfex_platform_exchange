@@ -36,6 +36,7 @@
             <Currency
               :currency="curr"
               :companies="companies"
+              :tooltip="true"
               :id="`ttp-${curr.symbol}`"
             />
           </v-col>
