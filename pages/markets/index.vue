@@ -54,9 +54,8 @@ export default {
       fetchAC: "fetchList",
     }),
   },
-  async mounted() {
+  created() {
     let me = this;
-    await me.fetchAC();
     let socket = global.socket;
     let send_str = "";
     me.fav_currs.forEach((element, i) => {
@@ -88,13 +87,11 @@ export default {
         });
       }
     };
-  },
-  created() {
     setTimeout(() => {
-      this.prices = Object.assign({}, this.prices)
+      me.prices = Object.assign({}, me.prices)
     }, 1500)
-    this.interv = setInterval(() => {
-      this.prices = Object.assign({}, this.prices)
+    me.interv = setInterval(() => {
+      me.prices = Object.assign({}, me.prices)
     }, 4000)
   },
   destroyed() {
