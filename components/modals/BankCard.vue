@@ -87,7 +87,7 @@ export default {
         list = c_json;
       }
       list.push(this.data);
-      localStorage.setItem('bank_cards', JSON.stringify(c_json));
+      localStorage.setItem('bank_cards', JSON.stringify(list));
       this.$emit('save');
       console.log(this.data)
     }
