@@ -93,10 +93,10 @@ export default {
         let fnd_p = prices.find(e => e && e.base == el.source_currency.symbol);
         let pr_p = 1;
         if (fnd_p && fnd_p.price) pr_p = fnd_p.price;
-        let curr_cost = el.source_amount * pr_b / pr_p;
+        let curr_cost = el.source_amount * pr_p / pr_b;
         el.current_cost = curr_cost.toFixed(4);
-        let diff = curr_cost - el.source_amount;
-        let diff_proc = (diff * 100) / el.source_amount;
+        let diff = curr_cost - el.dest_amount;
+        let diff_proc = (diff * 100) / el.dest_amount;
         el.difference = diff.toFixed(4);
         el.difference_perc = `${diff_proc.toFixed(4)} %`;
         return el;
