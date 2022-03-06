@@ -30,7 +30,7 @@
           rounded
           class="success-btn-half mr-6"
           color="white"
-          @click="depositChanger"
+          @click="depositChanger('deposit_title')"
         >
           {{ $t('deposit_title') }}
         </v-btn>
@@ -39,13 +39,13 @@
           large
           rounded
           class="simple-btn-half"
-          @click="depositChanger"
+          @click="depositChanger('withdraw')"
         >
           {{ $t('withdraw') }}
         </v-btn>
       </v-card-actions>
     </v-card>
-    <Deposit :dialog="dialog" @depositChanger="depositChanger"></Deposit>
+    <Deposit :action="action" :dialog="dialog" @depositChanger="depositChanger"></Deposit>
 
   </div>
 </template>
@@ -65,14 +65,16 @@ export default {
     return {
       hideBalancer: false,
       dialog:false,
+      action:''
     }
   },
   methods: {
     hideBalance() {
       this.hideBalancer = !this.hideBalancer
     },
-    depositChanger(){
+    depositChanger(val){
       this.dialog=!this.dialog
+      this.action=val
     }
   },
   watch:{

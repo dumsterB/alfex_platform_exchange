@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" width="600" persistent>
+    <v-dialog v-model="dialog" width="500" persistent>
       <v-card class="pa-4">
         <v-row>
           <v-col>
             <p class="text-h5 text-center">
-              {{ $t("withdraw") }}
+              {{ $t(action) }}
             </p>
             <p class="text-h6 text-gray mt-1 text-center">
               {{ $t("choose_payment_method") }}
@@ -33,17 +33,31 @@
           </v-list-item-group>
         </v-list>
         <div class="text-center justify-center d-flex">
+          <div class="d-block">
           <div class="credit-card-add" @click="cardDialogChanger">
-            <div class="mt-15">
-              <v-icon size="50" dark>mdi-plus</v-icon>
+            <div >
+              <v-icon style="margin-top: 50px" size="50" dark>mdi-plus</v-icon>
               <p style="color: white">{{ $t("addNewPayment") }}</p>
             </div>
           </div>
+          <v-col
+            cols="12"
+            sm="12"
+            md="12"
+          >
+            <v-text-field
+              v-model="enteredMoney"
+              :label="$t('enter_your_amount')"
+            ></v-text-field>
+            <p class="text-gray">Вы можете внести от 20 до 9999 $</p>
+          </v-col>
+          </div>
         </div>
         <v-card-actions>
+          {{$t('pay')}}: {{enteredMoney}}$
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="$emit('depositChanger')">
-            I accept
+          <v-btn large dark class="success-btn" text @click="$emit('depositChanger')">
+           {{$t('deposit')}}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -63,12 +77,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    action:{
+      type:String,
+      default: '',
+    }
   },
   name: "Deposit",
   data() {
     return {
       selectedItem: 1,
       cardDialog: false,
+      enteredMoney:'',
       items: [],
     };
   },
@@ -100,5 +119,9 @@ export default {
   background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
   border-radius: 20px;
   cursor: pointer;
+}
+.success-btn {
+  background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
+  color: white !important;
 }
 </style>

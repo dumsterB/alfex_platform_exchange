@@ -319,7 +319,7 @@ export default {
   chart_title: "График",
   time_title: "Время",
   transfer_title: "перевод",
-  deposit_title: "депозит",
+  deposit_title: "Депозит",
   available_title: "доступные",
   available_balance_title: "доступные средства",
   quantity_title: "Количество",
