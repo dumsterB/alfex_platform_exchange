@@ -36,7 +36,7 @@
           <div class="d-block">
           <div class="credit-card-add" @click="cardDialogChanger">
             <div >
-              <v-icon style="margin-top: 50px" size="50" dark>mdi-plus</v-icon>
+              <v-icon style="margin-top: 10px" size="50" dark>mdi-plus</v-icon>
               <p style="color: white">{{ $t("addNewPayment") }}</p>
             </div>
           </div>
@@ -48,6 +48,7 @@
             <v-text-field
               v-model="enteredMoney"
               :label="$t('enter_your_amount')"
+              type="number"
             ></v-text-field>
             <p class="text-gray">Вы можете внести от 20 до 9999 $</p>
           </v-col>
@@ -115,7 +116,7 @@ export default {
 <style scoped>
 .credit-card-add {
   width: 400px;
-  height: 220px;
+  height: 100px;
   background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
   border-radius: 20px;
   cursor: pointer;

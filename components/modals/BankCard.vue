@@ -18,13 +18,11 @@
         <v-card-text class='pb-6'>
           <v-row>
 
-            <v-form ref="form"
-                    v-model="valid"
-                    lazy-validation>
+
               <v-col cols='12'>
                 <v-subheader class="grey--text text--lighten-1 pl-0 subheader">CARD NUMBER</v-subheader>
                 <v-text-field
-                  single-line pattern="\d*" maxlength="4" type="number" :rules="cardRules" outlined
+                  single-line  type="number" :rules="cardRules" outlined
                   mask="credit-card"  @input="input" v-model.lazy="data.card_number" dense
                 />
               </v-col>
@@ -34,6 +32,7 @@
                 <v-text-field
                   single-line outlined label="" hide-details dense
                   v-model="data.user_name"
+                  type="text"
                   :rules="nameRules"
                 />
               </v-col>
@@ -41,16 +40,14 @@
               <v-col cols='8'>
                 <v-subheader class="grey--text text--lighten-1 pl-0 subheader">EXPIRY DATE</v-subheader>
                 <v-text-field
-                  label="MM/DD" outlined hide-details dense v-model="data.expire_date"
+                  label="MM/DD" type="number" outlined hide-details dense v-model="data.expire_date"
                 />
               </v-col>
 
               <v-col cols='4'>
                 <v-subheader class="grey--text text--lighten-1 pl-0 subheader">CVV</v-subheader>
-                <v-text-field single-line outlined hide-details dense v-model="data.cvv"/>
+                <v-text-field type="number" single-line outlined hide-details dense v-model="data.cvv"/>
               </v-col>
-            </v-form>
-
           </v-row>
         </v-card-text>
         <v-card-actions>
@@ -83,7 +80,7 @@ export default {
       valid:false,
       cardRules: [
         v => !!v || 'Card number is required',
-        v => (v && v.length <= 20) || 'Card number must be less than 20 characters',
+        v => (v && v.length <= 16) || 'Card number must be less than 20 characters',
       ],
       nameRules: [
         v => !!v || 'Name  is required',
