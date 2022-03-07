@@ -123,9 +123,8 @@ export default {
         amount: this.amount,
         arbitrage_company_id: this.tradePlatform.id,
         session_start_type_id: this.action === "Buy" ? 1 : 2,
-        exchange_wallet_id:
-          this.action === "Buy" ? this.wl.id : this.userWallet.id,
-        wallet_id: this.action === "Buy" ? this.userWallet.id : this.wl.id,
+        exchange_wallet_id: this.wl.id,
+        wallet_id: this.userWallet.id,
       };
       // code
       console.log("as_data", as_data, this.wl);
@@ -135,6 +134,7 @@ export default {
       this.fetchWallet();
       setTimeout(() => {
         this.loading = false;
+        this.close();
       }, 500);
     },
     close() {
