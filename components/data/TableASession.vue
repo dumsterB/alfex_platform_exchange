@@ -7,7 +7,7 @@
       class="elevation-1 ma-4 ml-8"
     >
       <template v-slot:[`item.amount`]="{ item }">
-        <span>{{ item.amount + " " + item.wallet.currency.name }}</span>
+        <span>{{ item.amount + " " + item.wallet.currency.symbol }}</span>
       </template>
       <template v-slot:[`item.difference`]="{ item }">
         <span :style="diffColor(item.difference)">{{ item.difference }}</span>
@@ -50,8 +50,8 @@ export default {
     prices: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     platform: {
       type: String,
@@ -130,19 +130,22 @@ export default {
     },
     resetList(prices) {
       let list = [];
-      this.arbitrage_sessions.forEach(element => {
+      this.arbitrage_sessions.forEach((element) => {
         if (element.arbitrage_company.name == this.platform) {
-          let fnd = prices.find(e => e && e.base == element.wallet.currency.name);
+          let fnd = prices.find(
+            (e) => e && e.base == element.wallet.currency.name
+          );
+          let pr = 1;
           if (fnd && fnd.price) {
-            let pr = fnd.price;
-            element.current_cost = pr.toFixed(3);
-            let diff = pr - element.start_exchange_rate;
-            let diff_full = diff * element.amount;
-            let diff_proc = (diff * 100) / element.start_exchange_rate;
-            element.difference = diff_full.toFixed(3);
-            element.difference_perc = `${diff_proc.toFixed(3)} %`;
-          };
-          list.push(element)
+            pr = fnd.price;
+          }
+          element.current_cost = pr.toFixed(3);
+          let diff = pr - element.start_exchange_rate;
+          let diff_full = diff * element.amount;
+          let diff_proc = (diff * 100) / element.start_exchange_rate;
+          element.difference = diff_full.toFixed(3);
+          element.difference_perc = `${diff_proc.toFixed(3)} %`;
+          list.push(element);
         }
       });
       this.list = list;
@@ -159,12 +162,12 @@ export default {
   },
   watch: {
     prices() {
-      console.log('this.prices', this.prices)
-      this.resetList(this.prices)
-    }
+      console.log("this.prices", this.prices);
+      this.resetList(this.prices);
+    },
   },
   async created() {
-    console.log("this.arbitrage_sessions", this.arbitrage_sessions)
+    console.log("this.arbitrage_sessions", this.arbitrage_sessions);
   },
 };
 </script>
