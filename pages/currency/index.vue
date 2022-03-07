@@ -60,7 +60,7 @@
               <TableASession
                 v-else
                 :prices="prices"
-                :platform="selected_platform"
+                :curr="curr_code"
               ></TableASession>
             </v-col>
           </v-row>
@@ -213,7 +213,7 @@ export default {
       }`);
       socket.send(`{
         "method": "subscribe",
-        "data": ["all_${me.curr_code}-USD@ticker_5s", "${me.selected_platform}_all@ticker_10s"]
+        "data": ["all_${me.curr_code}-USD@ticker_5s"]
       }`);
       
       socket.onmessage = function (event) {
@@ -222,12 +222,6 @@ export default {
           if (json_d && json_d.method == `all_${me.curr_code}-USD@ticker_5s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
             me.arb_data = data;
-          }
-          if (
-            json_d &&
-            json_d.method == `${me.selected_platform}_all@ticker_10s`
-          ) {
-            let data = json_d.data ? json_d.data.data || [] : [];
             me.prices = data;
           }
         }
@@ -250,7 +244,7 @@ export default {
     socket.send(`{
       "method": "unsubscribe",
       "data": ["binance_${this.curr_code}-USD@ticker_5s", "${this.platform}_all@ticker_10s", 
-      "all_${this.curr_code}-USD@ticker_5s", "${this.selected_platform}__all@ticker_10s"]
+      "all_${this.curr_code}-USD@ticker_5s"]
     }`);
   },
 };

@@ -14,7 +14,10 @@
             :class="elem.checked ? 'green' : 'green--text'"
             @click="changeClicked(i)"
           >
-            {{ elem.name }}
+            <v-container class="d-flex justify-lg-space-between">
+              <span>{{ elem.name }}</span>
+              <span>${{ elem.price }}</span>
+            </v-container>
           </v-btn>
         </v-row>
       </v-container>
@@ -48,6 +51,7 @@ export default {
     return {
       cmps: [],
       loading: false,
+      first: true,
     };
   },
   props: {
@@ -55,6 +59,12 @@ export default {
       type: Object,
       default: () => {
         return {};
+      },
+    },
+    prices: {
+      type: Array,
+      default: () => {
+        return [];
       },
     },
   },
@@ -68,52 +78,74 @@ export default {
       fetchList: "fetchList",
     }),
     ...mapActions("data/arbitrage_session", {
-      update_as: "update",
+      update_as: "replace",
     }),
     changeClicked(i) {
       this.cmps.forEach((e) => (e.checked = false));
       this.cmps[i].checked = true;
       this.cmps = Object.assign([], this.cmps);
     },
-    save() {
+    async save() {
       this.loading = true;
       let as_data = {};
       let ac = this.cmps.find((el) => el.checked == true);
       as_data.id = this.item.id;
       as_data.status_id = 2;
-      as_data.stop_exchange_rate = 1;
+      as_data.stop_exchange_rate = ac.price;
       as_data.arbitrage_company_id = ac.id;
       // code
-      console.log("this.defaultAs", this.item);
       console.log("as_data", as_data);
-      // let rs = await this.update_as({data: as_data});
+      // let rs = await this.update_as({ data: as_data });
       // console.log("rs", rs);
       setTimeout(() => {
         this.loading = false;
-        // this.emit('close');
+        setTimeout(() => {
+          this.emit("close");
+        }, 500);
       }, 500);
     },
     init() {
       let cmps = [];
-      let pr = this.item.prices;
-      this.companies.forEach((element) => {
-        let dt = {
-          name: element.name,
-          id: element.id,
-          logo: element.logo,
-          price: pr ? pr[element.name] : null,
-        };
-        dt.checked = false;
-        cmps.push(dt);
-      });
-      if (this.item.arbitrage_company_id) {
-        let id = this.item.arbitrage_company_id;
-        let fnd = cmps.find((e) => e.id == id);
-        if (fnd) {
-          fnd.checked = true;
-        }
+      let key = "cmps";
+      if (this.first) {
+        key = "companies";
       }
+      this[key].forEach((element) => {
+        let pr = this.prices.find((e) => e.company == element.name);
+        if (pr && pr.price) {
+          let dt = {
+            name: element.name,
+            id: element.id,
+            logo: element.logo,
+            price: pr.price,
+            checked: element.checked ? true : false
+          };
+          if (this.first) {
+            dt.checked = false;
+          }
+          cmps.push(dt);
+        }
+      });
+      if (this.first) {
+        if (this.item.arbitrage_company_id) {
+          let id = this.item.arbitrage_company_id;
+          let fnd = cmps.find((e) => e.id == id);
+          if (fnd) {
+            fnd.checked = true;
+          }
+        }
+        this.first = false;
+      }
+      console.log("this.first", this.first)
       this.cmps = cmps;
+    },
+  },
+  watch: {
+    prices() {
+      this.init();
+    },
+    item() {
+      this.first = true;
     },
   },
   mounted() {

@@ -21,7 +21,7 @@
         <v-row justify="center">
           <v-btn
             name="closeOrder"
-            @click="toggleModal"
+            @click="toggleModal(item)"
             class="green--text"
             :value="item"
             :disabled="item.status.key != 'OPEN'"
@@ -33,7 +33,7 @@
       </template>
     </v-data-table>
     <v-dialog v-model="dialog" max-width="600px">
-      <ClosePosition :item="JSON.parse(selectedItem)" @close="dialog = false" />
+      <ClosePosition :item="selectedItem" :prices="prices" @close="dialog = false" />
     </v-dialog>
   </div>
 </template>
@@ -52,6 +52,10 @@ export default {
       default: () => {
         return [];
       },
+    },
+    curr: {
+      type: String,
+      default: "BTC",
     },
     platform: {
       type: String,
@@ -124,22 +128,25 @@ export default {
     ...mapActions(model, {
       fetchList: "fetchList",
     }),
-    toggleModal(evt) {
+    toggleModal(item) {
+      this.selectedItem = item;
       this.dialog = true;
-      this.selectedItem = evt.currentTarget.value;
     },
     resetList(prices) {
       let list = [];
       this.arbitrage_sessions.forEach((element) => {
-        if (element.arbitrage_company.name == this.platform) {
+        if (element.wallet.currency.symbol == this.curr) {
           let fnd = prices.find(
-            (e) => e && e.base == element.wallet.currency.name
+            (e) =>
+              e &&
+              e.base == element.wallet.currency.symbol &&
+              e.company == element.arbitrage_company.name
           );
           let pr = 1;
           if (fnd && fnd.price) {
             pr = fnd.price;
           }
-          element.current_cost = pr.toFixed(3);
+          element.current_cost = pr;
           let diff = pr - element.start_exchange_rate;
           let diff_full = diff * element.amount;
           let diff_proc = (diff * 100) / element.start_exchange_rate;
