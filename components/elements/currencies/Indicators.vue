@@ -78,14 +78,14 @@ export default {
       let socket = global.socket;
       // socket.send(`{
       //     "method": "subscribe",
-      //     "data": ["binance_${me.currency}-USDT@ticker_5s"]
+      //     "data": ["binance_${me.currency}-USD@ticker_5s"]
       //   }`);
       // socket.onmessage = function (event) {
       //   if (event.data) {
       //     let json_d = JSON.parse(event.data);
       //     if (
       //       json_d &&
-      //       json_d.method == `binance_${me.currency}-USDT@ticker_5s`
+      //       json_d.method == `binance_${me.currency}-USD@ticker_5s`
       //     ) {
       //       let data = json_d.data ? json_d.data.data || [] : [];
       //       if (data && data[0] && data[0].price) {

@@ -165,7 +165,7 @@ export default {
                 if (me.waiter[sym]) {
                   socket.send(`{
                     "method": "subscribe",
-                    "data": ["all_${sym}-USDT@ticker_10s"]
+                    "data": ["all_${sym}-USD@ticker_10s"]
                   }`);
                 }
               }, 500);
@@ -179,7 +179,7 @@ export default {
               me.waiter[sym] = false;
               socket.send(`{
                 "method": "unsubscribe",
-                "data": ["all_${sym}-USDT@ticker_10s"]
+                "data": ["all_${sym}-USD@ticker_10s"]
               }`);
             },
             false

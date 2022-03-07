@@ -59,7 +59,7 @@ export default {
     let socket = global.socket;
     let send_str = "";
     me.fav_currs.forEach((element, i) => {
-      send_str += `"all_${element}-USDT@ticker_5s"`;
+      send_str += `"all_${element}-USD@ticker_5s"`;
       if (i != me.fav_currs.length - 1) {
         send_str += ", ";
       }
@@ -74,7 +74,7 @@ export default {
       if (event.data) {
         let json_d = JSON.parse(event.data);
         me.fav_currs.forEach((curr) => {
-          if (json_d && json_d.method == `all_${curr}-USDT@ticker_5s`) {
+          if (json_d && json_d.method == `all_${curr}-USD@ticker_5s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
             me.companies.forEach(cmp => {
               let fnd = data.find(el => el.company == cmp.name);

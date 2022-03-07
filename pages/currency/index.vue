@@ -175,18 +175,18 @@ export default {
       let socket = global.socket;
       socket.send(`{
         "method": "unsubscribe",
-        "data": ["all_${me.curr_code}-USDT@ticker_5s"]
+        "data": ["all_${me.curr_code}-USD@ticker_5s"]
       }`);
       socket.send(`{
         "method": "subscribe",
-        "data": ["binance_${me.curr_code}-USDT@ticker_5s", "${me.platform}_all@ticker_10s"]
+        "data": ["binance_${me.curr_code}-USD@ticker_5s", "${me.platform}_all@ticker_10s"]
       }`);
       socket.onmessage = function (event) {
         if (event.data) {
           let json_d = JSON.parse(event.data);
           if (
             json_d &&
-            json_d.method == `binance_${me.curr_code}-USDT@ticker_5s`
+            json_d.method == `binance_${me.curr_code}-USD@ticker_5s`
           ) {
             let data = json_d.data ? json_d.data.data || [] : [];
             if (data && data[0] && data[0].price) {
@@ -209,17 +209,17 @@ export default {
       let socket = global.socket;
       socket.send(`{
         "method": "unsubscribe",
-        "data": ["binance_${me.curr_code}-USDT@ticker_5s", "${me.platform}_all@ticker_10s"]
+        "data": ["binance_${me.curr_code}-USD@ticker_5s", "${me.platform}_all@ticker_10s"]
       }`);
       socket.send(`{
         "method": "subscribe",
-        "data": ["all_${me.curr_code}-USDT@ticker_5s", "${me.selected_platform}_all@ticker_10s"]
+        "data": ["all_${me.curr_code}-USD@ticker_5s", "${me.selected_platform}_all@ticker_10s"]
       }`);
       
       socket.onmessage = function (event) {
         if (event.data) {
           let json_d = JSON.parse(event.data);
-          if (json_d && json_d.method == `all_${me.curr_code}-USDT@ticker_5s`) {
+          if (json_d && json_d.method == `all_${me.curr_code}-USD@ticker_5s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
             me.arb_data = data;
           }
@@ -249,8 +249,8 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["binance_${this.curr_code}-USDT@ticker_5s", "${this.platform}_all@ticker_10s", 
-      "all_${this.curr_code}-USDT@ticker_5s", "${this.selected_platform}__all@ticker_10s"]
+      "data": ["binance_${this.curr_code}-USD@ticker_5s", "${this.platform}_all@ticker_10s", 
+      "all_${this.curr_code}-USD@ticker_5s", "${this.selected_platform}__all@ticker_10s"]
     }`);
   },
 };

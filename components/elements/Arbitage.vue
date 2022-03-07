@@ -173,7 +173,7 @@ export default {
     let socket = global.socket;
     let send_str = "";
     me.wallet.forEach((element, i) => {
-      send_str += `"all_${element.currency.symbol}-USDT@ticker_5s"`;
+      send_str += `"all_${element.currency.symbol}-USD@ticker_5s"`;
       if (i != me.wallet.length - 1) {
         send_str += ", ";
       }
@@ -189,7 +189,7 @@ export default {
         let json_d = JSON.parse(event.data);
         me.wallet.forEach((wl) => {
           let curr = wl.currency.symbol;
-          if (json_d && json_d.method == `all_${curr}-USDT@ticker_5s`) {
+          if (json_d && json_d.method == `all_${curr}-USD@ticker_5s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
             if (data.length > 0) {
               me.ac.forEach((cmp) => {
