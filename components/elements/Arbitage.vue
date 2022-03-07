@@ -7,16 +7,16 @@
         md="6"
         lg="4"
         sm="12"
-        v-for="(coin, i) in wallet"
+        v-for="(coin, i) in currs"
         :key="i"
       >
-        <v-card elevation="1" max-width="500" class="pb-4">
+        <v-card elevation="1" max-width="500" min-height="330" class="pb-4">
           <div class="justify-space-between d-flex pa-3">
             <div>
               <v-card-subtitle class="d-flex"
-                ><img height="30" :src="coin.currency.logo" alt="" />
+                ><img height="30" :src="coin.logo" alt="" />
                 <p class="ml-2 mt-1">
-                  <strong>{{ coin.currency.symbol }}</strong>
+                  <strong>{{ coin.symbol }}</strong>
                 </p></v-card-subtitle
               >
             </div>
@@ -30,7 +30,10 @@
             </div>
           </div>
           <div v-for="(item, i) in arbitrage_company" :key="i">
-            <v-list-item dense class="ml-4">
+            <v-list-item dense class="ml-4" v-if="
+                  prices[coin.symbol] &&
+                  prices[coin.symbol][item.name]
+                ">
               <v-list-item-content>
                 <div>
                   <p>{{ item.name }}</p>
@@ -39,21 +42,24 @@
               <v-list-item-content>
                 <div>
                   <p>
-                    ${{
-                      prices[coin.currency.symbol]
-                        ? prices[coin.currency.symbol][item.name]
+                    {{
+                      prices[coin.symbol] && prices[coin.symbol][item.name]
+                        ? "$" + prices[coin.symbol][item.name]
                         : ""
                     }}
                   </p>
                 </div>
               </v-list-item-content>
-              <v-list-item-content class="d-block">
+              <v-list-item-content
+                class="d-block"
+              >
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
                       v-bind="attrs"
                       v-on="on"
                       class="ml-3 green--text"
+                      :disabled="false"
                       @click="buy(coin, item)"
                       >mdi-plus-box
                     </v-icon>
@@ -66,6 +72,7 @@
                       v-bind="attrs"
                       v-on="on"
                       class="ml-3 red--text"
+                      :disabled="!coin.wallet_id"
                       @click="sell(coin, item)"
                       >mdi-minus-box
                     </v-icon>
@@ -117,6 +124,7 @@ export default {
       userWallet: "",
       send_str: "",
       prices: {},
+      cur_len: 8,
     };
   },
   watch: {
@@ -126,7 +134,7 @@ export default {
         this.userWallet = {};
         this.selectedArbitrageCompany = {};
       }
-    }
+    },
   },
   methods: {
     ...mapActions(wallet, {
@@ -141,15 +149,15 @@ export default {
     buy(coin, item) {
       this.action = "Buy";
       this.dialog = true;
-      this.userWallet = coin;
-      this.selectedCurrency = coin.currency;
+      this.userWallet = this.wallet_full.find(el => el.currency.symbol == "USD");
+      this.selectedCurrency = coin;
       this.selectedArbitrageCompany = item;
     },
     sell(coin, item) {
       this.action = "Sell";
       this.dialog = true;
-      this.userWallet = coin;
-      this.selectedCurrency = coin.currency;
+      this.userWallet = this.wallet_full.find(el => el.currency_id == coin.id);
+      this.selectedCurrency = coin;
       this.selectedArbitrageCompany = item;
     },
   },
@@ -157,8 +165,32 @@ export default {
     ...mapGetters("data/wallet", {
       wallet_full: "list",
     }),
-    wallet() {
-      return this.wallet_full.filter((el) => el.currency.symbol != "USD");
+    ...mapGetters("data/currency", {
+      currencies: "list",
+    }),
+    currs() {
+      let res = [];
+      let wlts = this.wallet_full.filter((el) => el.currency.symbol != "USD");
+      let crs = wlts.map(el => {
+        el.currency.wallet_id = el.id;
+        return el.currency;
+      });
+      if (crs.length > this.cur_len) {
+        res = wlts.crs(0, this.cur_len);
+      } else {
+        res = crs;
+        for (let i = crs.length; i < this.cur_len; i++) {
+          let cr = this.currencies.find(el => {
+            if (el.currency_type.key == "CRYPTO") {
+              let f = res.find(e => e.id == el.id);
+              if (!f) return true;
+            }
+            return false;
+          })
+          res.push(cr);
+        }
+      }
+      return res;
     },
     ...mapGetters(modelCompanies, {
       ac: "list",
@@ -172,9 +204,9 @@ export default {
     let me = this;
     let socket = global.socket;
     let send_str = "";
-    me.wallet.forEach((element, i) => {
-      send_str += `"all_${element.currency.symbol}-USD@ticker_5s"`;
-      if (i != me.wallet.length - 1) {
+    me.currs.forEach((element, i) => {
+      send_str += `"all_${element.symbol}-USD@ticker_5s"`;
+      if (i != me.currs.length - 1) {
         send_str += ", ";
       }
     });
@@ -187,8 +219,8 @@ export default {
     socket.onmessage = function (event) {
       if (event.data) {
         let json_d = JSON.parse(event.data);
-        me.wallet.forEach((wl) => {
-          let curr = wl.currency.symbol;
+        me.currs.forEach((wl) => {
+          let curr = wl.symbol;
           if (json_d && json_d.method == `all_${curr}-USD@ticker_5s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
             if (data.length > 0) {
