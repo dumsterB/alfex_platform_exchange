@@ -33,7 +33,11 @@
       </template>
     </v-data-table>
     <v-dialog v-model="dialog" max-width="600px">
-      <ClosePosition :item="selectedItem" :prices="prices" @close="dialog = false" />
+      <ClosePosition
+        :item="selectedItem"
+        :prices="prices"
+        @close="dialog = false"
+      />
     </v-dialog>
   </div>
 </template>
@@ -53,14 +57,7 @@ export default {
         return [];
       },
     },
-    curr: {
-      type: String,
-      default: "BTC",
-    },
-    platform: {
-      type: String,
-      default: "binance",
-    },
+    filter: null,
   },
   data() {
     return {
@@ -134,26 +131,50 @@ export default {
     },
     resetList(prices) {
       let list = [];
-      this.arbitrage_sessions.forEach((element) => {
-        if (element.wallet.currency.symbol == this.curr) {
-          let fnd = prices.find(
-            (e) =>
-              e &&
-              e.base == element.wallet.currency.symbol &&
-              e.company == element.arbitrage_company.name
-          );
-          let pr = 1;
-          if (fnd && fnd.price) {
-            pr = fnd.price;
+      let as = [];
+      if (this.filter) {
+        console.log("this.filter", this.filter);
+        as = this.arbitrage_sessions.filter((el) => {
+          for (let p in this.filter) {
+            let spl = p.split(".");
+            if (spl.length > 1) {
+              let v = el[spl[0]];
+              for (let i = 1; i < spl.length; i++) {
+                v = v[spl[i]];
+              }
+              if (this.filter[p] != v) {
+                return false;
+              }
+            } else {
+              if (this.filter[p] != el[p]) {
+                return false;
+              }
+            }
+            
           }
-          element.current_cost = pr;
-          let diff = pr - element.start_exchange_rate;
-          let diff_full = diff * element.amount;
-          let diff_proc = (diff * 100) / element.start_exchange_rate;
-          element.difference = diff_full.toFixed(3);
-          element.difference_perc = `${diff_proc.toFixed(3)} %`;
-          list.push(element);
+          return true;
+        });
+      } else {
+        as = this.arbitrage_sessions;
+      }
+      as.forEach((element) => {
+        let fnd = prices.find(
+          (e) =>
+            e &&
+            e.base == element.wallet.currency.symbol &&
+            e.company == element.arbitrage_company.name
+        );
+        let pr = 1;
+        if (fnd && fnd.price) {
+          pr = fnd.price;
         }
+        element.current_cost = pr;
+        let diff = pr - element.start_exchange_rate;
+        let diff_full = diff * element.amount;
+        let diff_proc = (diff * 100) / element.start_exchange_rate;
+        element.difference = diff_full.toFixed(3);
+        element.difference_perc = `${diff_proc.toFixed(3)} %`;
+        list.push(element);
       });
       this.list = list;
     },

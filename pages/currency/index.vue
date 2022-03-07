@@ -60,7 +60,7 @@
               <TableASession
                 v-else
                 :prices="prices"
-                :curr="curr_code"
+                :filter="as_filter"
               ></TableASession>
             </v-col>
           </v-row>
@@ -118,6 +118,7 @@ export default {
       change: null,
       prices: [],
       arb_data: [],
+      as_filter: null,
     };
   },
   computed: {
@@ -132,6 +133,9 @@ export default {
       this.curr_code = this.current.symbol;
     },
     curr_code() {
+      this.as_filter = {
+        "wallet.currency.symbol": this.curr_code
+      }
       if (this.curr_code && !this.is_switched) {
         this.spot_sockets();
       }
