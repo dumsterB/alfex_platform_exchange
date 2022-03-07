@@ -24,7 +24,8 @@
             <div>
               <v-card-subtitle
                 ><p class="mr-6 mt-1">
-                  <strong>{{ coin.balance }}</strong>
+                  <strong>${{ prices[coin.symbol] &&
+                  prices[coin.symbol]["binance"] ? prices[coin.symbol]["binance"] : '' }}</strong>
                 </p></v-card-subtitle
               >
             </div>

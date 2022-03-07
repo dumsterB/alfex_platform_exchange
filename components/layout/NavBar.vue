@@ -63,7 +63,7 @@
           dense
           @click="action.action"
         >
-          <v-list-item-title>{{ action.name }}</v-list-item-title>
+          <v-list-item-title>{{ $t(action.name) }}</v-list-item-title>
         </v-list-item>
         <v-list-item style="margin-top: 8px"
           ><language-select style="width: 50px"></language-select
@@ -94,7 +94,7 @@ export default {
         {
           name: "Account",
           action: () => {
-            this.$router.push("/account");
+            this.$router.push("/settings");
           },
         },
         {

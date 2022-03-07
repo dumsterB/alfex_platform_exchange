@@ -61,7 +61,7 @@ export default {
         let fnd = prices.find(e => e && e.company == el.name);
         let pr = 0;
         if (fnd && fnd.price) pr = fnd.price;
-        el.price = pr.toFixed(4);
+        el.price = pr;
         return el;
       });
       if (!this.first) {

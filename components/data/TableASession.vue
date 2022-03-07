@@ -24,6 +24,7 @@
             @click="toggleModal"
             class="green--text"
             :value="item"
+            :disabled="item.status.key != 'OPEN'"
             outlined
           >
             <v-icon>{{ "mdi-close" }}</v-icon>
@@ -134,11 +135,11 @@ export default {
           let fnd = prices.find(e => e && e.base == element.wallet.currency.name);
           if (fnd && fnd.price) {
             let pr = fnd.price;
-            let curr_cost = element.amount * pr;
-            element.current_cost = curr_cost.toFixed(3);
-            let diff = curr_cost - element.start_exchange_rate;
+            element.current_cost = pr.toFixed(3);
+            let diff = pr - element.start_exchange_rate;
+            let diff_full = diff * element.amount;
             let diff_proc = (diff * 100) / element.start_exchange_rate;
-            element.difference = diff.toFixed(3);
+            element.difference = diff_full.toFixed(3);
             element.difference_perc = `${diff_proc.toFixed(3)} %`;
           };
           list.push(element)
@@ -163,6 +164,7 @@ export default {
     }
   },
   async created() {
+    console.log("this.arbitrage_sessions", this.arbitrage_sessions)
   },
 };
 </script>
