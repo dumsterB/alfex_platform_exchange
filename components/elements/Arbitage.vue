@@ -150,9 +150,10 @@ export default {
     buy(coin, item) {
       this.action = "Buy";
       this.dialog = true;
-      this.userWallet = this.wallet_full.find(el => el.currency.symbol == "USD");
+      this.userWallet = this.wallet_full.find(el => el.currency_id == coin.id);
       this.selectedCurrency = coin;
       this.selectedArbitrageCompany = item;
+      console.log(this.userWallet)
     },
     sell(coin, item) {
       this.action = "Sell";
