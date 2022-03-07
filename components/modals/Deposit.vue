@@ -39,7 +39,7 @@
                 <v-icon style="margin-top: 10px" size="25" dark
                   >mdi-plus</v-icon
                 >
-                <p>{{ $t("addNewPayment") }}</p>
+                <p class="white--text">{{ $t("addNewPayment") }}</p>
               </div>
             </div>
           </div>
@@ -52,7 +52,7 @@
               :label="$t('enter_your_amount')"
               type="number"
             ></v-text-field>
-            <p class="text-gray">Вы можете внести от 20 до 9999 $</p>
+            <p class="text-gray">{{$t('deposit_ruls')}}</p>
           </v-col>
         </v-row>
         <v-card-actions>
@@ -177,7 +177,7 @@ export default {
 
 <style scoped>
 .credit-card-add {
-  width: 400px;
+  width: 450px;
   height: 70px;
   background: linear-gradient(94.9deg, #2fed59 4.26%, #23ad41 95.87%);
   border-radius: 20px;

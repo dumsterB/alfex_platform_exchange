@@ -40,13 +40,13 @@
               <v-col cols='8'>
                 <v-subheader class="grey--text text--lighten-1 pl-0 subheader">EXPIRY DATE</v-subheader>
                 <v-text-field
-                  label="MM/DD" type="number" outlined hide-details dense v-model="data.expire_date"
+                  label="MM/DD" type="number" :rules="expireDateRules" outlined hide-details dense v-model="data.expire_date"
                 />
               </v-col>
 
               <v-col cols='4'>
                 <v-subheader class="grey--text text--lighten-1 pl-0 subheader">CVV</v-subheader>
-                <v-text-field type="number" single-line outlined hide-details dense v-model="data.cvv"/>
+                <v-text-field type="number" :rules="cvvRules" single-line outlined hide-details dense v-model="data.cvv"/>
               </v-col>
           </v-row>
         </v-card-text>
@@ -85,6 +85,14 @@ export default {
       nameRules: [
         v => !!v || 'Name  is required',
       ],
+      expireDateRules:[
+        v => !!v || 'Name  is required',
+        v => (v && v.length >= 4) || 'Card number must be less than 20 characters',
+      ],
+      cvvRules:[
+        v => !!v || 'Name  is required',
+        v => (v && v.length >= 3) || 'Card number must be less than 20 characters',
+      ],
       years: [],
     }
   },
@@ -111,7 +119,7 @@ export default {
   },
   computed: {
    btnDisable(){
-     return this.valid && this.data.card_number && this.data.user_name && this.data.expire_date && this.data.cvv
+     return  this.data.card_number && this.data.user_name && this.data.expire_date && this.data.cvv
    },
 
   }
