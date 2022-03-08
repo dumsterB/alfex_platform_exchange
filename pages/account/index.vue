@@ -122,7 +122,7 @@ export default {
     reload_wallet() {
       this.$refs.wallet.counter = 1;
       this.init_currs();
-    }
+    },
   },
 
   async created() {
@@ -169,41 +169,42 @@ export default {
     let int = setInterval(() => {
       let test = document.getElementById(`ttp-BTC`);
       if (test) {
-        me.currencies.forEach((currency) => {
-          let sym = currency.symbol;
-          let test = document.getElementById(`ttp-${sym}`);
-          let socket = global.socket;
-
-          test.addEventListener(
-            "mouseenter",
-            function (event) {
-              me.companies = [];
-              me.waiter[sym] = true;
-              setTimeout(() => {
-                if (me.waiter[sym]) {
-                  socket.send(`{
+        setTimeout(() => {
+          me.currencies.forEach((currency) => {
+            let sym = currency.symbol;
+            let test = document.getElementById(`ttp-${sym}`);
+            let socket = global.socket;
+            test.addEventListener(
+              "mouseenter",
+              function (event) {
+                me.companies = [];
+                me.waiter[sym] = true;
+                setTimeout(() => {
+                  if (me.waiter[sym]) {
+                    socket.send(`{
                     "method": "subscribe",
                     "data": ["all_${sym}-USD@ticker_10s"]
                   }`);
-                }
-              }, 500);
-            },
-            false
-          );
+                  }
+                }, 500);
+              },
+              false
+            );
 
-          test.addEventListener(
-            "mouseleave",
-            function (event) {
-              me.waiter[sym] = false;
-              socket.send(`{
+            test.addEventListener(
+              "mouseleave",
+              function (event) {
+                me.waiter[sym] = false;
+                socket.send(`{
                 "method": "unsubscribe",
                 "data": ["all_${sym}-USD@ticker_10s"]
               }`);
-            },
-            false
-          );
-        });
-        clearInterval(int);
+              },
+              false
+            );
+          });
+          clearInterval(int);
+        }, 400);
       }
     }, 1000);
   },

@@ -29,6 +29,7 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -41,19 +42,11 @@ export default {
     };
   },
   created() {
-    this.$axios.onResponse(response => {
-      if (response.data && !response.data.success) {
-        let msg = response.data.message;
-        let title = response.config.url;
-        this.addItem(title, msg);
-      }
-      return response;
-    });
   },
   computed: {
-    items() {
-      return this.$store.state.data.notifications.messages;
-    }
+    ...mapGetters("data/notifications", {
+      items: "allMessages"
+    }),
   },
   watch: {
     items() {
@@ -73,9 +66,7 @@ export default {
       vm.processing = false;
     },
     addItem(title, message) {
-      const vm = this;
       let item = {
-        id: vm.uniqueId("error_"),
         title: title,
         text: message,
         color: "error"
@@ -94,7 +85,6 @@ export default {
       `${prefix}_` +
       Math.random()
         .toString(36)
-        .substr(2, 9)
   }
 };
 </script>

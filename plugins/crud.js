@@ -1,10 +1,38 @@
 import createCrudModule, { client } from 'vuex-crud';
 
+let store;
+if (process.browser) {
+    window.onNuxtReady(({ $store }) => {
+        store = $store
+    })
+}
+
 client.interceptors.request.use(function (config) {
     let auth_token = localStorage.getItem('auth._token.local');
     config.baseURL = localStorage.getItem('conf.API_BASE')
     config.headers.common['Authorization'] = auth_token;
     return config
+})
+
+client.interceptors.response.use(function (response) {
+
+    if (store) {
+        if (response.config.method != "get") {
+            let msg = response.data.message;
+            let title = response.config.url;
+            let color = !response.data.success ? "error" : "success"
+            store.commit('data/notifications/create', {
+                id: color + '_' + Math.random()
+                    .toString(36),
+                title: title,
+                text: msg,
+                color: color
+            });
+        }
+    }
+
+    return response
+
 })
 
 function createCRUD(module) {

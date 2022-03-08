@@ -2,7 +2,7 @@
   <v-app>
     <LoadingScreen :isLoading="isLoading" />
     <div v-if="!isLoading" class="main-page mb-16">
-      <!-- <SnackBar /> -->
+      <SnackBar />
       <Menu />
       <NavBar />
       <v-main fluid class="mb-16">
@@ -86,6 +86,7 @@ export default {
     Menu,
     LoadingScreen,
     Footer,
+    SnackBar
   },
   beforeDestroy() {
     if (this.interv) {

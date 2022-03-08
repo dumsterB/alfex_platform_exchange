@@ -1,11 +1,12 @@
 export const state = {
-    messages:[]
+    messages: []
 }
 
 export const mutations = {
     create(state, message) {
         let msg = {
-            id: message.id,
+            id: `${message.color}_` + Math.random()
+                .toString(36),
             text: message.text,
             title: message.title,
             color: message.color,
@@ -22,7 +23,7 @@ export const mutations = {
 }
 
 export const getters = {
-    allMessages(state){
+    allMessages(state) {
         return state.messages
     }
 }
