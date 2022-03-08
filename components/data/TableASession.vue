@@ -37,6 +37,7 @@
         :item="selectedItem"
         :prices="prices"
         @close="dialog = false"
+        @reload="reload"
       />
     </v-dialog>
   </div>
@@ -161,8 +162,7 @@ export default {
         let fnd = prices.find(
           (e) =>
             e &&
-            e.base == element.wallet.currency.symbol &&
-            e.company == element.arbitrage_company.name
+            e.base == element.wallet.currency.symbol
         );
         let pr = 1;
         if (fnd && fnd.price) {
@@ -177,6 +177,11 @@ export default {
         list.push(element);
       });
       this.list = list;
+    },
+
+    async reload() {
+      await this.fetchList();
+      this.resetList(this.prices);
     },
 
     diffColor(diff) {

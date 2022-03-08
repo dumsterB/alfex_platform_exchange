@@ -1,11 +1,10 @@
 <template v-slot:[`item.action`]="{ item }">
-  <v-card>
+  <v-card :height="height ? height : undefined">
     <v-card-title class="d-flex">
       <v-img
         contain
         tag="img"
-        height="auto"
-        max-width="200px"
+        height="60px"
         :src="tradePlatform ? tradePlatform.logo : ''"
         :alt="tradePlatform ? tradePlatform.name : ''"
         class=""
@@ -26,16 +25,39 @@
           :label="`${$t('choose_amount')}`"
           v-model="amount"
           :rules="rules"
+          outlined
+          dense
           hide-details="auto"
           type="number"
         ></v-text-field>
       </v-container>
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions v-if="action == 'Both'">
+      <v-btn
+        class="c-actions-sell"
+        color="red darken-1"
+        type="submit"
+        text
+        :loading="loadingSell"
+        @click="save('Sell')"
+      >
+        {{ $t("sell") }}
+      </v-btn>
       <v-spacer></v-spacer>
       <v-btn
+        class="c-actions"
         color="green darken-1"
-        name="goBack"
+        type="submit"
+        text
+        :loading="loading"
+        @click="save('Buy')"
+      >
+        {{ $t("buy") }}
+      </v-btn>
+    </v-card-actions>
+    <v-card-actions v-else class="c-actions">
+      <v-btn
+        color="green darken-1"
         type="submit"
         text
         :loading="loading"
@@ -61,6 +83,7 @@ export default {
         (value) => (value && value.length >= 1) || "Min 1 characters",
       ],
       loading: false,
+      loadingSell: false
     };
   },
   props: {
@@ -89,6 +112,7 @@ export default {
         return {};
       },
     },
+    height: null,
   },
   computed: {
     ...mapGetters("data/arbitrage_session", {
@@ -117,12 +141,20 @@ export default {
     ...mapActions("data/wallet", {
       fetchWallet: "fetchList",
     }),
-    async save() {
-      this.loading = true;
+    async save(act) {
+      let load = "loading";
+      if (!act) {
+        act = this.action;
+      } else {
+        if (act == "Sell") {
+          load = "loadingSell"
+        }
+      }
+      this[load] = true;
       let as_data = {
         amount: this.amount,
         arbitrage_company_id: this.tradePlatform.id,
-        session_start_type_id: this.action === "Buy" ? 1 : 2,
+        session_start_type_id: act === "Buy" ? 1 : 2,
         exchange_wallet_id: this.wl.id,
         wallet_id: this.userWallet.id,
       };
@@ -133,7 +165,8 @@ export default {
       console.log("rs", rs);
       this.fetchWallet();
       setTimeout(() => {
-        this.loading = false;
+        this[load] = false;
+        this.$emit("reload");
         this.close();
       }, 500);
     },
@@ -155,5 +188,17 @@ export default {
   display: inline;
   width: inherit;
   border-bottom: dotted 1px;
+}
+.c-actions {
+  position: absolute;
+  margin: 12px;
+  bottom: 0;
+  right: 0;
+}
+.c-actions-sell {
+  position: absolute;
+  margin: 12px;
+  bottom: 0;
+  left: 0;
 }
 </style>

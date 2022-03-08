@@ -18,7 +18,8 @@ export const state = () => ({
     ],
     default_language: "ru",
     preload_models: ["currency", "arbitrage_company", "wallet"],
-    themes: ["Dark", "Light"]
+    themes: ["Dark", "Light"],
+    base_p: "gate"
 })
 
 export const getters = {
@@ -27,6 +28,9 @@ export const getters = {
     },
     themes: state => {
         return state.themes;
+    },
+    base_p: state => {
+        return state.base_p;
     }
 }
 

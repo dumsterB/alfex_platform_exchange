@@ -77,7 +77,7 @@ export default {
           if (json_d && json_d.method == `all_${curr}-USD@ticker_5s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
             me.companies.forEach(cmp => {
-              let fnd = data.find(el => el.company == cmp.name);
+              let fnd = data.find(el => el && el.company == cmp.name);
               if (fnd && fnd.price) {
                 if (!me.prices[cmp.name]) me.prices[cmp.name] = {};
                 me.prices[cmp.name][curr] = fnd.price;

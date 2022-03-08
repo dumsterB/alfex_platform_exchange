@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row class="pa-3 pl-6 pr-6">
+    <v-row v-if="curr_company" class="pa-3 pl-6 pr-6">
       <v-col
         cols="12"
         xl="3"
@@ -30,64 +30,49 @@
             </div>
           </div>
           <div class="ma-8 mb-1 mt-1">
-            <v-btn class="green" block>{{ $t("trade_now") }}</v-btn>
+            <v-btn class="green" block @click="trade_now(coin)">{{
+              $t("trade_now")
+            }}</v-btn>
           </div>
-          <!-- <div v-for="(item, i) in arbitrage_company" :key="i">
-            <v-list-item dense class="ml-4" v-if="
-                  prices[coin.symbol] &&
-                  prices[coin.symbol][item.name]
-                ">
-              <v-list-item-content>
-                <div>
-                  <p>{{ item.name }}</p>
-                </div>
-              </v-list-item-content>
-              <v-list-item-content>
-                <div>
-                  <p>
-                    {{
-                      prices[coin.symbol] && prices[coin.symbol][item.name]
-                        ? "$" + prices[coin.symbol][item.name]
-                        : ""
-                    }}
-                  </p>
-                </div>
-              </v-list-item-content>
-              <v-list-item-content
-                class="d-block"
-              >
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon
-                      v-bind="attrs"
-                      v-on="on"
-                      class="ml-3 green--text"
-                      :disabled="false"
-                      @click="buy(coin, item)"
-                      >mdi-plus-box
-                    </v-icon>
-                  </template>
-                  <span>{{ $t("buy") }}</span>
-                </v-tooltip>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon
-                      v-bind="attrs"
-                      v-on="on"
-                      class="ml-3 red--text"
-                      :disabled="!coin.wallet_id"
-                      @click="sell(coin, item)"
-                      >mdi-minus-box
-                    </v-icon>
-                  </template>
-                  <span>{{ $t("sell") }}</span>
-                </v-tooltip>
-              </v-list-item-content>
-            </v-list-item>
-          </div> -->
         </v-card>
       </v-col>
     </v-row>
+    <v-row class="pa-3 pl-6 pr-6" v-if="!curr_company"
+      ><v-col
+        ><v-row
+          ><v-col>
+            <v-row class="pl-4 mb-2"
+              ><v-icon class="mr-4" @click="curr_company = true"
+                >mdi-arrow-left</v-icon
+              >
+              <v-img
+                class="mr-4"
+                max-width="50"
+                :src="sel_currency.logo"
+              ></v-img>
+              <span class="mt-3">{{ sel_currency.symbol }}</span></v-row
+            >
+          </v-col></v-row
+        >
+        <v-row>
+          <v-col
+            cols="12"
+            xl="3"
+            md="6"
+            lg="4"
+            sm="12"
+            v-for="(cmp, i) in arb_companies"
+            :key="i"
+            ><TradePosition
+              :tradeItem="cmp.currency"
+              :action="cmp.action"
+              :userWallet="cmp.wallet"
+              :tradePlatform="cmp.company"
+              :price="cmp.price"
+              :height="350"
+              @reload="reload"
+          /></v-col> </v-row></v-col
+    ></v-row>
     <v-row class="pl-8"
       ><v-col class="op_t_title">{{ $t("open_positions") }}</v-col></v-row
     >
@@ -102,22 +87,7 @@
         ></TableASession>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" max-width="600px">
-      <TradePosition
-        :tradeItem="selectedCurrency"
-        :action="action"
-        :userWallet="
-          userWallet ? userWallet : { balance: $t('wallet_balance') }
-        "
-        :tradePlatform="selectedArbitrageCompany"
-        :price="
-          prices[selectedCurrency.symbol]
-            ? prices[selectedCurrency.symbol][selectedArbitrageCompany.name]
-            : null
-        "
-        @close="closeTrade"
-      />
-    </v-dialog>
+    <v-dialog v-model="dialog" max-width="600px"> </v-dialog>
   </div>
 </template>
 
@@ -125,7 +95,7 @@
 import { mapActions, mapGetters } from "vuex";
 import TradePosition from "../../components/elements/modals/TradePosition";
 import TableASession from "~/components/data/TableASession";
-import ThemeSelectVue from '../settings/ThemeSelect.vue';
+import ThemeSelectVue from "../settings/ThemeSelect.vue";
 
 const modelCompanies = "data/arbitrage_company";
 const wallet = "data/wallet";
@@ -138,15 +108,14 @@ export default {
   data() {
     return {
       dialog: false,
-      action: "",
-      selectedCurrency: {},
-      selectedArbitrageCompany: {},
-      userWallet: "",
-      send_str: "",
-      prices: {},
+      sel_currency: {},
+      arb_companies: [],
       prices_all: [],
       cur_len: 8,
+      prices: [],
       need_curr: null,
+      curr_company: true,
+      base_p: this.$store.state.config.data.base_p,
     };
   },
   watch: {
@@ -168,9 +137,6 @@ export default {
     ...mapActions(modelCompanies, {
       fetchList: "fetchList",
     }),
-    closeTrade() {
-      this.dialog = false;
-    },
     update_subscr(curr) {
       let me = this;
       let socket = global.socket;
@@ -206,24 +172,35 @@ export default {
       });
       me.prices_all = dt;
     },
-    buy(coin, item) {
-      this.action = "Buy";
-      this.dialog = true;
-      this.userWallet = this.wallet_full.find(
-        (el) => el.currency_id == coin.id
-      );
-      this.selectedCurrency = coin;
-      this.selectedArbitrageCompany = item;
-      console.log(this.userWallet);
+    define_arb_companies(data) {
+      let me = this;
+      let arb_companies = [];
+      data.forEach((element) => {
+        if (element && element.price) {
+          let comp = me.ac.find((el) => el.name == element.company);
+          let wallet = me.wallet_full.find(
+            (el) => el.currency_id == me.sel_currency.id
+          );
+          arb_companies.push({
+            currency: me.sel_currency,
+            wallet: wallet || {},
+            company: comp,
+            action: wallet ? "Both" : "Buy",
+            price: element.price,
+          });
+        }
+      });
+      me.arb_companies = arb_companies;
+      console.log("me.arb_companies", me.arb_companies);
     },
-    sell(coin, item) {
-      this.action = "Sell";
-      this.dialog = true;
-      this.userWallet = this.wallet_full.find(
-        (el) => el.currency_id == coin.id
-      );
-      this.selectedCurrency = coin;
-      this.selectedArbitrageCompany = item;
+    trade_now(coin) {
+      this.sel_currency = coin;
+      this.update_subscr(coin);
+      this.curr_company = false;
+    },
+    async reload() {
+      await this.fetchWallet();
+      await this.fetchAS();
     },
   },
   computed: {
@@ -273,23 +250,22 @@ export default {
     await this.fetchAS();
     let me = this;
     let socket = global.socket;
-    me.send_str = `"binance_all@ticker_10s"`;
     socket.send(`{
       "method": "subscribe",
-      "data": ["binance_all@ticker_10s"]
+      "data": ["${me.base_p}_all@ticker_10s"]
     }`);
 
     socket.onmessage = function (event) {
       if (event.data) {
         let json_d = JSON.parse(event.data);
-        // console.log(json_d.method)
-        if (json_d && json_d.method == `binance_all@ticker_10s`) {
+        if (json_d && json_d.method == `${me.base_p}_all@ticker_10s`) {
           let data = json_d.data ? json_d.data.data || [] : [];
           me.define_prices(data);
         } else if (me.need_curr) {
           let curr = me.need_curr.symbol;
           if (json_d && json_d.method == `all_${curr}-USD@ticker_5s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
+            me.define_arb_companies(data);
             me.define_prices(data);
           }
         }
@@ -301,7 +277,7 @@ export default {
     let curr = this.need_curr ? this.need_curr.symbo : "USD";
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["binance_all@ticker_10s", "all_${curr}-USD@ticker_5s"]
+      "data": ["${this.base_p}_all@ticker_10s", "all_${curr}-USD@ticker_5s"]
     }`);
   },
 };

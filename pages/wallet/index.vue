@@ -61,6 +61,7 @@ export default {
       total_sum_usdt: "0",
       wallets_t: [],
       prices: null,
+      base_p: this.$store.state.config.data.base_p,
     };
   },
   computed: {
@@ -117,7 +118,7 @@ export default {
         me.fiat_available_balance_usdt = sum_fiat.toFixed(4);
         me.spot_total_equity_usdt = me.spot_available_balance_usdt;
         me.fiat_total_equity_usdt = me.fiat_available_balance_usdt;
-        let fnd_btc = data.find((el) => el.base == "BTC");
+        let fnd_btc = data.find((el) => el && el.base == "BTC");
         if (fnd_btc) {
           me.total_sum = (sum_t / parseFloat(fnd_btc.price)).toFixed(4);
           me.spot_available_balance = (
@@ -137,12 +138,12 @@ export default {
       let socket = global.socket;
       socket.send(`{
       "method": "subscribe",
-      "data": ["binance_all@ticker_10s"]
+      "data": ["${me.base_p}_all@ticker_10s"]
     }`);
       socket.onmessage = function (event) {
         if (event.data) {
           let json_d = JSON.parse(event.data);
-          if (json_d && json_d.method == `binance_all@ticker_10s`) {
+          if (json_d && json_d.method == `${me.base_p}_all@ticker_10s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
             me.prices = data;
           }
@@ -179,7 +180,7 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["binance_all@ticker_10s"]
+      "data": ["${this.base_p}_all@ticker_10s"]
     }`);
   },
 };

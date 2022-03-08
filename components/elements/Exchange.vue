@@ -126,6 +126,9 @@ export default {
       trade_create: "create",
       fetchTrades: "fetchList"
     }),
+    ...mapActions("data/wallet", {
+      fWallets: "fetchList",
+    }),
     async copyURL() {
       try {
         //*TODO - документация обещает, что navigator.clipboard будет работать при https соеденении. Иначе нужен иной способ
@@ -156,9 +159,9 @@ export default {
       console.log("trade_data", trade_data);
       let rs = await this.trade_create({data: trade_data});
       console.log("rs", rs);
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
+      await this.fWallets();
+      this.$emit("reload");
+      this.loading = false;
     },
   },
   watch: {

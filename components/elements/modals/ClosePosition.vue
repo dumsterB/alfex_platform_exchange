@@ -91,17 +91,16 @@ export default {
       let ac = this.cmps.find((el) => el.checked == true);
       as_data.id = this.item.id;
       as_data.status_id = 2;
-      as_data.stop_exchange_rate = ac.price;
-      as_data.arbitrage_company_id = ac.id;
+      as_data.stop_exchange_rate = ac ? ac.price : 1;
+      as_data.arbitrage_company_id = ac ? ac.id : this.item.arbitrage_company_id;
       // code
       console.log("as_data", as_data);
-      // let rs = await this.update_as({ data: as_data });
-      // console.log("rs", rs);
+      let rs = await this.update_as({ data: as_data, id: as_data.id });
+      console.log("rs", rs);
+      this.$emit("reload");
       setTimeout(() => {
         this.loading = false;
-        setTimeout(() => {
-          this.emit("close");
-        }, 500);
+        this.$emit("close");
       }, 500);
     },
     init() {
@@ -114,7 +113,9 @@ export default {
       // console.log("this.first", this.first, curr);
       if (curr) {
         this[key].forEach((element) => {
-          let pr = this.prices.find((e) => e && e.company == element.name && e.base == curr);
+          let pr = this.prices.find(
+            (e) => e && e.company == element.name && e.base == curr
+          );
           if (pr && pr.price) {
             let dt = {
               name: element.name,

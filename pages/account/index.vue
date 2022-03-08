@@ -43,8 +43,8 @@
         </v-row>
       </v-col>
       <v-col :cols="12" :md="4" :lg="4" :sm="12" :xs="12">
-        <Wallet :currency="currs"></Wallet>
-        <Exchange :currency="currs"></Exchange>
+        <Wallet ref="wallet" :currency="currs"></Wallet>
+        <Exchange :currency="currs" @reload="reload_wallet"></Exchange>
       </v-col>
     </v-row>
   </div>
@@ -67,8 +67,9 @@ export default {
     return {
       currs: [],
       companies: [],
-      platform: "binance",
+      base_p: this.$store.state.config.data.base_p,
       waiter: {},
+      prices: [],
     };
   },
   computed: {
@@ -77,7 +78,9 @@ export default {
     }),
     currencies() {
       let c_f = this.currencies_full;
-      return c_f.filter(el => el.currency_type && el.currency_type.key == "CRYPTO");
+      return c_f.filter(
+        (el) => el.currency_type && el.currency_type.key == "CRYPTO"
+      );
     },
     ...mapGetters("data/arbitrage_company", {
       arbitrage_company: "list",
@@ -90,38 +93,53 @@ export default {
     ...mapActions("data/arbitrage_company", {
       fetchAC: "fetchList",
     }),
+    ...mapActions("data/wallet", {
+      fetchWallet: "fetchList",
+    }),
+    init_currs() {
+      let me = this;
+      let data = me.prices;
+      let currs = me.currencies.map((el) => {
+        let res = {
+          id: el.id,
+          symbol: el.symbol,
+          name: el.name,
+          logo: el.logo,
+        };
+        let fnd = data.find((e) => e && e.base == el.symbol);
+        if (fnd) {
+          res.price = fnd.price;
+          res.change = fnd.change;
+          res.change_p = (
+            (parseFloat(fnd.change) * 100) /
+            parseFloat(fnd.price)
+          ).toFixed(4);
+        }
+        return res;
+      });
+      me.currs = currs;
+    },
+    reload_wallet() {
+      this.$refs.wallet.counter = 1;
+      this.init_currs();
+    }
   },
+
   async created() {
     let me = this;
     let socket = global.socket;
     socket.send(`{
       "method": "subscribe",
-      "data": ["${me.platform}_all@ticker_10s"]
+      "data": ["${me.base_p}_all@ticker_10s"]
     }`);
     socket.onmessage = function (event) {
       if (event.data) {
         let json_d = JSON.parse(event.data);
-        if (json_d && json_d.method == `${me.platform}_all@ticker_10s`) {
+        if (json_d && json_d.method == `${me.base_p}_all@ticker_10s`) {
           let data = json_d.data ? json_d.data.data || [] : [];
-          let currs = me.currencies.map((el) => {
-            let res = {
-              id: el.id,
-              symbol: el.symbol,
-              name: el.name,
-              logo: el.logo,
-            };
-            let fnd = data.find((e) => e && e.base == el.symbol);
-            if (fnd) {
-              res.price = fnd.price;
-              res.change = fnd.change;
-              res.change_p = (
-                (parseFloat(fnd.change) * 100) /
-                parseFloat(fnd.price)
-              ).toFixed(4);
-            }
-            return res;
-          });
-          me.currs = currs;
+          me.prices = data;
+          me.init_currs();
+          // console.log(json_d.method, currs, data)
         }
         let s_method = json_d.method.slice(0, 3);
         if (json_d && s_method == "all") {
@@ -193,7 +211,7 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["${this.platform}_all@ticker_10s"]
+      "data": ["${this.base_p}_all@ticker_10s"]
     }`);
   },
 };

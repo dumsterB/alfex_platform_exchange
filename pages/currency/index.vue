@@ -113,7 +113,7 @@ export default {
       graphWidth: parseInt(((window.innerWidth - 250) * 2) / 3),
       graphHeight: 500,
       selected_platform: "binance",
-      platform: "binance",
+      base_p: this.$store.state.config.data.base_p,
       price: null,
       change: null,
       prices: [],
@@ -183,7 +183,7 @@ export default {
       }`);
       socket.send(`{
         "method": "subscribe",
-        "data": ["binance_${me.curr_code}-USD@ticker_5s", "${me.platform}_all@ticker_10s"]
+        "data": ["binance_${me.curr_code}-USD@ticker_5s", "${me.base_p}_all@ticker_10s"]
       }`);
       socket.onmessage = function (event) {
         if (event.data) {
@@ -201,7 +201,7 @@ export default {
               me.change = 0;
             }
           }
-          if (json_d && json_d.method == `${me.platform}_all@ticker_10s`) {
+          if (json_d && json_d.method == `${me.base_p}_all@ticker_10s`) {
             let data = json_d.data ? json_d.data.data || [] : [];
             me.prices = data;
           }
@@ -213,7 +213,7 @@ export default {
       let socket = global.socket;
       socket.send(`{
         "method": "unsubscribe",
-        "data": ["binance_${me.curr_code}-USD@ticker_5s", "${me.platform}_all@ticker_10s"]
+        "data": ["binance_${me.curr_code}-USD@ticker_5s", "${me.base_p}_all@ticker_10s"]
       }`);
       socket.send(`{
         "method": "subscribe",
@@ -247,7 +247,7 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["binance_${this.curr_code}-USD@ticker_5s", "${this.platform}_all@ticker_10s", 
+      "data": ["binance_${this.curr_code}-USD@ticker_5s", "${this.base_p}_all@ticker_10s", 
       "all_${this.curr_code}-USD@ticker_5s"]
     }`);
   },
