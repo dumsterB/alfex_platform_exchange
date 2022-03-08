@@ -1,10 +1,14 @@
 <template>
   <div class="d-flex justify-center align-center py-10">
-    <div style="width: 350px">
+    <div style="width: 450px">
       <v-card
         elevation="4"
         class="d-flex flex-column justify-center _align-center px-4 py-6 pt-8"
       >
+        <h3>{{ $t('signin') }}</h3>
+        <p class="d-flex">{{ $t('haveNotAccount') }}
+          <router-link class="ml-2" to="/registration">{{ $t('signupHere') }}</router-link>
+        </p>
         <v-form
           v-model="auth_login_form_valid"
           ref="auth_login_form"
@@ -45,14 +49,151 @@
             >
               {{ $t("SignIn") }}
             </v-btn>
+            <span class="forgetPassword"> {{ $t('forgetPasswordMessage') }}</span>
           </div>
         </v-form>
       </v-card>
     </div>
+    <div style="width: 450px" class="ml-5">
+      <v-card
+        elevation="4"
+        class="d-flex flex-column justify-center _align-center px-4 py-6 pt-8"
+      >
+        <h3>{{ $t('register') }}</h3>
+        <p class="d-flex">{{ $t('readyToRegister') }}
+          <router-link class="ml-2" to="/registration">{{ $t('signinHere') }}</router-link>
+        </p>
+        <v-form
+          v-model="auth_login_form_valid"
+          ref="auth_login_form"
+          class="mt-6"
+          :lazy-validation="false"
+          @submit.prevent="auth_login"
+        >
+          <v-text-field
+            v-model="name"
+            :rules="validation.name"
+            dense
+            outlined
+            :label="$t('first_name')"
+            class="mt-4"
+            required
+          ></v-text-field>
 
+          <v-text-field
+            v-model="surname"
+            dense
+            outlined
+            :label="$t('surname')"
+            :append-icon="is_show_pass ? 'mdi-eye' : 'mdi-eye-off'"
+            :rules="validation.required"
+            :type="is_show_pass ? 'text' : 'password'"
+            @click:append="is_show_pass = !is_show_pass"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="email"
+            :rules="validation.email"
+            dense
+            outlined
+            :label="$t('email')"
+            class="mt-4"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="phone_number"
+            :rules="validation.phone_number"
+            dense
+            outlined
+            :label="$t('phone_number')"
+            class="mt-4"
+            required
+          ></v-text-field>
+          <v-select
+            v-model="selectCountry"
+            :items="countries"
+            :label="$t('place_of_birth')"
+            outlined
+            dense
+            required
+          ></v-select>
+          <v-select
+            v-model="selectGender"
+            :items="['male','female']"
+            :label="$t('gender')"
+            outlined
+            dense
+            required
+          ></v-select>
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="date"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="date"
+                :label="$t('date_of_birth')"
+                readonly
+                outlined
+                :rules="[v => !!v || $t('enter_day_birth')]"
+                dense
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="date"
+              no-title
+              scrollable
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="primary"
+                @click="menu = false"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.menu.save(date)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <div class="d-flex">
+            <v-checkbox
+              v-model="checkbox"
+            ></v-checkbox>
+           <span style="font-size: 13px" class="text-gray mt-5"> {{ $t('agree_with_policy') }}</span>
+          </div>
+          <p style="font-size: 14px">{{$t('agree')}}</p>
+          <p class="success-text text-center" style="cursor: pointer">{{$t('terms_and_policy')}}</p>
+          <div>
+            <v-btn
+              width="200"
+              outlined
+              tile
+              class="d-flex mt-2 mb-2 mx-auto"
+              color="green"
+              type="submit"
+            >
+              {{ $t("SignIn") }}
+            </v-btn>
+          </div>
+        </v-form>
+      </v-card>
+    </div>
     <v-snackbar v-model="is_notify" color="#1F1F29" :timeout="3000" top="top">
       {{ is_notify_message }}
-      <v-btn dark text @click="is_notify = false"> OK </v-btn>
+      <v-btn dark text @click="is_notify = false"> OK</v-btn>
     </v-snackbar>
   </div>
 </template>
@@ -76,7 +217,6 @@ export default {
       auth_login_form_valid: false,
       email: "",
       password: "",
-
       // settings
       is_show_pass: false,
       is_notify: false,
@@ -128,6 +268,17 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+  },
 };
 </script>
+<style scoped>
+.forgetPassword {
+  color: #23ad41;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: 15px;
+}
+</style>
