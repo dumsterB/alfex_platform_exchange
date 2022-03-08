@@ -190,7 +190,7 @@ export default {
   new_password: "новый пароль",
   old_password: "старый пароль",
   confirm_password: "Подтвердите пароль",
-  email: "электронная почта",
+  email: "Электронная почта",
   password: "пароль",
   first_name: "Имя",
   surname: "Фамилия",

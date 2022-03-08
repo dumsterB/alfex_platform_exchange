@@ -2,6 +2,7 @@
   <v-app>
     <LoadingScreen :isLoading="isLoading" />
     <div v-if="!isLoading" class="main-page mb-16">
+      <!-- <SnackBar /> -->
       <Menu />
       <NavBar />
       <v-main fluid class="mb-16">
@@ -15,6 +16,7 @@
 </template>
 
 <script>
+import SnackBar from "../components/layout/Notification";
 import NavBar from "~/components/layout/NavBar";
 import Menu from "~/components/layout/Menu";
 import Footer from "~/components/layout/Footer";

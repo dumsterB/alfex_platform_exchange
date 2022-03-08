@@ -26,10 +26,10 @@ function createCRUD(module) {
                         "total": data.total
                     },
                     links: {
-                        "first":"...",
-                        "last":"...",
-                        "prev":"..",
-                        "next":"..."
+                        "first": "...",
+                        "last": "...",
+                        "prev": "..",
+                        "next": "..."
                     }
                 });
             } else {

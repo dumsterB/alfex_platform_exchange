@@ -169,7 +169,9 @@ export default {
         this.$emit("reload");
         this.close();
       }, 500);
+
     },
+
     close() {
       this.$emit("close");
     },
