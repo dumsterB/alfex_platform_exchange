@@ -126,6 +126,7 @@ export default {
       fetchList: "fetchList",
     }),
     toggleModal(item) {
+      this.$emit("get_prices", item.wallet.currency);
       this.selectedItem = item;
       this.dialog = true;
     },
@@ -133,7 +134,6 @@ export default {
       let list = [];
       let as = [];
       if (this.filter) {
-        console.log("this.filter", this.filter);
         as = this.arbitrage_sessions.filter((el) => {
           for (let p in this.filter) {
             let spl = p.split(".");
@@ -190,12 +190,12 @@ export default {
   },
   watch: {
     prices() {
-      console.log("this.prices", this.prices);
+      // console.log("this.prices", this.prices);
       this.resetList(this.prices);
     },
   },
   async created() {
-    console.log("this.arbitrage_sessions", this.arbitrage_sessions);
+    // console.log("this.arbitrage_sessions", this.arbitrage_sessions);
   },
 };
 </script>

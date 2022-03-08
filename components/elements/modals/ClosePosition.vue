@@ -110,33 +110,39 @@ export default {
       if (this.first) {
         key = "companies";
       }
-      this[key].forEach((element) => {
-        let pr = this.prices.find((e) => e.company == element.name);
-        if (pr && pr.price) {
-          let dt = {
-            name: element.name,
-            id: element.id,
-            logo: element.logo,
-            price: pr.price,
-            checked: element.checked ? true : false
-          };
-          if (this.first) {
-            dt.checked = false;
+      let curr = this.item.wallet ? this.item.wallet.currency.symbol : null;
+      // console.log("this.first", this.first, curr);
+      if (curr) {
+        this[key].forEach((element) => {
+          let pr = this.prices.find((e) => e && e.company == element.name && e.base == curr);
+          if (pr && pr.price) {
+            let dt = {
+              name: element.name,
+              id: element.id,
+              logo: element.logo,
+              price: pr.price,
+              checked: element.checked ? true : false,
+            };
+            if (this.first) {
+              dt.checked = false;
+            }
+            cmps.push(dt);
           }
-          cmps.push(dt);
-        }
-      });
-      if (this.first) {
-        if (this.item.arbitrage_company_id) {
-          let id = this.item.arbitrage_company_id;
-          let fnd = cmps.find((e) => e.id == id);
-          if (fnd) {
-            fnd.checked = true;
+        });
+        if (this.first) {
+          if (this.item.arbitrage_company_id) {
+            let id = this.item.arbitrage_company_id;
+            let fnd = cmps.find((e) => e.id == id);
+            if (fnd) {
+              fnd.checked = true;
+            }
           }
+          setTimeout(() => {
+            this.first = false;
+          }, 500);
         }
-        this.first = false;
       }
-      console.log("this.first", this.first)
+
       this.cmps = cmps;
     },
   },
@@ -146,6 +152,7 @@ export default {
     },
     item() {
       this.first = true;
+      this.cmps = [];
     },
   },
   mounted() {
