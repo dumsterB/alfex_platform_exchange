@@ -19,32 +19,26 @@
             :label="$t('market_search_bar_placeholder')"
             hide-details
           ></v-text-field>
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
-                >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
-                >
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
-        <v-btn elevation="0" class="success-text" @click="depositChanger">{{
-          $t("deposit_title")
-        }}</v-btn>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-btn
+          elevation="0"
+          class="success-text"
+          @click="depositChanger(item)"
+          >{{ $t("deposit_title") }}</v-btn
+        >
       </template>
       <template v-slot:no-data>
         <p>No data</p>
       </template>
     </v-data-table>
-    <Deposit :dialog="dialog" @depositChanger="depositChanger"></Deposit>
+    <Deposit
+      :dialog="dialog"
+      @depositChanger="close"
+      action="deposit_title"
+      :wallet="sel_wallet"
+    ></Deposit>
   </div>
 </template>
 
@@ -60,9 +54,9 @@ export default {
     wallets: {
       type: Array,
       default: () => {
-        return []
-      }
-    }
+        return [];
+      },
+    },
   },
   data() {
     return {
@@ -71,6 +65,7 @@ export default {
       search: "",
       desserts: [],
       editedIndex: -1,
+      sel_wallet: null,
       editedItem: {
         name: "",
         calories: 0,
@@ -95,7 +90,7 @@ export default {
           align: "start",
           sortable: false,
           value: "currency.name",
-          width: 220
+          width: 220,
         },
         { text: this.$t("wallet_balance"), value: "balance" },
         { text: this.$t("available_balance"), value: "balance" },
@@ -113,52 +108,15 @@ export default {
       val || this.closeDelete();
     },
   },
-  created() {
-  },
+  created() {},
   methods: {
-    depositChanger() {
-      this.dialog = !this.dialog;
-    },
-    editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+    depositChanger(item) {
+      this.sel_wallet = item;
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
     close() {
       this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      }
-      this.close();
+      this.$emit('reload');
     },
   },
 };

@@ -28,7 +28,10 @@
       </v-col>
       <v-col md="8">
         <div class="ma-2 mr-8">
-          <TableTransactions :wallets="wallets_t"></TableTransactions>
+          <TableTransactions
+            :wallets="wallets_t"
+            @reload="init_tb"
+          ></TableTransactions>
         </div>
       </v-col>
     </v-row>
@@ -57,6 +60,7 @@ export default {
       total_sum: "0",
       total_sum_usdt: "0",
       wallets_t: [],
+      prices: null,
     };
   },
   computed: {
@@ -74,85 +78,102 @@ export default {
     ...mapActions("data/wallet", {
       fetchWallet: "fetchList",
     }),
-  },
-  watch: {},
-  async created() {
-    let me = this;
-    this.fetchWallet();
-    let socket = global.socket;
-    socket.send(`{
+    init_tb() {
+      let me = this;
+      let data = this.prices;
+      if (data) {
+        me.wallets_t = me.wallets.map((el) => {
+          let fnd = data.find((dt) => dt && dt.base == el.currency.symbol);
+          if (fnd && fnd.price) {
+            let eqv = parseFloat(fnd.price) * el.balance;
+            el.eqv = eqv.toFixed(3);
+          } else {
+            el.eqv = el.balance;
+          }
+          return el;
+        });
+        let sum_t = 0;
+        let sum_spot = 0;
+        let sum_fiat = 0;
+        me.wallets_t.forEach((element) => {
+          sum_t += parseFloat(element.eqv);
+          if (
+            element.currency &&
+            element.currency.currency_type &&
+            element.currency.currency_type.key == "CRYPTO"
+          ) {
+            sum_spot += parseFloat(element.eqv);
+          }
+          if (
+            element.currency &&
+            element.currency.currency_type &&
+            element.currency.currency_type.key == "FIAT"
+          ) {
+            sum_fiat += parseFloat(element.eqv);
+          }
+        });
+        me.total_sum_usdt = sum_t.toFixed(4);
+        me.spot_available_balance_usdt = sum_spot.toFixed(4);
+        me.fiat_available_balance_usdt = sum_fiat.toFixed(4);
+        me.spot_total_equity_usdt = me.spot_available_balance_usdt;
+        me.fiat_total_equity_usdt = me.fiat_available_balance_usdt;
+        let fnd_btc = data.find((el) => el.base == "BTC");
+        if (fnd_btc) {
+          me.total_sum = (sum_t / parseFloat(fnd_btc.price)).toFixed(4);
+          me.spot_available_balance = (
+            sum_spot / parseFloat(fnd_btc.price)
+          ).toFixed(4);
+          me.fiat_available_balance = (
+            sum_fiat / parseFloat(fnd_btc.price)
+          ).toFixed(4);
+          me.spot_total_equity = me.spot_available_balance;
+          me.fiat_total_equity = me.fiat_available_balance;
+        }
+        console.log("sums", sum_t, sum_spot, sum_fiat);
+      }
+    },
+    async init() {
+      let me = this;
+      let socket = global.socket;
+      socket.send(`{
       "method": "subscribe",
       "data": ["binance_all@ticker_10s"]
     }`);
-    socket.onmessage = function (event) {
-      if (event.data) {
-        let json_d = JSON.parse(event.data);
-        if (json_d && json_d.method == `binance_all@ticker_10s`) {
-          let data = json_d.data ? json_d.data.data || [] : [];
-          me.wallets_t = me.wallets.map((el) => {
-            let fnd = data.find((dt) => dt && dt.base == el.currency.symbol);
-            if (fnd && fnd.price) {
-              let eqv = parseFloat(fnd.price) * el.balance;
-              el.eqv = eqv.toFixed(3);
-            } else {
-              el.eqv = el.balance;
-            }
-            return el;
-          });
-          let sum_t = 0;
-          let sum_spot = 0;
-          let sum_fiat = 0;
-          me.wallets_t.forEach((element) => {
-            sum_t += parseFloat(element.eqv);
-            if (
-              element.currency &&
-              element.currency.currency_type &&
-              element.currency.currency_type.key == "CRYPTO"
-            ) {
-              sum_spot += parseFloat(element.eqv);
-            }
-            if (
-              element.currency &&
-              element.currency.currency_type &&
-              element.currency.currency_type.key == "FIAT"
-            ) {
-              sum_fiat += parseFloat(element.eqv);
-            }
-          });
-          me.total_sum_usdt = sum_t.toFixed(4);
-          me.spot_available_balance_usdt = sum_spot.toFixed(4);
-          me.fiat_available_balance_usdt = sum_fiat.toFixed(4);
-          me.spot_total_equity_usdt = me.spot_available_balance_usdt;
-          me.fiat_total_equity_usdt = me.fiat_available_balance_usdt;
-          let fnd_btc = data.find((el) => el.base == "BTC");
-          if (fnd_btc) {
-            me.total_sum = (sum_t/ parseFloat(fnd_btc.price)).toFixed(4);
-            me.spot_available_balance = (sum_spot/ parseFloat(fnd_btc.price)).toFixed(4);
-            me.fiat_available_balance = (sum_fiat/ parseFloat(fnd_btc.price)).toFixed(4);
-            me.spot_total_equity = me.spot_available_balance;
-            me.fiat_total_equity = me.fiat_available_balance;
+      socket.onmessage = function (event) {
+        if (event.data) {
+          let json_d = JSON.parse(event.data);
+          if (json_d && json_d.method == `binance_all@ticker_10s`) {
+            let data = json_d.data ? json_d.data.data || [] : [];
+            me.prices = data;
           }
-          console.log("sums", sum_t, sum_spot, sum_fiat);
-        }
 
-        // me.currs = me.currencies.map(el => {
-        //   let res = {
-        //     id: el.id,
-        //     symbol: el.symbol,
-        //     name: el.name,
-        //     logo: el.logo
-        //   }
-        //   let fnd = data.find(e => e && e.base == el.symbol);
-        //   if (fnd) {
-        //     res.price = fnd.price;
-        //     res.change = fnd.change;
-        //     res.change_p = (parseFloat(fnd.change) / parseFloat(fnd.price)).toFixed(4);
-        //   }
-        //   return res;
-        // })
-        // console.log('me.currs', me.currs)
-      }
-    };
+          // me.currs = me.currencies.map(el => {
+          //   let res = {
+          //     id: el.id,
+          //     symbol: el.symbol,
+          //     name: el.name,
+          //     logo: el.logo
+          //   }
+          //   let fnd = data.find(e => e && e.base == el.symbol);
+          //   if (fnd) {
+          //     res.price = fnd.price;
+          //     res.change = fnd.change;
+          //     res.change_p = (parseFloat(fnd.change) / parseFloat(fnd.price)).toFixed(4);
+          //   }
+          //   return res;
+          // })
+          // console.log('me.currs', me.currs)
+        }
+      };
+    },
+  },
+  watch: {
+    prices() {
+      this.init_tb();
+    },
+  },
+  async created() {
+    await this.init();
   },
   destroyed() {
     let socket = global.socket;

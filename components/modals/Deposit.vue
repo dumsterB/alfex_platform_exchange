@@ -11,12 +11,7 @@
               {{ $t("choose_payment_method") }}
             </p>
           </v-col>
-          <v-btn
-            elevation="0"
-            @click="close"
-            icon
-            class="mt-2 mr-2"
-          >
+          <v-btn elevation="0" @click="close" icon class="mt-2 mr-2">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-row>
@@ -52,11 +47,11 @@
               :label="$t('enter_your_amount')"
               type="number"
             ></v-text-field>
-            <p class="text-gray">{{$t('deposit_ruls')}}</p>
+            <!-- <p class="text-gray">{{ $t("deposit_ruls") }}</p> -->
           </v-col>
         </v-row>
         <v-card-actions>
-          {{ $t("pay") }}: {{ enteredMoney }}$
+          {{ $t("pay") }}: {{ enteredMoney }} {{ curr }}
           <v-spacer></v-spacer>
           <v-btn
             large
@@ -92,6 +87,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    wallet: null,
     action: {
       type: String,
       default: "",
@@ -106,6 +102,7 @@ export default {
       items: [],
       selected_card: -1,
       loading: false,
+      curr: "USD",
     };
   },
   computed: {
@@ -117,9 +114,12 @@ export default {
     ...mapActions("data/order", {
       order_create: "create",
     }),
+    ...mapActions("data/wallet", {
+      f_wallets: "fetchList",
+    }),
     close() {
       this.enteredMoney = "";
-      this.$emit('depositChanger');
+      this.$emit("depositChanger");
     },
     cardDialogChanger() {
       this.cardDialog = !this.cardDialog;
@@ -128,7 +128,9 @@ export default {
       let d = localStorage.getItem("bank_cards");
       if (d) {
         this.items = JSON.parse(d) || [];
-
+        if (this.items.length > 0) {
+          this.selected_card = 0;
+        }
         this.cardDialog = false;
       }
     },
@@ -136,7 +138,13 @@ export default {
       if (this.selected_card > -1) {
         this.loading = true;
         let order_data = {};
-        let curr = this.currencies.find((el) => el.symbol == "USD");
+        let curr;
+        if (!this.wallet) {
+          curr = this.currencies.find((el) => el.symbol == "USD");
+        } else {
+          curr = this.wallet.currency;
+          this.curr = curr.symbol;
+        }
         if (curr) {
           order_data.source_currency_id = curr.id;
         }
@@ -145,21 +153,25 @@ export default {
         order_data.dest_amount = parseFloat(this.enteredMoney);
         order_data.exchange_rate = 1;
         if (this.action == "deposit_title") {
-          order_data.order_type_id = 1;
+          order_data.order_type_id = 2;
         }
         if (this.action == "withdraw") {
-          order_data.order_type_id = 2;
+          order_data.order_type_id = 1;
         }
         order_data.order_method_id = 1;
         console.log("order_data", order_data);
         let rs = await this.order_create({ data: order_data });
         console.log("rs", rs);
-        setTimeout(() => {
-          this.loading = false;
-          setTimeout(() => {
-            this.$emit("depositChanger");
-          }, 500);
-        }, 500);
+        await this.f_wallets();
+        this.loading = false;
+        this.$emit("depositChanger", true);
+      }
+    },
+  },
+  watch: {
+    wallet() {
+      if (this.wallet && this.wallet.currency) {
+        this.curr = this.wallet.currency.symbol;
       }
     },
   },

@@ -119,7 +119,7 @@ export default {
   news_page: "блог",
   settings_page: "Настройки",
   spot_account: "Спотовый счет",
-  fiat_account: "Фатный счет",
+  fiat_account: "Фиатный счет",
   total_equity: "Общий капитал",
   available_balance: "Доступный баланс",
   account_created: "Аккаунт создан!",
