@@ -1,17 +1,26 @@
 <template v-slot:[`item.action`]="{ item }">
   <v-card>
-    <v-card-title class="d-flex">
-      <v-img
-        contain
-        tag="img"
-        height="auto"
-        max-width="200px"
-        :src="tradePlatform ? tradePlatform.logo : ''"
-        :alt="tradePlatform ? tradePlatform.name : ''"
-        class=""
-      >
-      </v-img>
-    </v-card-title>
+    <div
+      class="d-flex darken-1 pa-5 white--text font-weight-black title"
+    >
+      <v-card-title class="d-flex">
+        <v-img
+          contain
+          tag="img"
+          height="auto"
+          max-width="200px"
+          :src="tradePlatform ? tradePlatform.logo : ''"
+          :alt="tradePlatform ? tradePlatform.name : ''"
+          class=""
+        >
+        </v-img>
+      </v-card-title>
+      <v-spacer></v-spacer>
+
+      <v-btn class="mt-2" icon @click="$emit('close')">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </div>
     <v-card-text>
       <v-container class="d-flex justify-lg-space-between font-weight-medium">
         <span>{{ $t("marketplace_price") }}</span>
@@ -134,9 +143,13 @@ export default {
       this.fetchWallet();
       setTimeout(() => {
         this.loading = false;
-        this.close();
+        if(rs.status===200){
+          this.close();
+        }
       }, 500);
+
     },
+
     close() {
       this.$emit("close");
     },
