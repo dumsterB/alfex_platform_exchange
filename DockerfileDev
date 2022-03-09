@@ -11,6 +11,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
+
 # этап production (production-stage)
 FROM nginx:stable-alpine as production-stage
 COPY nginx.conf /etc/nginx/nginx.conf
