@@ -36,7 +36,7 @@ definitions:
         name: Deploy to K8s
         image: google/cloud-sdk:latest
         script:
-          - echo AIzaSyBu07rM7IUw6YD2mUpayDy9Iy7yWDrFA28 > ~/.gcloud-api-key.json
+          - echo ${GCLOUD_API_KEYFILE} > ~/.gcloud-api-key.json
           - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
           - gcloud container clusters get-credentials test-dev --zone=europe-west1 --project alfex-340710
           - docker login -u alfex -p 3wAadoLIG3IxFh21021994
