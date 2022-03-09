@@ -57,7 +57,7 @@ definitions:
           - docker
         script:
           - docker login -u $DOCKER_GCR_REPO_URL_DEV -p $DOCKER_HUB_PASSWORD_DEV
-          - docker build -t $DOCKER_GCR_REPO_URL_DEV/$DOCKER_IMAGE_NAME_DEV:${BITBUCKET_BUILD_NUMBER}_f_d_prof_invest -f DockerfileDev .
+          - docker build -t $DOCKER_GCR_REPO_URL_DEV/$DOCKER_IMAGE_NAME_DEV:${BITBUCKET_BUILD_NUMBER}_f_d_prof_invest -f DockerfileProfInvestDev .
           - docker push $DOCKER_GCR_REPO_URL_DEV/$DOCKER_IMAGE_NAME_DEV:${BITBUCKET_BUILD_NUMBER}_f_d_prof_invest
         services:
           - docker
@@ -74,6 +74,13 @@ definitions:
           - docker
 pipelines:
   branches:
+#    master:
+#      - step:
+#          script:
+#            - git checkout prof-invest-dev
+#            - git merge master
+#            - git push
+      #- step: *docker-build-dev
     prof-invest-dev:
       - step: *docker-build-prof-invest-dev
       - step: *deploy-prof-invest-dev
