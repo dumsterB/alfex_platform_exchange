@@ -62,11 +62,11 @@ export default {
   },
   async created() {
     if (this.$store.state.auth.user) {
-      global.socket = new WebSocket("ws://getaway-ws-server.herokuapp.com");
+      global.socket = new WebSocket(this.$env('WS_SERVER_BASE'));
       this.interv = setInterval(() => {
         let ws = global.socket;
         if (ws.readyState !== ws.OPEN) {
-          global.socket = new WebSocket("ws://getaway-ws-server.herokuapp.com");
+          global.socket = new WebSocket(this.$env('WS_SERVER_BASE'));
         }
       }, 5000);
       await this.preload_models();

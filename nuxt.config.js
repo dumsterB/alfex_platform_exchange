@@ -1,8 +1,9 @@
 const langs = ["en", "ru", "pl", "de"];
-import de from "./locales/de.js";
-import en from "./locales/en.js";
-import pl from "./locales/pl.js";
-import ru from "./locales/ru.js";
+import de from "./config/locales/de.js";
+import en from "./config/locales/en.js";
+import pl from "./config/locales/pl.js";
+import ru from "./config/locales/ru.js";
+import config from "./config/config.json";
 
 let locales = { en, de, ru, pl };
 
@@ -14,7 +15,7 @@ export default {
   },
   mode: "spa",
   head: {
-    title: "vue-platform",
+    title: config.title,
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -100,9 +101,9 @@ export default {
 
   i18n: {
     locales: langs,
-    defaultLocale: "ru",
+    defaultLocale: config.default_language,
     vueI18n: {
-      fallbackLocale: "ru",
+      fallbackLocale: config.default_language,
       messages: locales,
     },
   },
