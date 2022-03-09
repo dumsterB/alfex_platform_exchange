@@ -2,7 +2,7 @@
 FROM node:15-alpine as build-stage
 WORKDIR /app
 RUN ln -f -s .env.dev .env
-RUN ln -f -s ./config/ProfInvest/config.json ./config/config.json
+RUN ln -f -s config/ProfInvest/config.json config/config.json
 COPY package*.json ./
 RUN apk --no-cache --virtual build-dependencies add \
     python \
