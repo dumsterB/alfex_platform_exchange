@@ -75,8 +75,9 @@ definitions:
 pipelines:
   branches:
     prof-invest-dev:
-      - step: *docker-build-prof-invest-dev
-      #- step: *deploy-prof-invest-dev
+      - step: *docker-build-dev
+      - step: *deploy-dev
+      #- step: *version_update_dev
     prod:
       - step: *docker-build-prod
 #      - step: *deploy-prod
