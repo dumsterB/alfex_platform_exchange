@@ -75,7 +75,12 @@ definitions:
 pipelines:
   branches:
     master:
-      - step: *docker-build-dev
+      - step:
+          script:
+            - git checkout prof-invest-dev
+            - git merge master
+            - git push
+      #- step: *docker-build-dev
     prof-invest-dev:
       - step: *docker-build-prof-invest-dev
       - step: *deploy-prof-invest-dev
