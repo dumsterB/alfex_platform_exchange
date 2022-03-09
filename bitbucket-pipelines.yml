@@ -74,6 +74,8 @@ definitions:
           - docker
 pipelines:
   branches:
+    master:
+      - step: *docker-build-dev
     prof-invest-dev:
       - step: *docker-build-prof-invest-dev
       - step: *deploy-prof-invest-dev
