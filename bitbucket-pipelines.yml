@@ -55,7 +55,7 @@ pipelines:
   branches:
     master:
       - step: *docker-build-dev
-      #- step: *deploy-dev
+      - step: *deploy-dev
       #- step: *version_update_dev
     prod:
       - step: *docker-build-prod
