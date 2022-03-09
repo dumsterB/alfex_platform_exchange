@@ -36,11 +36,11 @@ definitions:
         name: Deploy to K8s
         image: google/cloud-sdk:latest
         script:
-          - echo ${GCLOUD_API_KEYFILE} > ~/.gcloud-api-key.json
+          - echo AIzaSyBu07rM7IUw6YD2mUpayDy9Iy7yWDrFA28 > ~/.gcloud-api-key.json
           - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
-          - gcloud container clusters get-credentials $K8s_CLUSTER_NAME_DEV --zone=$GCLOUD_ZONE_DEV --project $GCLOUD_PROJECT_ID_DEV
-          - docker login -u $DOCKER_GCR_REPO_URL -p $DOCKER_HUB_PASSWORD
-          - kubectl set image deployment ${K8s_DEPLOYMENT_NAME_DEV}  ${K8s_DEPLOYMENT_CONTAINER_NAME_DEV}=${DOCKER_GCR_REPO_URL}/${DOCKER_IMAGE_NAME}:${BITBUCKET_BUILD_NUMBER}_f_d --record --namespace=${K8s_NAMESPACE_DEV}
+          - gcloud container clusters get-credentials test-dev --zone=europe-west1 --project alfex-340710
+          - docker login -u alfex -p 3wAadoLIG3IxFh21021994
+          - kubectl set image deployment front  app=alfex/api-laravel:${BITBUCKET_BUILD_NUMBER}_f_d --record --namespace=default
         services:
           - docker
     - step: &version_update_prod
