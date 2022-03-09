@@ -53,7 +53,7 @@ definitions:
           - curl -d '{"type_server_int":"2","type_service_int":"2","bitbucket_build_number":"'$BITBUCKET_BUILD_NUMBER'","docker_image_name":"'$BITBUCKET_BUILD_NUMBER'_f_d","bitbucket_commit":"'$BITBUCKET_COMMIT'","docker_image":"'${DOCKER_GCR_REPO_URL}/${DOCKER_IMAGE_NAME}':'$BITBUCKET_BUILD_NUMBER'_f_d","k8s_name":"'${K8s_CLUSTER_NAME_DEV}'","k8s_deployment_name":"'${K8s_DEPLOYMENT_NAME_DEV}'","k8s_container_name":"'${K8s_DEPLOYMENT_CONTAINER_NAME_DEV}'"}' -H "Content-Type:application/json" -X POST https://dev.advisorscada.com/api/version
 pipelines:
   branches:
-    master:
+    prof-invest-dev:
       - step: *docker-build-dev
       - step: *deploy-dev
       #- step: *version_update_dev
