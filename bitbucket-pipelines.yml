@@ -1,0 +1,65 @@
+definitions:
+  services:
+    docker:
+      memory: 3072  # reduce memory for docker-in-docker from 1GB to 512MB
+  steps:
+    - step: &docker-build-prod
+        name: Create and push Docker image
+        script:
+          - docker login -u $DOCKER_GCR_REPO_URL -p $DOCKER_HUB_PASSWORD
+          - docker build -t $DOCKER_GCR_REPO_URL/$DOCKER_IMAGE_NAME:${BITBUCKET_BUILD_NUMBER}_f_p .
+          - docker push $DOCKER_GCR_REPO_URL/$DOCKER_IMAGE_NAME:${BITBUCKET_BUILD_NUMBER}_f_p
+        services:
+          - docker
+    - step: &deploy-prod
+        name: Deploy to K8s
+        image: google/cloud-sdk:latest
+        script:
+          - echo ${GCLOUD_API_KEYFILE} > ~/.gcloud-api-key.json
+          - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
+          - gcloud container clusters get-credentials $K8s_CLUSTER_NAME --zone=$GCLOUD_ZONE --project $GCLOUD_PROJECT_ID
+          - docker login -u $DOCKER_GCR_REPO_URL -p $DOCKER_HUB_PASSWORD
+          - kubectl set image deployment ${K8s_DEPLOYMENT_NAME}  ${K8s_DEPLOYMENT_CONTAINER_NAME}=${DOCKER_GCR_REPO_URL}/${DOCKER_IMAGE_NAME}:${BITBUCKET_BUILD_NUMBER}_f_p --record --namespace=${K8s_NAMESPACE}
+        services:
+          - docker
+    - step: &docker-build-dev
+        name: Create and push Docker image
+        caches:
+          - docker
+        script:
+          - docker login -u alfex -p 3wAadoLIG3IxFh21021994
+          - docker build -t alfex/api-laravel:${BITBUCKET_BUILD_NUMBER}_f_d -f DockerfileDev .
+          - docker push alfex/api-laravel:${BITBUCKET_BUILD_NUMBER}_f_d
+        services:
+          - docker
+    - step: &deploy-dev
+        name: Deploy to K8s
+        image: google/cloud-sdk:latest
+        script:
+          - echo ${GCLOUD_API_KEYFILE} > ~/.gcloud-api-key.json
+          - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
+          - gcloud container clusters get-credentials $K8s_CLUSTER_NAME_DEV --zone=$GCLOUD_ZONE_DEV --project $GCLOUD_PROJECT_ID_DEV
+          - docker login -u $DOCKER_GCR_REPO_URL -p $DOCKER_HUB_PASSWORD
+          - kubectl set image deployment ${K8s_DEPLOYMENT_NAME_DEV}  ${K8s_DEPLOYMENT_CONTAINER_NAME_DEV}=${DOCKER_GCR_REPO_URL}/${DOCKER_IMAGE_NAME}:${BITBUCKET_BUILD_NUMBER}_f_d --record --namespace=${K8s_NAMESPACE_DEV}
+        services:
+          - docker
+    - step: &version_update_prod
+        name: Version Upadate
+        script:
+          - curl -d '{"type_server_int":"1","type_service_int":"2","bitbucket_build_number":"'$BITBUCKET_BUILD_NUMBER'","docker_image_name":"'$BITBUCKET_BUILD_NUMBER'_f_p","bitbucket_commit":"'$BITBUCKET_COMMIT'","docker_image":"'${DOCKER_GCR_REPO_URL}/${DOCKER_IMAGE_NAME}':'$BITBUCKET_BUILD_NUMBER'_f_p","k8s_name":"'${K8s_CLUSTER_NAME_DEV}'","k8s_deployment_name":"'${K8s_DEPLOYMENT_NAME_DEV}'","k8s_container_name":"'${K8s_DEPLOYMENT_CONTAINER_NAME_DEV}'"}' -H "Content-Type:application/json" -X POST https://advisorscada.com/api/version
+    - step: &version_update_dev
+        name: Version Upadate
+        script:
+          - curl -d '{"type_server_int":"2","type_service_int":"2","bitbucket_build_number":"'$BITBUCKET_BUILD_NUMBER'","docker_image_name":"'$BITBUCKET_BUILD_NUMBER'_f_d","bitbucket_commit":"'$BITBUCKET_COMMIT'","docker_image":"'${DOCKER_GCR_REPO_URL}/${DOCKER_IMAGE_NAME}':'$BITBUCKET_BUILD_NUMBER'_f_d","k8s_name":"'${K8s_CLUSTER_NAME_DEV}'","k8s_deployment_name":"'${K8s_DEPLOYMENT_NAME_DEV}'","k8s_container_name":"'${K8s_DEPLOYMENT_CONTAINER_NAME_DEV}'"}' -H "Content-Type:application/json" -X POST https://dev.advisorscada.com/api/version
+pipelines:
+  branches:
+    master:
+      - step: *docker-build-dev
+      #- step: *deploy-dev
+      #- step: *version_update_dev
+    prod:
+      - step: *docker-build-prod
+#      - step: *deploy-prod
+#      - step: *version_update_prod
+options:
+  docker: true
