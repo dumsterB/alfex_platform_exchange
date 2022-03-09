@@ -14,6 +14,7 @@
             :total_equity_usdt="spot_total_equity_usdt"
             :available_balance="spot_available_balance"
             :available_balance_usdt="spot_available_balance_usdt"
+            :main_currency="true"
           ></Check>
           <br />
           <Check
@@ -22,6 +23,7 @@
             :total_equity_usdt="fiat_total_equity_usdt"
             :available_balance="fiat_available_balance"
             :available_balance_usdt="fiat_available_balance_usdt"
+            :main_currency="false"
           >
           </Check>
         </div>
