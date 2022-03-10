@@ -183,14 +183,14 @@ export default {
       }`);
       socket.send(`{
         "method": "subscribe",
-        "data": ["binance_${me.curr_code}-USD@ticker_5s", "${me.base_p}_all@ticker_10s"]
+        "data": ["${me.base_p}_${me.curr_code}-USD@ticker_5s", "${me.base_p}_all@ticker_10s"]
       }`);
       socket.onmessage = function (event) {
         if (event.data) {
           let json_d = JSON.parse(event.data);
           if (
             json_d &&
-            json_d.method == `binance_${me.curr_code}-USD@ticker_5s`
+            json_d.method == `${me.base_p}_${me.curr_code}-USD@ticker_5s`
           ) {
             let data = json_d.data ? json_d.data.data || [] : [];
             if (data && data[0] && data[0].price) {
@@ -247,7 +247,7 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["binance_${this.curr_code}-USD@ticker_5s", "${this.base_p}_all@ticker_10s", 
+      "data": ["${this.base_p}_${this.curr_code}-USD@ticker_5s", "${this.base_p}_all@ticker_10s", 
       "all_${this.curr_code}-USD@ticker_5s"]
     }`);
   },
