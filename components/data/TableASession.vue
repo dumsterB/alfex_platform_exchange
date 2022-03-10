@@ -4,8 +4,26 @@
       :items="list"
       :headers="headers"
       :items-per-page="perpage"
+      :search="search"
       class="elevation-1 ma-4 ml-8"
     >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>{{ $t(title) }}</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <div style="max-width: 300px !important;">
+            <v-text-field
+              dense
+              v-model="search"
+              append-icon="mdi-magnify"
+              outlined
+              :label="$t('market_search_bar_placeholder')"
+              hide-details
+            ></v-text-field>
+          </div>
+        </v-toolbar>
+      </template>
       <template v-slot:[`item.amount`]="{ item }">
         <span>{{ item.amount + " " + item.wallet.currency.symbol }}</span>
       </template>
@@ -59,11 +77,13 @@ export default {
       },
     },
     filter: null,
+    title: ""
   },
   data() {
     return {
       dialog: false,
       perpage: 5,
+      search: "",
       selectedItem: null,
       headers: [
         {
@@ -151,7 +171,6 @@ export default {
                 return false;
               }
             }
-            
           }
           return true;
         });
@@ -160,9 +179,7 @@ export default {
       }
       as.forEach((element) => {
         let fnd = prices.find(
-          (e) =>
-            e &&
-            e.base == element.wallet.currency.symbol
+          (e) => e && e.base == element.wallet.currency.symbol
         );
         let pr = 1;
         if (fnd && fnd.price) {
