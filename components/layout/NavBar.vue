@@ -18,13 +18,15 @@
       <v-btn elevation="0" @click="handlerOpenTrading" class="navLink">{{
         $t("user_trading")
       }}</v-btn>
-      <v-text-field
+      <v-autocomplete
+        v-model="value"
+        :items="filterItems"
+        prepend-inner-icon="mdi-magnify"
         :label="$t('market_search_bar_placeholder')"
+        dense
         outlined
         class="ml-2"
-        dense
-        prepend-inner-icon="mdi-magnify"
-      ></v-text-field>
+      ></v-autocomplete>
     </div>
     <v-spacer></v-spacer>
 
@@ -77,7 +79,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import LanguageSelect from "~/components/settings/LanguageSelect";
 import ThemeSelect from "~/components/settings/ThemeSelect";
 
@@ -86,9 +88,17 @@ export default {
     return {
       user_image: null,
       account_menu: this.initAccountMenu(),
+      filterItems: [],
+      value: null,
     };
   },
   methods: {
+    ...mapActions("data/currency", {
+      fetchCurrencies: "fetchList",
+    }),
+    ...mapActions("data/arbitrage_company", {
+      fetchAC: "fetchList",
+    }),
     initAccountMenu() {
       return [
         {
@@ -130,7 +140,10 @@ export default {
     },
     async close(i, message_id) {},
   },
-  mounted() {},
+  mounted() {
+    console.log("this.filterItems :>> ", this.filterItems);
+    console.log("this.filter :>> ", this.filter);
+  },
 
   watch: {},
 
@@ -148,6 +161,24 @@ export default {
       } catch (e) {
         this.user_image = "/files/avatar_default.jpg";
       }
+    },
+    ...mapGetters("data/arbitrage_company", {
+      arbitrage_company: "list",
+    }),
+    ...mapGetters("data/currency", {
+      currencies_full: "list",
+    }),
+    filter() {
+      let options = [...this.arbitrage_company, ...this.currencies_full];
+      let createOptions = options.map((item) => {
+        return {
+          label: item.name,
+          value: item.name,
+          logo: item.logo,
+        };
+      });
+      console.log("createOptions :>> ", createOptions);
+      this.filterItems = createOptions;
     },
     user_in() {
       //   let name = this.$store.state.auth.user.name;
@@ -174,5 +205,4 @@ html[theme="light"] {
     background-color: rgb(245, 245, 245) !important;
   }
 }
-
 </style>
