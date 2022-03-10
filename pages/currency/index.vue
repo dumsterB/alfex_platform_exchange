@@ -61,6 +61,7 @@
                 v-else
                 :prices="prices"
                 :filter="as_filter"
+                title="table_position"
               ></TableASession>
             </v-col>
           </v-row>

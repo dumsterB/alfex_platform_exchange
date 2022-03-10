@@ -20,6 +20,7 @@
             </p>
             <v-text-field
               :label="$t('market_search_bar_placeholder')"
+              v-model="search"
               outlined
               class="searchCurrency"
               dense
@@ -70,6 +71,8 @@ export default {
       base_p: this.$store.state.config.data.base_p,
       waiter: {},
       prices: [],
+      search: "",
+      f_currs: [],
     };
   },
   computed: {
@@ -86,6 +89,11 @@ export default {
       arbitrage_company: "list",
     }),
   },
+  watch: {
+    search() {
+      this.search_f();
+    },
+  },
   methods: {
     ...mapActions(model, {
       fetchCurrencies: "fetchList",
@@ -96,6 +104,21 @@ export default {
     ...mapActions("data/wallet", {
       fetchWallet: "fetchList",
     }),
+    search_f() {
+      let me = this;
+      if (me.search) {
+        me.currs = me.f_currs.filter((el) => {
+          return (
+            (el.name &&
+              el.name.toLowerCase().includes(this.search.toLowerCase())) ||
+            (el.symbol &&
+              el.symbol.toLowerCase().includes(this.search.toLowerCase()))
+          );
+        });
+      } else {
+        me.currs = Object.assign([], me.f_currs);
+      }
+    },
     init_currs() {
       let me = this;
       let data = me.prices;
@@ -117,7 +140,8 @@ export default {
         }
         return res;
       });
-      me.currs = currs;
+      me.f_currs = currs;
+      me.search_f();
     },
     reload_wallet() {
       this.$refs.wallet.counter = 1;

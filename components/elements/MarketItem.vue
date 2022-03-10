@@ -1,11 +1,10 @@
 <template>
   <v-card
     @click="handlerOpenMarketPage"
-    tag="li"
     class="pl-0 pr-0 mb-2 ml-2 mr-2"
     :width="380"
   >
-    <a>
+    <div>
       <div class="d-flex justify-space-between">
         <v-card-title>{{ `${item.name}` }}</v-card-title>
         <v-icon
@@ -29,7 +28,7 @@
           $<v-list-item-content v-text="prices[cur.symbol]"></v-list-item-content>
         </v-list-item>
       </v-list>
-    </a>
+    </div>
   </v-card>
 </template>
 

@@ -4,8 +4,28 @@
       :items="list"
       :headers="headers"
       :items-per-page="perpage"
+      :search="search"
+      sort-by="created_at"
+      :sort-desc="true"
       class="elevation-1 ma-4 ml-8"
     >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>{{ $t("recent_trades") }}</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <div style="max-width: 300px !important;">
+            <v-text-field
+              dense
+              v-model="search"
+              append-icon="mdi-magnify"
+              outlined
+              :label="$t('market_search_bar_placeholder')"
+              hide-details
+            ></v-text-field>
+          </div>
+        </v-toolbar>
+      </template>
       <template v-slot:[`item.difference`]="{ item }">
         <span :style="diffColor(item.difference)">{{ item.difference }}</span>
       </template>
@@ -33,6 +53,7 @@ export default {
   data() {
     return {
       perpage: 5,
+      search: "",
       headers: [
         {
           text: "bought",
