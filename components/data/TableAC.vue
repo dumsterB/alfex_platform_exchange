@@ -8,10 +8,10 @@
     >
       <template v-slot:[`item.action`]="{ item }">
         <div class="d-flex justify-end">
-          <v-btn @click="buy(item)" class="ml-3 green--text" outlined>
+          <v-btn small @click="buy(item)" class="ml-3 green--text" outlined>
             {{ $t("buy") }}
           </v-btn>
-          <v-btn @click="sell(item)" class="ml-3 red--text" outlined>
+          <v-btn small @click="sell(item)" class="ml-3 red--text" outlined>
             {{ $t("sell") }}
           </v-btn>
         </div>
@@ -60,23 +60,6 @@ export default {
     return {
       dialog: false,
       perpage: 10,
-      headers: [
-        {
-          text: "name",
-          value: "name",
-          width: 100,
-        },
-        {
-          text: "price",
-          value: "price",
-          width: 100,
-        },
-        {
-          text: "",
-          value: "action",
-          sortable: false,
-        },
-      ],
       list: [],
       interv: null,
       action: null,
@@ -91,11 +74,30 @@ export default {
     ...mapGetters("data/wallet", {
       wallets: "list",
     }),
+    headers() {
+      return [
+        {
+          text: this.$t("name_table"),
+          value: "name",
+          width: 120,
+        },
+        {
+          text: this.$t("price"),
+          value: "price",
+          width: 100,
+        },
+        {
+          text: "",
+          value: "action",
+          sortable: false,
+        },
+      ];
+    },
   },
   watch: {
     prices() {
       this.resetList(this.prices);
-    }
+    },
   },
   methods: {
     ...mapActions(modelCompanies, {
@@ -104,7 +106,7 @@ export default {
 
     resetList(prices) {
       this.list = this.ac.map((el) => {
-        let fnd = prices.find(e => e && e.company == el.name);
+        let fnd = prices.find((e) => e && e.company == el.name);
         let pr = 0;
         if (fnd && fnd.price) pr = fnd.price;
         el.price = pr;

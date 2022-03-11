@@ -566,4 +566,10 @@ export default {
   copy: "копировать",
   copied: "скопировано",
   no_market_place: "Сегодня, нет активных биржевых рынков",
+  Account: "Аккаунт",
+  LogOff: "Выйти",
+  CurrentLanguage: "Язык",
+  Theme: "Тема",
+  Purchased: "Куплено",
+  Spent: "Продано"
 };

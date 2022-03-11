@@ -10,6 +10,9 @@
 export default {
   props: ["error"],
   layout: "error", // you can set a custom layout for the error page
+  created() {
+    console.log('error', this.error)
+  }
 };
 </script>
 

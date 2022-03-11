@@ -31,9 +31,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("config/data", {
-      default_language: "default_language",
-    }),
+    CURRENT_LOCALE() {
+      return this.$i18n.locale;
+    }
+  },
+  watch: {
+    CURRENT_LOCALE() {
+      console.log('CURRENT_LOCALE', this.CURRENT_LOCALE)
+    }
   },
   methods: {
     async preload_models() {
@@ -45,13 +50,15 @@ export default {
         }
         let lang = localStorage.getItem("language");
         if (!lang) {
-          lang = this.default_language;
+          lang = this.$i18n.locale;
         }
         if (theme == "dark") {
           this.$vuetify.theme.dark = true;
         }
         localStorage.setItem("theme", theme);
         localStorage.setItem("language", lang);
+        this.$i18n.locale = lang;
+        // console.log('this.$i18n', this.$i18n)
         htmlElement.setAttribute("theme", theme);
       }
       let models = this.$store.state.config.data.preload_models;

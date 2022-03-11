@@ -1,22 +1,4 @@
 export const state = () => ({
-    languages: [{
-        text: "English",
-        value: "en"
-    },
-    {
-        text: "Русский",
-        value: "ru"
-    },
-    {
-        text: "Deutsch",
-        value: "de"
-    },
-    {
-        text: "Polskie",
-        value: "pl"
-    }
-    ],
-    default_language: "ru",
     preload_models: ["currency", "arbitrage_company", "wallet"],
     themes: ["Dark", "Light"],
     base_p: "gate",

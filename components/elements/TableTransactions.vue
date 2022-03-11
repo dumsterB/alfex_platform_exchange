@@ -98,7 +98,7 @@ export default {
         { text: this.$t("wallet_balance"), value: "balance" },
         { text: this.$t("available_balance"), value: "balance" },
         { text: this.$t("equivalent") + " $", value: "eqv" },
-        { text: this.$t("actions"), value: "actions" },
+        { text: this.$t("action_title"), value: "actions" },
       ];
     },
   },

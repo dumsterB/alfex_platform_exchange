@@ -12,7 +12,7 @@
           <v-toolbar-title>{{ $t(title) }}</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <div style="max-width: 300px !important;">
+          <div style="max-width: 300px !important">
             <v-text-field
               dense
               v-model="search"
@@ -77,7 +77,7 @@ export default {
       },
     },
     filter: null,
-    title: ""
+    title: "",
   },
   data() {
     return {
@@ -85,53 +85,6 @@ export default {
       perpage: 5,
       search: "",
       selectedItem: null,
-      headers: [
-        {
-          text: "Market",
-          value: "arbitrage_company.name",
-          // width: 80,
-        },
-        {
-          text: "Position",
-          value: "session_start_type.name",
-          // width: 100,
-        },
-        {
-          text: "Date & Time",
-          value: "created_at",
-          width: 120,
-        },
-        {
-          text: "Amount",
-          value: "amount",
-          // width: 100,
-        },
-        {
-          text: "Start price",
-          value: "start_exchange_rate",
-          // width: 120,
-        },
-        {
-          text: "Current price",
-          value: "current_cost",
-          // width: 130,
-        },
-        {
-          text: "Profit/loss",
-          value: "difference",
-          // width: 116,
-        },
-        {
-          text: "Profit/loss %",
-          value: "difference_perc",
-          // width: 128,
-        },
-        {
-          text: "Close",
-          value: "action",
-          // width: 80,
-        },
-      ],
       list: [],
       interv: null,
     };
@@ -140,6 +93,54 @@ export default {
     ...mapGetters(model, {
       arbitrage_sessions: "list",
     }),
+    headers() {
+      return [
+        {
+          text: this.$t("name_table"),
+          value: "arbitrage_company.name",
+          // width: 80,
+        },
+        {
+          text: this.$t("table_position"),
+          value: "session_start_type.name",
+          // width: 100,
+        },
+        {
+          text: this.$t("table_time"),
+          value: "created_at",
+        },
+        {
+          text: this.$t("amount"),
+          value: "amount",
+          // width: 100,
+        },
+        {
+          text: this.$t("table_buy_price"),
+          value: "start_exchange_rate",
+          // width: 120,
+        },
+        {
+          text: this.$t("table_current_price"),
+          value: "current_cost",
+          // width: 130,
+        },
+        {
+          text: this.$t("table_profit_loss"),
+          value: "difference",
+          // width: 116,
+        },
+        {
+          text: `${this.$t("table_profit_loss")} %`,
+          value: "difference_perc",
+          // width: 128,
+        },
+        {
+          text: this.$t("table_close"),
+          value: "action",
+          // width: 80,
+        },
+      ];
+    },
   },
 
   methods: {

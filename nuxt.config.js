@@ -1,4 +1,16 @@
-const langs = ["en", "ru", "pl", "de"];
+const langs = [{
+  code: 'en',
+  name: 'English',
+}, {
+  code: "ru",
+  name: 'Русский'
+}, {
+  code: "pl",
+  name: 'Polskie'
+}, {
+  code: "de",
+  name: "Deutsch"
+}];
 import de from "./config/locales/de.js";
 import en from "./config/locales/en.js";
 import pl from "./config/locales/pl.js";
@@ -13,7 +25,7 @@ export default {
     port: 3061,
     host: "0.0.0.0",
   },
-  mode: "spa",
+  ssr: false,
   head: {
     title: config.title,
     meta: [
@@ -73,6 +85,10 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ["@nuxtjs/axios", "@nuxtjs/auth", "@nuxtjs/i18n"],
 
+  router: {
+    middleware: ['auth']
+  },
+
   vuetify: {
     customVariables: ["~/assets/scss/app.scss"],
     theme: {
@@ -100,12 +116,13 @@ export default {
   },
 
   i18n: {
+    strategy: 'no_prefix',
     locales: langs,
     defaultLocale: config.default_language,
     vueI18n: {
       fallbackLocale: config.default_language,
       messages: locales,
-    },
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
