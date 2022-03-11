@@ -17,8 +17,22 @@ export const state = () => ({
     {
       icon: "mdi-chart-box-outline",
       title: "user_markets",
-      key: "News",
+      key: "user_markets",
       to: "/markets",
+      badge_color: "primary",
+    },
+    {
+      icon: "mdi-flag-outline",
+      title: "user_help",
+      key: "user_help",
+      to: "/help",
+      badge_color: "primary",
+    },
+    {
+      icon: "mdi-comment-question-outline",
+      title: "user_questions",
+      key: "user_questions",
+      to: "/questions",
       badge_color: "primary",
     },
     {
@@ -28,6 +42,7 @@ export const state = () => ({
       to: "/settings",
       badge_color: "primary",
     },
+    
   ],
 });
 
