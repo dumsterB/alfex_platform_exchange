@@ -528,5 +528,6 @@ export default {
   CurrentLanguage: "Language",
   Theme: "Theme",
   Purchased: "Purchased",
-  Spent: "Spent"
+  Spent: "Spent",
+  Success: "Success"
 };

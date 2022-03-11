@@ -571,5 +571,6 @@ export default {
   CurrentLanguage: "Язык",
   Theme: "Тема",
   Purchased: "Куплено",
-  Spent: "Продано"
+  Spent: "Продано",
+  Success: "Успешно"
 };

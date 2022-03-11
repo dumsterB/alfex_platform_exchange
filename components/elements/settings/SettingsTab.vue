@@ -1,12 +1,12 @@
 <template>
   <div class="settingsTab">
-    <p class="text-h6">Настройки</p>
+    <p class="text-h6 ml-4">{{ $t('settings_page') }}</p>
     <div class="content ma-4">
       <v-card  :class="item.active  ? 'tabs-active tabs-setting' : 'tabs-setting'"  @click="tabHandler(item)"  v-for="item of selections" :key="item.text" >
         <h3 class="tab-btn text">{{ $t(item.title) }}</h3>
         <p>{{$t(item.text)}}</p>
       </v-card>
-      <p class="text-h6 success-text">{{$t('settings_notification')}}</p>
+      <p class="text-h6 mt-6 success-text">{{$t('settings_notification')}}</p>
       <p class="text-gray">{{$t('settings_notification_description')}}</p>
       <v-switch
         v-model="switcher"
