@@ -568,4 +568,10 @@ export default {
   copy: "kopieren",
   copied: "kopiert",
   no_market_place: "Heute gibt es keine aktiven Börsenmärkte",
-};
+  Account: "Konto",
+  LogOff: "Abmelden",
+  CurrentLanguage: "Sprache",
+  Theme: "Thema",
+  Purchased: "Gekauft",
+  Spent: "Verbraucht"
+}
