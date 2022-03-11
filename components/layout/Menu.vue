@@ -39,6 +39,11 @@
       class="align-center px-4"
       style="height: 70px; margin: 0px"
     >
+      <img
+        style="height: 30px; margin-right: 20px; margin-left: auto;"
+        :src="config.logo"
+        alt="Профинвест картинка"
+      />
       <v-btn
         icon
         class="ml-auto"
@@ -79,6 +84,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import config from "~/config/config.json"
 export default {
   data: function () {
     return {
@@ -86,6 +92,7 @@ export default {
       permanent: true,
       menu_active: 0,
       drawer: true,
+      config: config
     };
   },
   components: {},

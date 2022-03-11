@@ -21,7 +21,7 @@ client.interceptors.response.use(function (response) {
     if (store) {
         if (response.config.method != "get") {
             let msg = !response.data.success ? response.data.message : '';
-            let title = !response.data.success ? response.config.url : i18n.t('create_order_done');
+            let title = !response.data.success ? response.config.url : i18n.t('Success');
             let color = !response.data.success ? "error" : "success";
             store.commit('data/notifications/create', {
                 id: color + '_' + Math.random()

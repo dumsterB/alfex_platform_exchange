@@ -1,8 +1,8 @@
 <template>
   <div class="privateInformation">
-    <p class="text-h6">{{$t('settings_page')}}</p>
-    <v-card class="mainCard">
-      <div class="text-center">
+    <p class="text-h6">{{ $t("settings_page") }}</p>
+    <v-card class="mainCard pt-6">
+      <!-- <div class="text-center">
         <div class="selecImage">
           <div
             class="image-input"
@@ -24,24 +24,24 @@
           </div>
         </div>
         <p>{{ $t('choose_photo') }}</p>
-      </div>
+      </div> -->
       <div class="form">
         <v-container>
           <v-row>
             <v-col cols="12" md="6" sm="6" lg="6">
               <v-text-field
                 v-model="name"
-                :rules="[v => !!v || $t('enter_first_name')]"
                 outlined
                 filled
                 dense
                 :label="$t('first_name')"
+                :rules="validation.name"
                 required
               ></v-text-field>
 
               <v-text-field
                 v-model="email"
-                :rules="[v => !!v || $t('email_not_standart')]"
+                :rules="validation.email"
                 :label="$t('email')"
                 readonly
                 required
@@ -50,70 +50,25 @@
                 dense
               ></v-text-field>
 
-              <v-select
+              <v-autocomplete
                 v-model="selectCountry"
                 :items="countries"
+                :rules="validation.birth_place"
                 :label="$t('place_of_birth')"
                 outlined
                 filled
                 dense
                 required
-              ></v-select>
-              <v-menu
-                ref="menu"
-                v-model="menu"
-                :close-on-content-click="false"
-                :return-value.sync="date"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="date"
-                    :label="$t('date_of_birth')"
-                    readonly
-                    outlined
-                    filled
-                    :rules="[v => !!v || $t('enter_day_birth')]"
-                    dense
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="date"
-                  no-title
-                  scrollable
-                >
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="menu = false"
-                  >
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="$refs.menu.save(date)"
-                  >
-                    OK
-                  </v-btn>
-                </v-date-picker>
-              </v-menu>
-
+              ></v-autocomplete>
             </v-col>
             <v-col cols="12" md="6" sm="6" lg="6">
-
               <v-text-field
                 v-model="surname"
                 outlined
                 filled
                 dense
                 :label="$t('surname')"
-                :rules="[v => !!v || $t('enter_last_name')]"
+                :rules="validation.surname"
                 required
               ></v-text-field>
               <v-text-field
@@ -122,7 +77,16 @@
                 filled
                 dense
                 :label="$t('phone_number')"
+                :rules="validation.number"
                 required
+              ></v-text-field>
+              <v-text-field
+                v-model="date"
+                :label="$t('date_of_birth')"
+                :rules="validation.birth"
+                outlined
+                dense
+                type="date"
               ></v-text-field>
             </v-col>
             <v-card-actions class="text-center d-flex justify-center">
@@ -133,12 +97,11 @@
                 large
                 :loading="loading"
               >
-                {{ $t('saveAccountSettings') }}
+                {{ $t("saveAccountSettings") }}
               </v-btn>
             </v-card-actions>
           </v-row>
         </v-container>
-
       </div>
     </v-card>
   </div>
@@ -150,35 +113,38 @@ export default {
   data() {
     return {
       rules: [
-        value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
+        (value) =>
+          !value ||
+          value.size < 2000000 ||
+          "Avatar size should be less than 2 MB!",
       ],
-      countries: ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bangladesh', 'Barbados', 'Bahamas', 'Bahrain', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'British Indian Ocean Territory', 'British Virgin Islands', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burma', 'Burundi', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands', 'Central African Republic', 'Chad', 'Chile', 'China', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Congo-Brazzaville', 'Congo-Kinshasa', 'Cook Islands', 'Costa Rica', 'Croatia', 'Cura?ao', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'East Timor', 'Ecuador', 'El Salvador', 'Egypt', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia', 'Falkland Islands', 'Faroe Islands', 'Federated States of Micronesia', 'Fiji', 'Finland', 'France', 'French Guiana', 'French Polynesia', 'French Southern Lands', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Heard and McDonald Islands', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Northern Mariana Islands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn Islands', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'R?union', 'Romania', 'Russia', 'Rwanda', 'Saint Barth?lemy', 'Saint Helena', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Martin', 'Saint Pierre and Miquelon', 'Saint Vincent', 'Samoa', 'San Marino', 'S?o Tom? and Pr?ncipe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Sint Maarten', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Georgia', 'South Korea', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Svalbard and Jan Mayen', 'Sweden', 'Swaziland', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Vietnam', 'Venezuela', 'Wallis and Futuna', 'Western Sahara', 'Yemen', 'Zambia', 'Zimbabwe'],
-      gender: ['male', 'female'],
+      countries: this.$store.state.config.data.countries,
+      gender: ["male", "female"],
       imageData: null,
-      selectCountry:this.$auth.user.birth_place,
+      selectCountry: this.$auth.user.birth_place,
       name: this.$auth.user.name,
-      surname:this.$auth.user.last_name,
-      email:this.$auth.user.mail,
-      date:this.$auth.user.birth,
+      surname: this.$auth.user.last_name,
+      email: this.$auth.user.mail,
+      date: this.$auth.user.birth,
       menu: false,
-      phone:this.$auth.user.phone,
+      phone: this.$auth.user.phone,
       loading: false
-    }
+    };
   },
   methods: {
     chooseImage() {
-      this.$refs.fileInput.click()
+      this.$refs.fileInput.click();
     },
     onSelectFile() {
-      const input = this.$refs.fileInput
-      const files = input.files
+      const input = this.$refs.fileInput;
+      const files = input.files;
       if (files && files[0]) {
-        const reader = new FileReader
-        reader.onload = e => {
-          this.imageData = e.target.result
-        }
-        reader.readAsDataURL(files[0])
-        this.$emit('input', files[0])
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.imageData = e.target.result;
+        };
+        reader.readAsDataURL(files[0]);
+        this.$emit("input", files[0]);
       }
     },
     async validate() {
@@ -191,26 +157,53 @@ export default {
       user_data.birth = this.date;
       user_data.phone = this.phone;
       user_data.selectCountry = this.selectCountry;
-      console.log("user_data", user_data)
+      console.log("user_data", user_data);
       let rs = await this.$axios.put(
         `/api/user_platform/${user_data.id}`,
         user_data,
         {}
       );
-      console.log('rs', rs);
+      console.log("rs", rs);
       setTimeout(() => {
         this.loading = false;
-      }, 500)
-    }
+      }, 500);
+    },
   },
-  mounted() {
+  mounted() {},
+  computed: {
+    validation() {
+      return {
+        required: [
+          (v) => !!v || this.$t("password_required"),
+        ],
+        password: [
+          (v) => !!v || this.$t("password_required"),
+          (v) => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(v) || this.$t("password_create_description"),
+        ],
+        number: [(v) => (!!v && v.length == 12) || this.$t("invalid_phone_number")],
+        name: [(v) => !!v || this.$t("enter_first_name")],
+        surname: [(v) => !!v || this.$t("enter_last_name")],
+        birth_place: [(v) => !!v || this.$t("enter_place_birth")],
+        birth: [(v) => !!v || this.$t("enter_day_birth")],
+        email: [
+          (v) => !!v || this.$t("enter_verification_email"),
+          (v) => /.+@.+\..+/.test(v) || this.$t("enter_verification_email"),
+        ],
+      }
+    },
+    disableBtn() {
+      return (
+        this.name &&
+        this.surname &&
+        this.selectCountry &&
+        this.selectGender &&
+        this.phone &&
+        this.email &&
+        this.date
+      );
+    },
   },
-  computed:{
-    disableBtn(){
-      return this.name && this.surname && this.selectCountry && this.selectGender && this.phone && this.email && this.date
-    }
-  }
-}
+};
 </script>
 
 <style scoped>
