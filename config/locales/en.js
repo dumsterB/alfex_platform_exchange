@@ -1,5 +1,7 @@
 export default {
-  logo_name: "profinvest",
+  // ACCOUNT
+  logo_name: "Profinvest",
+  // pages
   signin: "sign in",
   signup: "sign up",
   register: "register",
@@ -7,6 +9,7 @@ export default {
   reset_password: "reset password",
   footer_copyright: "All right reserved to ",
   transfer: "transfer",
+  // settings
   security: "security",
   security_description:
     "These devices are currently allowed to access your account",
@@ -47,28 +50,34 @@ export default {
   email_change: "email change",
   description_change_email:
     " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas accumsan, ligula at bibendum blandit, nulla tortor suscipit elit, faucibus posuere augue orci eget mi.", // not for translate now
+  // dashboard
   user_balance: "Your balance is equivalent",
   deposit: "deposit",
   withdraw: "withdraw",
   history_button: "history",
-  exchange: "Exchange",
+  exchange: "exchange",
+  // commodities
   commodities: "commodities",
   moskow: "moscow indices",
   frankfurt: "frankfurt stocks",
   british: "british stocks",
   newYork: "New York",
+  // wallet and investment
   wallet_balance: "wallet balance",
   equivalent: "equivalent",
+  // 2f
   document_examples: "Examples of how to upload documents correctly",
   phote_of_documents: "Take a photo of your passport. The photo should be",
   bright_and_clear: "bright and clear",
   good_quality: "good quality",
   uncut: "uncut",
   doc_should_be_visible: "all corners of the document should be visible",
+  // trading coin
   high: "high",
   turnover: "turnover",
   volume: "volume",
   low: "low",
+  // order tabs
   current_orders: "current orders",
   current: "current",
   past_orders: "past orders",
@@ -77,7 +86,9 @@ export default {
   history: "history",
   recent_trades: "recent trades",
   orderes_book: "order book",
+  // sell coin page
   amount: "Amount",
+  // descriptions
   readyToRegister: "Have an account?",
   haveNotAccount: "Don't have an account?",
   verificationDescription: "Enter 4-digit Code code we have sent to at",
@@ -96,6 +107,7 @@ export default {
     "Your password has to have a capital letter and at least one number",
   password_match: "passwords must match",
   low_blance: "low balance",
+  // headers
   orLog: "Or Login with",
   questions: "questions",
   markets: "all markets",
@@ -106,7 +118,7 @@ export default {
   spot_account: "spot account",
   fiat_account: "fiat account",
   total_equity: "total equity",
-  available_balance: "Available balance",
+  available_balance: "available balance",
   account_created: "Account Created!",
   account_created_successfully: "Your account has been created successfully!",
   hottest_news_heading_text: "The hottest news about the currency:",
@@ -114,20 +126,23 @@ export default {
   assets: "assets",
   document_type: "Choose your document type",
   choose_crypto: "choose crypto",
-  my_wallet: "My wallet",
-  user_forex: "Forex",
-  user_commodities: "Commodities",
-  user_arbitrage: "Arbitrage",
-  user_trading: "Automatic trading",
-  user_dashboard: "Dashboard",
-  user_investment: "My investment",
-  user_news: "News",
-  user_help: "Help",
-  user_questions: "Questions",
-  user_payment_method: "Payment method",
-  user_settings: "Settings",
-  user_markets: "Exchanges market",
-  user_contacts: "Contact us",
+  // user menu in header
+  my_wallet: "my wallet",
+  user_forex: "forex",
+  user_commodities: "commodities",
+  user_arbitrage: "arbitrage",
+  user_trading: "automatic trading",
+  // sidebar
+  user_dashboard: "dashboard",
+  user_investment: "my investment",
+  user_news: "news",
+  user_help: "help",
+  user_questions: "questions",
+  user_payment_method: "payment method",
+  user_settings: "settings",
+  user_markets: "markets",
+  user_contacts: "contact us",
+  // button titles
   logInButton: "login",
   lightMode: "light mode",
   darkMode: "dark mode",
@@ -167,6 +182,7 @@ export default {
   market: "market",
   limit: "limit",
   great: "Great!",
+  // labels
   new_password: "new password",
   old_password: "old password",
   confirm_password: "confirm password",
@@ -178,8 +194,10 @@ export default {
   wallet_address: "wallet address",
   amount_choosed: "amount in chosen crypto",
   enter_amount: "enter amount",
+  // inputs
   sell: "sell",
   buy: "buy",
+  // placeholders
   email_placeholder: "Type your email here",
   password_placeholder: "Type your password here",
   reset_email_placeholder: "Please type your email here",
@@ -207,6 +225,7 @@ export default {
   email_address: "Email address",
   to_action: "to",
   from_action: "from",
+  // links
   forgetPasswordMessage: "forget your password?",
   forgetPassword: "reset",
   backToLogin: "Back to Login",
@@ -214,11 +233,12 @@ export default {
   privacy_policy: "privacy policy",
   terms_conditions: "terms & conditions",
   read_more: "read more",
-  view_more: "View more",
+  view_more: "view more",
+  // helpers
   password_helper: "Your password must be at least 6 characters",
   password_required: "Password is required!",
   confirm_password_required: "confirm password is required",
-  agree: 'By clicking "Continue" I agree to "Profinvest" to ',
+  agree: 'By clicking "create an account," I agree to "Profinvest" to ',
   checknox_terms_and_policy: "Be sure to read the Terms and Privacy Policy",
   invalid_phone_number: "invalid phone number",
   enter_verification_code: "please enter your verification code",
@@ -233,9 +253,11 @@ export default {
   maximun: "9999$ maximum",
   enter_somthing: "Must enter something",
   some_address: "Must enter a wallet address",
+  // titles
   choose_card: "choose card",
   passport_title: "passport",
   card_title: "card",
+  // alt images
   hello: "robot say hello to you",
   serching: "robot searching for ",
   errPic: "error picture",
@@ -251,6 +273,8 @@ export default {
   user_avatar: "user avatar",
   image: "image",
   card_image: "card image",
+  // SITE
+  // time
   one_hour: "1H",
   one_day: "24H",
   one_week: "1W",
@@ -258,17 +282,23 @@ export default {
   six_months: "6M",
   one_year: "1Y",
   all_time: "ALL",
+  // site (landing) menu
   about_us: "about us",
   our_tech: "Our technology",
   calc_profit: "Calculate profit",
   our_blog: "Blog",
   popular_faq: "FAQ",
   contact_us: "Contact us",
+  //messages
   empty_balance: "No coins were found",
+  // COMPONENTS
+  // footer
   subscribeTo: "subscribe to our newsletter",
+  // diagram my wallet
   total: "total",
   others: "others",
   make_deposite: "Make a deposit",
+  // VLAD
   my_transactions: "my transactions",
   transactions_history: "transactions history",
   items_per_page: "items per page",
@@ -390,6 +420,7 @@ export default {
   no_transactions_were_found: "no transactions were found",
   cryptocurrency_market: "Cryptocurrency market",
   residence_permit: "residence permit",
+  // new
   notice_settings_successful: "you have successfully changed your details",
   open_positions: "open positions",
   table_position: "position",
@@ -529,5 +560,5 @@ export default {
   Theme: "Theme",
   Purchased: "Purchased",
   Spent: "Spent",
-  Success: "Success"
+  Success: "Success",
 };
