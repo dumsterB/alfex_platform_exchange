@@ -20,7 +20,7 @@
       }}</v-btn>
       <v-autocomplete
         v-model="value"
-        :items="filterItems"
+        :items="filtered ? filtered : filterItems"
         prepend-inner-icon="mdi-magnify"
         :label="$t('market_search_bar_placeholder')"
         dense
@@ -140,10 +140,6 @@ export default {
     },
     async close(i, message_id) {},
   },
-  mounted() {
-    console.log("this.filterItems :>> ", this.filterItems);
-    console.log("this.filter :>> ", this.filter);
-  },
 
   watch: {},
 
@@ -168,16 +164,11 @@ export default {
     ...mapGetters("data/currency", {
       currencies_full: "list",
     }),
-    filter() {
+    filtered() {
       let options = [...this.arbitrage_company, ...this.currencies_full];
       let createOptions = options.map((item) => {
-        return {
-          label: item.name,
-          value: item.name,
-          logo: item.logo,
-        };
+        return item.name;
       });
-      console.log("createOptions :>> ", createOptions);
       this.filterItems = createOptions;
     },
     user_in() {
@@ -186,6 +177,10 @@ export default {
       //   let initiales = name && name.length > 0 ? name[0] : "";
       //   initiales += surname && surname.length > 0 ? surname[0] : "";
       return "User";
+    },
+    mounted() {
+      console.log("this.filterItems :>> ", this.filterItems);
+      console.log("this.filtered :>> ", this.filtered);
     },
   },
 };
