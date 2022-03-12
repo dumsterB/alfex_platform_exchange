@@ -3,6 +3,7 @@
     <v-data-table
       :headers="headers"
       :items="wallets"
+      :search="search"
       sort-by="calories"
       class="elevation-1"
     >
@@ -11,14 +12,16 @@
           <v-toolbar-title>{{ $t("my_wallet") }}</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-text-field
-            dense
-            v-model="search"
-            append-icon="mdi-magnify"
-            outlined
-            :label="$t('market_search_bar_placeholder')"
-            hide-details
-          ></v-text-field>
+          <div style="max-width: 300px !important;">
+            <v-text-field
+              dense
+              v-model="search"
+              append-icon="mdi-magnify"
+              outlined
+              :label="$t('market_search_bar_placeholder')"
+              hide-details
+            ></v-text-field>
+          </div>
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
@@ -95,7 +98,7 @@ export default {
         { text: this.$t("wallet_balance"), value: "balance" },
         { text: this.$t("available_balance"), value: "balance" },
         { text: this.$t("equivalent") + " $", value: "eqv" },
-        { text: this.$t("actions"), value: "actions" },
+        { text: this.$t("action_title"), value: "actions" },
       ];
     },
   },

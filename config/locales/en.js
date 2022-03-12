@@ -523,4 +523,11 @@ export default {
   copy: "copy",
   copied: "copied",
   no_market_place: "Today, there are no active exchange markets",
+  Account: "Account",
+  LogOff: "Log off",
+  CurrentLanguage: "Language",
+  Theme: "Theme",
+  Purchased: "Purchased",
+  Spent: "Spent",
+  Success: "Success"
 };

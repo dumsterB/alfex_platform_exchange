@@ -1,9 +1,11 @@
 import createCrudModule, { client } from 'vuex-crud';
 
 let store;
+let i18n;
 if (process.browser) {
-    window.onNuxtReady(({ $store }) => {
+    window.onNuxtReady(({ $store, $i18n }) => {
         store = $store
+        i18n = $i18n
     })
 }
 
@@ -18,9 +20,9 @@ client.interceptors.response.use(function (response) {
 
     if (store) {
         if (response.config.method != "get") {
-            let msg = response.data.message;
-            let title = response.config.url;
-            let color = !response.data.success ? "error" : "success"
+            let msg = !response.data.success ? response.data.message : '';
+            let title = !response.data.success ? response.config.url : i18n.t('Success');
+            let color = !response.data.success ? "error" : "success";
             store.commit('data/notifications/create', {
                 id: color + '_' + Math.random()
                     .toString(36),

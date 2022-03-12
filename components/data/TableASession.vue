@@ -4,8 +4,26 @@
       :items="list"
       :headers="headers"
       :items-per-page="perpage"
+      :search="search"
       class="elevation-1 ma-4 ml-8"
     >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>{{ $t(title) }}</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <div style="max-width: 300px !important">
+            <v-text-field
+              dense
+              v-model="search"
+              append-icon="mdi-magnify"
+              outlined
+              :label="$t('market_search_bar_placeholder')"
+              hide-details
+            ></v-text-field>
+          </div>
+        </v-toolbar>
+      </template>
       <template v-slot:[`item.amount`]="{ item }">
         <span>{{ item.amount + " " + item.wallet.currency.symbol }}</span>
       </template>
@@ -59,59 +77,14 @@ export default {
       },
     },
     filter: null,
+    title: "",
   },
   data() {
     return {
       dialog: false,
       perpage: 5,
+      search: "",
       selectedItem: null,
-      headers: [
-        {
-          text: "Market",
-          value: "arbitrage_company.name",
-          // width: 80,
-        },
-        {
-          text: "Position",
-          value: "session_start_type.name",
-          // width: 100,
-        },
-        {
-          text: "Date & Time",
-          value: "created_at",
-          width: 120,
-        },
-        {
-          text: "Amount",
-          value: "amount",
-          // width: 100,
-        },
-        {
-          text: "Start price",
-          value: "start_exchange_rate",
-          // width: 120,
-        },
-        {
-          text: "Current price",
-          value: "current_cost",
-          // width: 130,
-        },
-        {
-          text: "Profit/loss",
-          value: "difference",
-          // width: 116,
-        },
-        {
-          text: "Profit/loss %",
-          value: "difference_perc",
-          // width: 128,
-        },
-        {
-          text: "Close",
-          value: "action",
-          // width: 80,
-        },
-      ],
       list: [],
       interv: null,
     };
@@ -120,6 +93,54 @@ export default {
     ...mapGetters(model, {
       arbitrage_sessions: "list",
     }),
+    headers() {
+      return [
+        {
+          text: this.$t("name_table"),
+          value: "arbitrage_company.name",
+          // width: 80,
+        },
+        {
+          text: this.$t("table_position"),
+          value: "session_start_type.name",
+          // width: 100,
+        },
+        {
+          text: this.$t("table_time"),
+          value: "created_at",
+        },
+        {
+          text: this.$t("amount"),
+          value: "amount",
+          // width: 100,
+        },
+        {
+          text: this.$t("table_buy_price"),
+          value: "start_exchange_rate",
+          // width: 120,
+        },
+        {
+          text: this.$t("table_current_price"),
+          value: "current_cost",
+          // width: 130,
+        },
+        {
+          text: this.$t("table_profit_loss"),
+          value: "difference",
+          // width: 116,
+        },
+        {
+          text: `${this.$t("table_profit_loss")} %`,
+          value: "difference_perc",
+          // width: 128,
+        },
+        {
+          text: this.$t("table_close"),
+          value: "action",
+          // width: 80,
+        },
+      ];
+    },
   },
 
   methods: {
@@ -151,7 +172,6 @@ export default {
                 return false;
               }
             }
-            
           }
           return true;
         });
@@ -160,9 +180,7 @@ export default {
       }
       as.forEach((element) => {
         let fnd = prices.find(
-          (e) =>
-            e &&
-            e.base == element.wallet.currency.symbol
+          (e) => e && e.base == element.wallet.currency.symbol
         );
         let pr = 1;
         if (fnd && fnd.price) {

@@ -6,8 +6,8 @@
     dense
     hide-details
     @change="modeChange"
-    item-text="text"
-    item-value="value"
+    item-text="name"
+    item-value="code"
     :label="$t('CurrentLanguage')"
   ></v-select>
 </template>
@@ -29,10 +29,9 @@ export default {
     CURRENT_LOCALE() {
       return this.$i18n.locale;
     },
-    ...mapGetters("config/data", {
-      langs: "languages",
-      default_language: "default_language"
-    }),
+    langs() {
+      return this.$i18n.locales
+    }
   },
 
   methods: {

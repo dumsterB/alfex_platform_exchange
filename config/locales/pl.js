@@ -529,4 +529,11 @@ export default {
   copy: "kopiuj",
   copied: "skopiowane",
   no_market_place: "Obecnie nie ma aktywnych rynków giełdowych",
+  Account: "Rachunek",
+  LogOff: "Wychodzić",
+  CurrentLanguage: "Język",
+  Theme: "Temat",
+  Purchased: "Zakupione",
+  Spent: "Zużyty",
+  Success: "Sukces"
 };
