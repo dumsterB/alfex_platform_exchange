@@ -13,16 +13,13 @@
           >
             <NewsItem :item="article" />
           </v-col>
-          <v-col
-            v-if="news && news.length > 0"
-            class="d-flex justify-center mt-4"
-            :xl="3"
-            :lg="4"
-            :md="6"
-          >
-            <v-btn x-large outlined class="btn-load">Load more</v-btn>
-          </v-col>
         </v-row>
+        <v-col
+          v-if="news && news.length > 0"
+          class="d-flex justify-center mt-4"
+        >
+          <v-btn x-large outlined>{{ $t("view_more") }}</v-btn>
+        </v-col>
       </v-col>
     </v-row>
   </div>
