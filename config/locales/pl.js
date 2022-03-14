@@ -1,7 +1,5 @@
 export default {
-  // ACCOUNT
   logo_name: "Profinvest",
-  // pages
   signin: "zaloguj się",
   signup: "zapisz się",
   register: "zarejestrować",
@@ -9,7 +7,6 @@ export default {
   reset_password: "zresetuj hasło",
   footer_copyright: "Wszelkie prawa zastrzeżone dla ",
   transfer: "przenosić",
-  // settings
   security: "bezpieczeństwo",
   security_description: "Te urządzenia mają obecnie dostęp do Twojego konta",
   security_keys: "klucz bezpieczeństwa",
@@ -129,7 +126,7 @@ export default {
   user_questions: "pytania",
   user_payment_method: "metoda płatności",
   user_settings: "ustawienia",
-  user_markets: "rynki",
+  user_markets: "Rynek wymiany",
   user_contacts: "skontaktuj się z nami",
   logInButton: "zaloguj sie",
   lightMode: "tryb światła",

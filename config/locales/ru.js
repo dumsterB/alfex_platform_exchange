@@ -129,7 +129,7 @@ export default {
   user_questions: "Вопросы",
   user_payment_method: "Способ оплаты",
   user_settings: "Настройки",
-  user_markets: "Рынки",
+  user_markets: "Биржевой рынок",
   user_contacts: "Связаться с нами",
   logInButton: "Вход",
   lightMode: "Светлая тема",
