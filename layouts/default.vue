@@ -113,6 +113,8 @@ html {
   -webkit-transition: 223ms;
   -o-transition: 223ms;
   transition: 223ms;
+  min-width: 1400px !important;
+  overflow: auto;
 }
 div {
   font-family: "Cera Pro";
