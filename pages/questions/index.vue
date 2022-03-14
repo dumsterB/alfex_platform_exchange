@@ -10,7 +10,7 @@
               <div>
                 <v-row class="mt-5">
                   <v-col cols="12">
-                    <v-card class="pa-2 mt-2" v-for="(item, i) of items1">
+                    <v-card class="pa-2 mt-2" v-for="(item, i) in items1" :key="i">
                       <v-card-actions>
                         <p>How are the prices calculated for the various cryptocurrencies?</p>
 
@@ -43,7 +43,7 @@
               <div>
                 <v-row class="mt-5">
                   <v-col cols="12">
-                    <v-card class="pa-2 mt-2" v-for="(item, i) of items">
+                    <v-card class="pa-2 mt-2" v-for="(item, i) in items" :key="i">
                       <v-card-actions>
                         <p>How are the prices calculated for the various cryptocurrencies?</p>
 
