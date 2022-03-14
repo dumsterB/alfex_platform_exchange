@@ -124,9 +124,15 @@ export default {
   },
   computed: {
     ...mapGetters(model, {
-      currencies: "list",
+      currencies_full: "list",
       curr_by_id: "byId",
     }),
+    currencies() {
+      let c_f = this.currencies_full;
+      return c_f.filter(
+        (el) => el.currency_type && el.currency_type.key == "CRYPTO"
+      );
+    },
   },
   watch: {
     curr_id() {
@@ -135,14 +141,26 @@ export default {
     },
     curr_code() {
       this.as_filter = {
-        "wallet.currency.symbol": this.curr_code
-      }
+        "wallet.currency.symbol": this.curr_code,
+      };
       if (this.curr_code && !this.is_switched) {
         this.spot_sockets();
       }
       if (this.curr_code && this.is_switched) {
         this.arbitrage_sockets();
       }
+    },
+    "$route.params.search": {
+      handler: function (search) {
+        if (
+          this.$router.currentRoute.query &&
+          this.$router.currentRoute.query.id
+        ) {
+          this.curr_id = parseInt(this.$router.currentRoute.query.id);
+        }
+      },
+      deep: true,
+      immediate: true,
     },
     is_switched() {
       if (!this.is_switched) {
@@ -220,7 +238,7 @@ export default {
         "method": "subscribe",
         "data": ["all_${me.curr_code}-USD@ticker_5s"]
       }`);
-      
+
       socket.onmessage = function (event) {
         if (event.data) {
           let json_d = JSON.parse(event.data);
@@ -236,9 +254,6 @@ export default {
   async mounted() {
     await this.fetchTrades();
     this.fetchAS();
-    if (this.$router.currentRoute.query && this.$router.currentRoute.query.id) {
-      this.curr_id = parseInt(this.$router.currentRoute.query.id);
-    }
     window.addEventListener("resize", this.onResize);
   },
   beforeDestroy() {

@@ -20,13 +20,53 @@
       }}</v-btn>
       <v-autocomplete
         v-model="value"
-        :items="filtered ? filtered : filterItems"
+        :items="filtered"
         prepend-inner-icon="mdi-magnify"
         :label="$t('market_search_bar_placeholder')"
+        item-value="id"
+        item-text="name"
         dense
         outlined
+        chips
+        clearable
+        hide-selected
         class="ml-2"
-      ></v-autocomplete>
+        ><template v-slot:selection="{ attr, on, item, selected }">
+          <v-chip
+            v-bind="attr"
+            :input-value="selected"
+            color="blue-grey"
+            class="white--text"
+            v-on="on"
+          >
+            <v-icon left
+              >{{
+                item.type == "currency"
+                  ? " mdi-bitcoin"
+                  : "mdi-shopping-outline"
+              }}
+            </v-icon>
+            <span v-text="item.name"></span>
+          </v-chip>
+        </template>
+        <template v-slot:item="{ item }">
+          <v-list-item-avatar
+            color="indigo"
+            class="text-h5 font-weight-light white--text"
+          >
+            <v-img :src="item.logo"></v-img>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.name"></v-list-item-title>
+            <v-list-item-subtitle v-text="item.symbol"></v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-icon>{{
+              item.type == "currency" ? " mdi-bitcoin" : "mdi-shopping-outline"
+            }}</v-icon>
+          </v-list-item-action>
+        </template></v-autocomplete
+      >
     </div>
     <v-spacer></v-spacer>
 
@@ -42,7 +82,16 @@
       <template v-slot:activator="{ on }">
         <v-card
           flat
-          class="account-menu d-flex flex-columns align-center mt-2 py-2 pr-2 pl-4"
+          class="
+            account-menu
+            d-flex
+            flex-columns
+            align-center
+            mt-2
+            py-2
+            pr-2
+            pl-4
+          "
           style="width: 200px"
           v-on="on"
         >
@@ -88,7 +137,6 @@ export default {
     return {
       user_image: null,
       account_menu: this.initAccountMenu(),
-      filterItems: [],
       value: null,
     };
   },
@@ -141,7 +189,24 @@ export default {
     async close(i, message_id) {},
   },
 
-  watch: {},
+  watch: {
+    value(v) {
+      let fnd = this.filtered.find((el) => el.id == v);
+      if (fnd) {
+        if (fnd.type == "arbitrage_company") {
+          this.$router.push({
+            path: `/markets/${fnd.id}`,
+          });
+        }
+        if (fnd.type == "currency") {
+          this.$router.push({
+            path: `/currency?id=${fnd.id}`,
+          });
+        }
+      }
+      console.log("selected", v);
+    },
+  },
 
   components: {
     LanguageSelect,
@@ -165,11 +230,30 @@ export default {
       currencies_full: "list",
     }),
     filtered() {
-      let options = [...this.arbitrage_company, ...this.currencies_full];
-      let createOptions = options.map((item) => {
-        return item.name;
+      let res = [];
+      this.arbitrage_company.forEach((element) => {
+        res.push({
+          name: element.name,
+          id: element.id,
+          type: "arbitrage_company",
+          logo: element.logo,
+          symbol: element.name,
+        });
       });
-      this.filterItems = createOptions;
+      let c_f = this.currencies_full;
+      let currencies = c_f.filter(
+        (el) => el.currency_type && el.currency_type.key == "CRYPTO"
+      );
+      currencies.forEach((element) => {
+        res.push({
+          name: element.name,
+          id: element.id,
+          type: "currency",
+          logo: element.logo,
+          symbol: element.symbol,
+        });
+      });
+      return res;
     },
     user_in() {
       //   let name = this.$store.state.auth.user.name;
@@ -179,7 +263,6 @@ export default {
       return "User";
     },
     mounted() {
-      console.log("this.filterItems :>> ", this.filterItems);
       console.log("this.filtered :>> ", this.filtered);
     },
   },
