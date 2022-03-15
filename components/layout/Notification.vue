@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-snackbar
+      v-if="item"
       :color="item.color"
       :key="item.id"
       right
       :timeout="timeout"
       top
-      :value="i === 0"
-      v-for="(item, i) in items"
+      :value="true"
     >
       <div class="main-msg">
         <div>
@@ -15,13 +15,8 @@
           <div>{{ item.text }}</div>
         </div>
         <div class="action-button">
-          <v-btn
-            @click="removeItem(item.id)"
-            text
-            v-if="items.length > 1"
-          >{{nextButtonText}} ({{items.length - 1}} more)</v-btn>
-          <v-btn @click="removeItem(item.id)" text icon v-else>
-            <v-icon>{{closeButtonIcon}}</v-icon>
+          <v-btn @click="removeItem(item.id)" text icon>
+            <v-icon>{{ closeButtonIcon }}</v-icon>
           </v-btn>
         </div>
       </div>
@@ -34,34 +29,36 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      timeout: 10000,
+      timeout: 5000,
       nextButtonText: "Next",
       closeButtonIcon: "mdi-close",
       processing: false,
-      timeoutId: false
+      timeoutId: false,
+      item: null,
     };
   },
-  created() {
-  },
+  created() {},
   computed: {
     ...mapGetters("data/notifications", {
-      items: "allMessages"
+      items: "allMessages",
     }),
   },
   watch: {
     items() {
       this.processItems();
-    }
+    },
   },
   methods: {
     processItems() {
       const vm = this;
       vm.processing = true;
       if (vm.items && Array.isArray(vm.items) && vm.items.length > 0) {
-        const item = vm.items[0];
+        this.item = vm.items[vm.items.length - 1];
         return (vm.timeoutId = setTimeout(() => {
           vm.removeItem(item.id);
         }, vm.timeout));
+      } else {
+        this.item = null;
       }
       vm.processing = false;
     },
@@ -69,7 +66,7 @@ export default {
       let item = {
         title: title,
         text: message,
-        color: "error"
+        color: "error",
       };
       this.$store.commit("data/notifications/create", item);
     },
@@ -81,11 +78,8 @@ export default {
         return vm.processItems();
       }
     },
-    uniqueId: prefix =>
-      `${prefix}_` +
-      Math.random()
-        .toString(36)
-  }
+    uniqueId: (prefix) => `${prefix}_` + Math.random().toString(36),
+  },
 };
 </script>
 <style scoped>

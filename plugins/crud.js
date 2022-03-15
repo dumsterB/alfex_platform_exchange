@@ -19,10 +19,10 @@ client.interceptors.request.use(function (config) {
 client.interceptors.response.use(function (response) {
 
     if (store) {
-        if (response.config.method != "get") {
-            let msg = !response.data.success ? response.data.message : '';
-            let title = !response.data.success ? response.config.url : i18n.t('Success');
-            let color = !response.data.success ? "error" : "success";
+        if (response.config.method != "get" && !response.data.success) {
+            let msg = response.data.message;
+            let title = response.config.url;
+            let color = "red";
             store.commit('data/notifications/create', {
                 id: color + '_' + Math.random()
                     .toString(36),
