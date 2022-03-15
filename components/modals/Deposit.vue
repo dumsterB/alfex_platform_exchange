@@ -161,7 +161,28 @@ export default {
         order_data.order_method_id = 1;
         console.log("order_data", order_data);
         let rs = await this.order_create({ data: order_data });
-        console.log("rs", rs);
+        let title, color;
+        if (rs.data && rs.data.order_status_id != 3) {
+          title = this.$t("order_failed");
+          color = "error";
+        } else {
+          title = this.$t("create_order_progress");
+          color = "warning";
+          setTimeout(() => {
+            this.$store.commit("data/notifications/create", {
+              id: color + "_" + Math.random().toString(36),
+              title: this.$t("create_order_done"),
+              text: this.$t("create_order_done"),
+              color: "primary",
+            });
+          }, 2000);
+        }
+        this.$store.commit("data/notifications/create", {
+          id: color + "_" + Math.random().toString(36),
+          title: title,
+          text: title,
+          color: color,
+        });
         await this.f_wallets();
         this.loading = false;
         this.$emit("depositChanger", true);

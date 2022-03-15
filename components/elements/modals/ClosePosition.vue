@@ -92,11 +92,34 @@ export default {
       as_data.id = this.item.id;
       as_data.status_id = 2;
       as_data.stop_exchange_rate = ac ? ac.price : 1;
-      as_data.arbitrage_company_id = ac ? ac.id : this.item.arbitrage_company_id;
+      as_data.arbitrage_company_id = ac
+        ? ac.id
+        : this.item.arbitrage_company_id;
       // code
       console.log("as_data", as_data);
       let rs = await this.update_as({ data: as_data, id: as_data.id });
-      console.log("rs", rs);
+      let title, color;
+      if (rs.data && rs.data.status_id != 2) {
+        title = this.$t("not_enough_balance");
+        color = "error";
+      } else {
+        title = this.$t("stop_arbitrage_sessions");
+        color = "warning";
+        setTimeout(() => {
+          this.$store.commit("data/notifications/create", {
+            id: color + "_" + Math.random().toString(36),
+            title: this.$t("stop_arbitrage_sessions_done"),
+            text: this.$t("stop_arbitrage_sessions_done"),
+            color: "primary",
+          });
+        }, 2000);
+      }
+      this.$store.commit("data/notifications/create", {
+        id: color + "_" + Math.random().toString(36),
+        title: title,
+        text: title,
+        color: color,
+      });
       this.$emit("reload");
       setTimeout(() => {
         this.loading = false;

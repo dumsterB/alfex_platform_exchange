@@ -83,7 +83,7 @@ export default {
         (value) => (value && value.length >= 1) || "Min 1 characters",
       ],
       loading: false,
-      loadingSell: false
+      loadingSell: false,
     };
   },
   props: {
@@ -147,7 +147,7 @@ export default {
         act = this.action;
       } else {
         if (act == "Sell") {
-          load = "loadingSell"
+          load = "loadingSell";
         }
       }
       this[load] = true;
@@ -162,14 +162,34 @@ export default {
       console.log("as_data", as_data, this.wl);
       as_data.start_exchange_rate = this.price;
       let rs = await this.as_create({ data: as_data });
-      console.log("rs", rs);
+      let title, color;
+      if (rs.data && rs.data.status_id != 1) {
+        title = this.$t("not_enough_balance");
+        color = "error";
+      } else {
+        title = this.$t("arbitrage_session_processing");
+        color = "warning";
+        setTimeout(() => {
+          this.$store.commit("data/notifications/create", {
+            id: color + "_" + Math.random().toString(36),
+            title: this.$t("arbitrage_session_done"),
+            text: this.$t("arbitrage_session_done"),
+            color: "primary",
+          });
+        }, 2000);
+      }
+      this.$store.commit("data/notifications/create", {
+        id: color + "_" + Math.random().toString(36),
+        title: title,
+        text: title,
+        color: color,
+      });
       this.fetchWallet();
       setTimeout(() => {
         this[load] = false;
         this.$emit("reload");
         this.close();
       }, 500);
-
     },
 
     close() {
