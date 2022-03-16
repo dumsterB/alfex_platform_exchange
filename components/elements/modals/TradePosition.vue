@@ -27,13 +27,14 @@
           :rules="rules"
           outlined
           dense
-          hide-details="auto"
+          :error-messages="err_m"
           type="number"
         ></v-text-field>
       </v-container>
     </v-card-text>
     <v-card-actions v-if="action == 'Both'">
       <v-btn
+        v-if="userWallet && userWallet.balance"
         class="c-actions-sell"
         color="red darken-1"
         type="submit"
@@ -84,6 +85,7 @@ export default {
       ],
       loading: false,
       loadingSell: false,
+      err_m: null,
     };
   },
   props: {
@@ -112,7 +114,10 @@ export default {
         return {};
       },
     },
-    height: null,
+    height: {
+      type: Number,
+      default: 400,
+    },
   },
   computed: {
     ...mapGetters("data/arbitrage_session", {
@@ -133,6 +138,11 @@ export default {
       }
     },
   },
+  watch: {
+    amount() {
+      this.err_m = null;
+    }
+  },
   methods: {
     ...mapActions("data/arbitrage_session", {
       as_create: "create",
@@ -141,6 +151,23 @@ export default {
     ...mapActions("data/wallet", {
       fetchWallet: "fetchList",
     }),
+    validate_amount(act) {
+      if (act == "Buy") {
+        let ttl = parseFloat(this.amount) * this.price;
+        console.log(ttl, this.wl.balance)
+        if (!this.wl.balance || ttl > this.wl.balance) {
+          this.err_m = [this.$t("not_enough_balance")];
+          return false;
+        }
+      } else {
+        let ttl = parseFloat(this.amount);
+        if (!this.userWallet.balance || ttl > this.userWallet.balance) {
+          this.err_m = [this.$t("not_enough_balance")];
+          return false;
+        }
+      }
+      return true;
+    },
     async save(act) {
       let load = "loading";
       if (!act) {
@@ -149,6 +176,10 @@ export default {
         if (act == "Sell") {
           load = "loadingSell";
         }
+      }
+      let valid = this.validate_amount(act);
+      if (!valid) {
+        return;
       }
       this[load] = true;
       let as_data = {
@@ -159,7 +190,6 @@ export default {
         wallet_id: this.userWallet.id,
       };
       // code
-      console.log("as_data", as_data, this.wl);
       as_data.start_exchange_rate = this.price;
       let rs = await this.as_create({ data: as_data });
       let title, color;
@@ -198,8 +228,6 @@ export default {
   },
   async created() {
     await this.fetchAs();
-    console.log("this.as", this.as);
-    console.log(this.userWallet, "wallet");
     this.wl = this.wallet.find((el) => el.currency.symbol == "USD") || {};
   },
 };

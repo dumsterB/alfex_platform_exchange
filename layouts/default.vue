@@ -27,18 +27,18 @@ export default {
   data() {
     return {
       isLoading: true,
-      interv: null
+      interv: null,
     };
   },
   computed: {
     CURRENT_LOCALE() {
       return this.$i18n.locale;
-    }
+    },
   },
   watch: {
     CURRENT_LOCALE() {
-      console.log('CURRENT_LOCALE', this.CURRENT_LOCALE)
-    }
+      console.log("CURRENT_LOCALE", this.CURRENT_LOCALE);
+    },
   },
   methods: {
     async preload_models() {
@@ -69,11 +69,11 @@ export default {
   },
   async created() {
     if (this.$store.state.auth.user) {
-      global.socket = new WebSocket(this.$env('WS_SERVER_BASE'));
+      global.socket = new WebSocket(this.$env("WS_SERVER_BASE"));
       this.interv = setInterval(() => {
         let ws = global.socket;
         if (ws.readyState !== ws.OPEN) {
-          global.socket = new WebSocket(this.$env('WS_SERVER_BASE'));
+          global.socket = new WebSocket(this.$env("WS_SERVER_BASE"));
         }
       }, 5000);
       await this.preload_models();
@@ -93,13 +93,13 @@ export default {
     Menu,
     LoadingScreen,
     Footer,
-    SnackBar
+    SnackBar,
   },
   beforeDestroy() {
     if (this.interv) {
-      clearInterval(this.interv)
+      clearInterval(this.interv);
     }
-  }
+  },
 };
 </script>
 

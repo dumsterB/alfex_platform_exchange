@@ -11,10 +11,10 @@
 
         <v-card-text class="pb-6">
           <v-row>
-            <v-col cols="12" class="pb-0">
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader"
-                >CARD NUMBER</v-subheader
-              >
+            <v-col cols="12" class="pb-0 card">
+              <v-subheader class="grey--text text--lighten-1 pl-0 subheader">{{
+                $t("card_number")
+              }}</v-subheader>
               <v-text-field
                 single-line
                 :rules="cardRules"
@@ -22,13 +22,33 @@
                 mask="credit-card"
                 v-model="card_number"
                 dense
+                class="card_input"
+                maxlength="19"
               />
+
+              <v-icon v-if="getCardType === 'visa'" class="card_input__icon"
+                >mdi-credit-card-check-outline</v-icon
+              >
+              <v-icon
+                v-if="getCardType === 'mastercard'"
+                class="card_input__icon"
+                >mdi-credit-card-lock</v-icon
+              >
+              <v-icon v-if="getCardType === 'amex'" class="card_input__icon"
+                >mdi-credit-card-check</v-icon
+              >
+              <v-icon v-if="getCardType === 'discover'" class="card_input__icon"
+                >mdi-card-account-details</v-icon
+              >
+              <v-icon v-if="getCardType === 'troy'" class="card_input__icon"
+                >mdi-credit-card-search-outline</v-icon
+              >
             </v-col>
 
             <v-col cols="12" class="pb-0">
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader"
-                >CARDHOLDER’S NAME</v-subheader
-              >
+              <v-subheader class="grey--text text--lighten-1 pl-0 subheader">{{
+                $t("cardholder_name")
+              }}</v-subheader>
               <v-text-field
                 single-line
                 outlined
@@ -41,14 +61,15 @@
             </v-col>
 
             <v-col cols="8">
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader"
-                >EXPIRY DATE</v-subheader
-              >
+              <v-subheader class="grey--text text--lighten-1 pl-0 subheader">{{
+                $t("expiry")
+              }}</v-subheader>
               <v-text-field
                 label="MM/YY"
                 :rules="expireDateRules"
                 outlined
                 dense
+                maxlength="5"
                 v-model="exp_date"
               />
             </v-col>
@@ -64,6 +85,7 @@
                 outlined
                 dense
                 v-model="data.cvv"
+                maxlength="3"
               />
             </v-col>
           </v-row>
@@ -84,6 +106,13 @@
   </div>
 </template>
 <script>
+const validateExpDate = (value) => {
+  const monthAndYear = value.split("/");
+  const valueDate = new Date();
+  valueDate.setFullYear(parseInt(`20${monthAndYear[1]}`), monthAndYear[0], 1);
+  const today = new Date();
+  return valueDate > today;
+};
 export default {
   name: "BankCard",
   props: {
@@ -94,29 +123,31 @@ export default {
   },
   data() {
     return {
-      maxlength: 20,
-      valueOfCardNumber: "4478 6322 9923 8990",
       data: {
         expire_date: "",
         card_number: "",
         user_name: "",
         cvv: "",
+        card_type: "",
       },
+      card_icon: "",
       card_number: "",
       exp_date: "",
       valid: false,
       cardRules: [
-        (v) => !!v || "Card number is required",
+        (v) => !!v || this.$t("card_number_required"),
         (v) => (v && v.length == 19) || "Card number must have 16 characters",
+        (v) => console.log(v),
       ],
-      nameRules: [(v) => !!v || "Name  is required"],
+      nameRules: [(v) => !!v || this.$t("cardholder_name_required")],
       expireDateRules: [
-        (v) => !!v || "Expire date is required",
-        (v) => (v && v.length == 5) || "Wrond date",
+        (v) => !!v || this.$t("card_expiry_required"),
+        (v) => (v && v.length == 5) || this.$t("invalid_date"),
+        (v) => (v && validateExpDate(v)) || this.$t("your_card_expired"),
       ],
       cvvRules: [
-        (v) => !!v || "CVV  is required",
-        (v) => (v && v.length == 3) || "Wrong CVV",
+        (v) => !!v || this.$t("CVV_required"),
+        (v) => (v && v.length == 3) || this.$t("CVV_rules"),
       ],
       years: [],
     };
@@ -140,30 +171,78 @@ export default {
         this.exp_date += "/";
       }
       this.data.expire_date = v;
+      console.log("this.data.expire_date :>> ", this.data.expire_date);
     },
     card_number(v) {
       if (v.length == 4 || v.length == 9 || v.length == 14) {
         this.card_number += " ";
       }
       this.data.card_number = v;
-    }
+    },
+    card_type(v) {
+      return (this.data.card_type = v);
+      // if (v === "visa") return (this.card_icon = "fab fa-cc-visa");
+      // if (v === "amex") return (this.card_icon = "fab fa-cc-amex");
+      // if (v === "mastercard") return (this.card_icon = "fab fa-cc-mastercard");
+      // if (v === "discover") return (this.card_icon = "fab fa-cc-discover");
+      // if (v === "troy") return (this.card_icon = "fab fa-cc-troy");
+      // if (v === "") return (this.card_icon = "fab fa-credit-card");
+      console.log("card type :>> ", this.data.card_type);
+      v === "visa"
+        ? (this.card_icon = "mdi-credit-card-check-outline")
+        : v === "mastercard"
+        ? (this.card_icon = "mdi-credit-card-lock")
+        : v === "amex"
+        ? (this.card_icon = "mdi-credit-card-check")
+        : v === "discover"
+        ? (this.card_icon = "mdi-card-account-details")
+        : v === "troy"
+        ? (this.card_icon = "mdi-credit-card-search-outline")
+        : (this.card_icon = "mdi-credit-card");
+    },
   },
-  mounted() {},
   computed: {
+    getCardType() {
+      let number = this.data.card_number;
+      let re = new RegExp("^4");
+      if (number.match(re) != null) return (this.data.card_type = "visa");
+      re = new RegExp("^(34|37)");
+      if (number.match(re) != null) return (this.data.card_type = "amex");
+      re = new RegExp("^5[1-5]");
+      if (number.match(re) != null) return (this.data.card_type = "mastercard");
+      re = new RegExp("^6011");
+      if (number.match(re) != null) return (this.data.card_type = "discover");
+      re = new RegExp("^9792");
+      if (number.match(re) != null) return (this.data.card_type = "troy");
+      return (this.data.card_type = "visa"); // default type
+    },
     btnDisable() {
       return (
         this.data.card_number &&
         this.data.user_name &&
         this.data.expire_date &&
-        this.data.cvv
+        this.data.cvv &&
+        this.data.card_type
       );
     },
   },
+  mounted() {},
 };
 </script>
 <style scoped>
 .v-subheader {
   height: 32px;
   margin-left: 6px;
+}
+.card_input,
+.card {
+  position: relative;
+}
+.card_input__icon {
+  position: absolute;
+  content: "";
+  top: 16px;
+  right: 16px;
+  bottom: 0;
 }
 </style>

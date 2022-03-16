@@ -494,6 +494,7 @@ export default {
   invalid_date: "Недействительная дата",
   your_card_expired: "Срок действия вашей карты истек",
   CVV_required: "CVV вашей карты обязателен!",
+  CVV_rules: "CVV неверен",
   you_can_login:
     "Вы можете войти в систему, используя адрес электронной почты, который вы указали при регистрации.",
   you_can_log_with_pass:
@@ -539,4 +540,6 @@ export default {
   Purchased: "Куплено",
   Spent: "Продано",
   Success: "Успешно",
+  cardholder_name: "Имя владельца карты",
+  cardholder_name_required: "Требуется имя владельца карты",
 };

@@ -500,6 +500,7 @@ export default {
   invalid_date: "Ungültiges Datum",
   your_card_expired: "Ihre Karte ist abgelaufen",
   CVV_required: "CVV Ihrer Karte ist erforderlich!",
+  CVV_rules: "CVV ist falsch",
   you_can_login:
     "Sie können sich mit der Mitglieds-E-Mail Adresse anmelden, die Sie bei der Anmeldung angegeben haben",
   you_can_log_with_pass:
@@ -545,4 +546,6 @@ export default {
   Purchased: "Gekauft",
   Spent: "Verbraucht",
   Success: "Erfolg",
+  cardholder_name: "Name des Karteninhabers",
+  cardholder_name_required: "Der Name des Karteninhabers ist erforderlich",
 };

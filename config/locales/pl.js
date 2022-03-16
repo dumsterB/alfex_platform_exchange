@@ -488,6 +488,7 @@ export default {
   invalid_date: "Nieprawidłowa data",
   your_card_expired: "Twoja karta straciła ważność",
   CVV_required: "CVV twojej karty jest wymagane!",
+  CVV_rules: "CVV jest błędne",
   you_can_login:
     "Możesz zalogować się za pomocą adresu e-mail członka, który został podany podczas rejestracji",
   you_can_log_with_pass:
@@ -533,4 +534,6 @@ export default {
   Purchased: "Zakupione",
   Spent: "Zużyty",
   Success: "Sukces",
+  cardholder_name: "Imię i nazwisko posiadacza karty",
+  cardholder_name_required: "Imię i nazwisko posiadacza karty jest wymagane",
 };

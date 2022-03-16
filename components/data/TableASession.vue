@@ -5,6 +5,8 @@
       :headers="headers"
       :items-per-page="perpage"
       :search="search"
+      sort-by="created_at"
+      :sort-desc="true"
       class="elevation-1 ma-4 ml-8"
     >
       <template v-slot:top>
@@ -215,6 +217,9 @@ export default {
     prices() {
       // console.log("this.prices", this.prices);
       this.resetList(this.prices);
+    },
+    filter() {
+      this.resetList();
     },
   },
   async created() {
