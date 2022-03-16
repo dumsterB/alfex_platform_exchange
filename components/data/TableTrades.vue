@@ -113,7 +113,10 @@ export default {
       fetchList: "fetchList",
     }),
     resetList(prices) {
-      this.list = this.trades.map((el) => {
+      let trades = this.trades.filter(el => {
+        return el.trade_status_id == 3;
+      })
+      this.list = trades.map((el) => {
         let fnd_b = prices.find((e) => e && e.base == el.dest_currency.symbol);
         let pr_b = 1;
         if (fnd_b && fnd_b.price) pr_b = fnd_b.price;
