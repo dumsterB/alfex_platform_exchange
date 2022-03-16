@@ -178,6 +178,7 @@ export default {
     }),
     ...mapActions("data/trade", {
       trade_create: "create",
+      fetchTrades: "fetchList",
     }),
     depositChanger(val) {
       this.dialog = !this.dialog;
@@ -232,7 +233,30 @@ export default {
       if (!this.buy_sell) trade_data.exchange_rate = this.price;
       console.log("trade_data", trade_data);
       let rs = await this.trade_create({ data: trade_data });
-      console.log("rs", rs);
+      let title, color;
+      if (rs.data && rs.data.trade_status_id != 3) {
+        title = this.$t("not_enough_balance");
+        color = "error";
+      } else {
+        title = this.$t("create_order_progress");
+        color = "warning";
+        setTimeout(() => {
+          this.$store.commit("data/notifications/create", {
+            id: color + "_" + Math.random().toString(36),
+            title: this.$t("create_order_done"),
+            text: this.$t("create_order_done"),
+            color: "primary",
+          });
+        }, 2000);
+      }
+      this.$store.commit("data/notifications/create", {
+        id: color + "_" + Math.random().toString(36),
+        title: title,
+        text: title,
+        color: color,
+      });
+      await this.fetchWallet();
+      await this.fetchTrades();
       setTimeout(() => {
         this.loading = false;
       }, 500);

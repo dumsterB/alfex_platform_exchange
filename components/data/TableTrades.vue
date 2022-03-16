@@ -145,6 +145,9 @@ export default {
     prices() {
       this.resetList(this.prices);
     },
+    trades() {
+      this.resetList(this.prices);
+    },
   },
   async created() {
     if (this.prices && this.prices.length > 0) {

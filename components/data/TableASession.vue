@@ -219,7 +219,10 @@ export default {
       this.resetList(this.prices);
     },
     filter() {
-      this.resetList();
+      this.resetList(this.prices);
+    },
+    arbitrage_sessions() {
+      this.resetList(this.prices);
     },
   },
   async created() {
