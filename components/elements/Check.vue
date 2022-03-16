@@ -7,15 +7,17 @@
             <v-list-item-title class="text-h5 mb-1">
               <strong>{{ title }}</strong>
             </v-list-item-title>
-            <v-chip
+            <v-btn
+              rounded
               outlined
-              :class="tgl ? 'historyChipTgl' : 'historyChip'"
-              small
+              :class="tgl ? 'historyChip green' : 'historyChip'"
+              x-small
               @click="history_tgl"
-            >
-              <v-icon x-small>mdi-history</v-icon
-              ><span class="history-btn-cl">History</span>
-            </v-chip>
+              ><div>
+                <v-icon x-small>mdi-history</v-icon
+                ><span class="history-btn-cl">History</span>
+              </div>
+            </v-btn>
           </div>
 
           <br /><br />
@@ -76,7 +78,7 @@ export default {
   methods: {
     history_tgl() {
       this.tgl = !this.tgl;
-      this.$emit('history', this.tgl);
+      this.$emit("history", this.tgl);
     },
   },
 };
@@ -93,11 +95,5 @@ export default {
 .historyChip {
   position: absolute;
   right: 5px;
-}
-.historyChipTgl {
-  position: absolute;
-  right: 5px;
-  color: green;
-  border: 1px solid green;
 }
 </style>

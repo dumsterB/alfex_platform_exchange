@@ -1,18 +1,19 @@
 <template>
-  <div>
+  <div class="prod-table">
     <v-data-table
       :headers="headers"
       :items="wallets"
       :search="search"
       sort-by="calories"
       class="elevation-1"
+      @click:row="handleClick"
     >
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>{{ $t("my_wallet") }}</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <div style="max-width: 300px !important;">
+          <div style="max-width: 300px !important">
             <v-text-field
               dense
               v-model="search"
@@ -69,6 +70,7 @@ export default {
       desserts: [],
       editedIndex: -1,
       sel_wallet: null,
+      sel_row: false,
       editedItem: {
         name: "",
         calories: 0,
@@ -116,14 +118,30 @@ export default {
     depositChanger(item) {
       this.sel_wallet = item;
       this.dialog = true;
+      this.sel_row = true;
+      setTimeout(() => {
+        this.sel_row = false;
+      }, 200);
     },
     close() {
       this.dialog = false;
-      this.$emit('reload');
+      this.$emit("reload");
+    },
+    handleClick(value) {
+      setTimeout(() => {
+        if (!this.sel_row) {
+          this.$router.push({
+            path: `/currency?id=${value.currency_id}`,
+          });
+        }
+      }, 100);
     },
   },
 };
 </script>
 
-<style scoped>
+<style>
+.prod-table tr {
+  cursor: pointer;
+}
 </style>
