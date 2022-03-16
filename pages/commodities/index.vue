@@ -1,5 +1,5 @@
 <template>
-  <div class="prod-table">
+  <div>
     <TableProducts
       v-for="(item, i) in stocks"
       :key="i"
@@ -102,7 +102,4 @@ export default {
 };
 </script>
 <style>
-.prod-table tr {
-  cursor: pointer;
-}
 </style>

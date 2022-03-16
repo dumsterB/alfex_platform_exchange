@@ -49,7 +49,7 @@
 import { mapActions, mapGetters } from "vuex";
 import GeneralCapital from "@/components/elements/GeneralCapital";
 import Check from "@/components/elements/Check";
-import TableTransactions from "@/components/elements/TableTransactions";
+import TableTransactions from "@/components/data/TableWallets";
 import TableTrades from "@/components/data/TableTrades";
 import TableOrders from "@/components/data/TableOrders";
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="prod-table">
     <v-data-table
       :items="list"
       :headers="headers"
@@ -135,3 +135,8 @@ export default {
   async created() {},
 };
 </script>
+<style>
+.prod-table tr {
+  cursor: pointer;
+}
+</style>

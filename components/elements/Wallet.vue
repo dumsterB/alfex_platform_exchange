@@ -2,7 +2,7 @@
   <div class="ma-4">
     <div class="d-flex mdc-form-field--space-between">
       <p class="text-h6">{{ $t("my_wallet") }}</p>
-      <a @click="$router.push('/wallet')">{{ $t("view_more") }}</a>
+      <a @click="$router.push('/wallet')">{{ $t("show_all") }}</a>
     </div>
     <v-card class="pa-3">
       <div class="justify-center">
@@ -17,8 +17,10 @@
                 :series="series"
               ></apexchart>
             </div>
-            <strong class="text-h4">${{total_sum ? total_sum.toFixed(4) : ""}}</strong>
-            <div>≈ {{total_sum_btc ? total_sum_btc.toFixed(4) : ""}} BTC</div>
+            <strong class="text-h4"
+              >${{ total_sum ? total_sum.toFixed(4) : "" }}</strong
+            >
+            <div>≈ {{ total_sum_btc ? total_sum_btc.toFixed(4) : "" }} BTC</div>
           </div>
         </div>
         <div class="mt-10">
@@ -32,14 +34,21 @@
                       :color="chartOptions.colors[i]"
                       dot
                     ></v-badge>
-                    <span class="ml-2">{{
-                      coin.currency
-                    }}</span></v-list-item-title
+                    <span
+                      class="ml-2"
+                      style="cursor: pointer"
+                      @click="wall_click(coin)"
+                      >{{ coin.currency }}</span
+                    ></v-list-item-title
                   >
                 </v-list-item-content>
                 <v-spacer></v-spacer>
                 <v-list-item-content class="flexNone">
-                  <v-list-item-title>${{ coin.balance ? coin.balance.toFixed(4) : "" }}</v-list-item-title>
+                  <v-list-item-title
+                    >${{
+                      coin.balance ? coin.balance.toFixed(4) : ""
+                    }}</v-list-item-title
+                  >
                 </v-list-item-content>
               </v-list-item>
               <v-divider></v-divider>
@@ -50,7 +59,7 @@
                   <v-badge
                     class="ml-1 mb-1"
                     dot
-                    :color="chartOptions.colors[5]"
+                    :color="chartOptions.colors[this.limit]"
                   ></v-badge>
                   <span class="ml-2">
                     {{ getLengthArr + " " + $t("others") }}</span
@@ -58,11 +67,19 @@
                 >
                 <v-spacer></v-spacer>
                 <v-list-item-content class="flexNone">
-                  <v-list-item-title> ${{ other_sum ? other_sum.toFixed(4) : "" }}</v-list-item-title>
+                  <v-list-item-title>
+                    ${{
+                      other_sum ? other_sum.toFixed(4) : ""
+                    }}</v-list-item-title
+                  >
                 </v-list-item-content>
               </v-list-item>
               <v-divider></v-divider>
+              <a v-if="!more" class="ma-3" @click="view_more">{{ $t("view_more") }}</a>
             </div>
+            <a v-if="more" class="ma-3" @click="view_back">{{
+              $t("go_back")
+            }}</a>
           </v-card>
         </div>
       </div>
@@ -98,10 +115,11 @@ export default {
       other_sum: 0,
       total_sum: 0,
       total_sum_btc: 0,
-      max_items: 5,
       series: [1],
       filteredArr: [],
+      more: false,
       counter: 0,
+      limit: 5,
       chartOptions: {
         colors: [
           "#53d923",
@@ -110,6 +128,20 @@ export default {
           "#7762a8",
           "#b52d9c",
           "#04151a",
+          "#767ed1",
+          "#b81452",
+          "#9e225e",
+          "#c757ab",
+          "#26d040",
+          "#5d9acb",
+          "#bd6728",
+          "#1984b7",
+          "#5fc75a",
+          "#f08a89",
+          "#b9535b",
+          "#47b987",
+          "#7ce5f1",
+          "#06758b",
         ],
         labels: [],
         chart: {
@@ -150,11 +182,29 @@ export default {
     ...mapActions(currencies, {
       fetchCurrencies: "fetchList",
     }),
+    wall_click(coin) {
+      this.$router.push({
+        path: `/currency?id=${coin.currency_id}`,
+      });
+    },
+    view_more() {
+      this.limit = 20;
+      this.more = true;
+      this.counter = 1;
+      this.filteredArrInit();
+    },
+    view_back() {
+      this.limit = 5;
+      this.more = false;
+      this.counter = 1;
+      this.filteredArrInit();
+    },
     filteredArrInit() {
       let data = this.wallet.map((el) => {
         return {
           balance: el.balance,
           currency: el.currency.symbol,
+          currency_id: el.currency_id,
         };
       });
       this.total_sum = 0;
@@ -172,19 +222,18 @@ export default {
           this.total_sum_btc = this.total_sum / parseFloat(fnd_btc.price);
         }
       }
-      
 
       data.sort((a, b) => {
         return b.balance - a.balance;
       });
-      if (data.length > 5) {
-        this.getLengthArr = data.length - 5;
+      this.getLengthArr = data.length - this.limit;
+      if (data.length > this.limit) {
         let other_sum = 0;
-        for (let i = 5; i < data.length; i++) {
+        for (let i = this.limit; i < data.length; i++) {
           other_sum += data[i].balance;
         }
         this.other_sum = other_sum;
-        this.filteredArr = data.slice(0, 5);
+        this.filteredArr = data.slice(0, this.limit);
       } else {
         this.filteredArr = data;
       }
@@ -201,14 +250,12 @@ export default {
         this.series = this.apexArrBalance;
         this.chartOptions = Object.assign({}, this.chartOptions);
       }
-      
     },
   },
 
   watch: {
     currency() {
       this.filteredArrInit();
-      
     },
   },
 
