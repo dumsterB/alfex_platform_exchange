@@ -113,6 +113,7 @@ export default {
   methods: {
     ...mapActions("data/order", {
       order_create: "create",
+      fetchOrders: "fetchList",
     }),
     ...mapActions("data/wallet", {
       f_wallets: "fetchList",
@@ -184,6 +185,7 @@ export default {
           color: color,
         });
         await this.f_wallets();
+        await this.fetchOrders();
         this.loading = false;
         this.$emit("depositChanger", true);
       }
