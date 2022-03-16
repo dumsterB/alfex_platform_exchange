@@ -542,4 +542,5 @@ export default {
   Success: "Успешно",
   cardholder_name: "Имя владельца карты",
   cardholder_name_required: "Требуется имя владельца карты",
+  card_rules: "Номер карты должен состоять из 16 символов.",
 };
