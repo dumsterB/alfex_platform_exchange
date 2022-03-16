@@ -137,8 +137,8 @@ export default {
             {
               "width": 980,
               "height": 610,
-              "symbol": "` + this.platform.toUpperCase() + `:` + this.currency.toUpperCase() + `USDT",
-              "interval": "D",
+              "symbol": "` + this.platform.toUpperCase() + `:` + this.currency.toUpperCase() + `USD",
+              "interval": "H",
               "timezone": "Etc/UTC",
               "theme": "dark",
               "style": "1",
