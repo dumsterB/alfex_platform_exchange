@@ -485,6 +485,7 @@ export default {
   invalid_date: "Invalid date",
   your_card_expired: "Your card is expired",
   CVV_required: "CVV of your card is required!",
+  CVV_rules: "CVV is wrong",
   you_can_login: "You can log in using the member email you when signing up",
   you_can_log_with_pass:
     "You can log in with a password each you using when you sign up",
@@ -529,4 +530,6 @@ export default {
   Purchased: "Purchased",
   Spent: "Spent",
   Success: "Success",
+  cardholder_name: "Cardholder's name",
+  cardholder_name_required: "Cardholder's name is required",
 };
