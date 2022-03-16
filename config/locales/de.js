@@ -548,4 +548,5 @@ export default {
   Success: "Erfolg",
   cardholder_name: "Name des Karteninhabers",
   cardholder_name_required: "Der Name des Karteninhabers ist erforderlich",
+  card_rules: "Die Kartennummer muss 16 Zeichen lang sein.",
 };

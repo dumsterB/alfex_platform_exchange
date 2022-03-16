@@ -532,4 +532,5 @@ export default {
   Success: "Success",
   cardholder_name: "Cardholder's name",
   cardholder_name_required: "Cardholder's name is required",
+  card_rules: "Card number must have 16 characters.",
 };

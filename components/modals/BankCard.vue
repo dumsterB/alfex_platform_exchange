@@ -16,33 +16,26 @@
                 $t("card_number")
               }}</v-subheader>
               <v-text-field
-                single-line
-                :rules="cardRules"
-                outlined
-                mask="credit-card"
                 v-model="card_number"
-                dense
+                mask="credit-card"
+                :rules="cardRules"
                 class="card_input"
                 maxlength="19"
+                single-line
+                outlined
+                dense
               />
-
-              <v-icon v-if="getCardType === 'visa'" class="card_input__icon"
-                >mdi-credit-card-check-outline</v-icon
-              >
-              <v-icon
-                v-if="getCardType === 'mastercard'"
-                class="card_input__icon"
-                >mdi-credit-card-lock</v-icon
-              >
-              <v-icon v-if="getCardType === 'amex'" class="card_input__icon"
-                >mdi-credit-card-check</v-icon
-              >
-              <v-icon v-if="getCardType === 'discover'" class="card_input__icon"
-                >mdi-card-account-details</v-icon
-              >
-              <v-icon v-if="getCardType === 'troy'" class="card_input__icon"
-                >mdi-credit-card-search-outline</v-icon
-              >
+              <template>
+                <v-fade-transition leave-absolute>
+                  <img
+                    class="card_input__icon"
+                    width="24"
+                    height="24"
+                    :src="card_icon"
+                    alt=""
+                  />
+                </v-fade-transition>
+              </template>
             </v-col>
 
             <v-col cols="12" class="pb-0">
@@ -123,21 +116,20 @@ export default {
   },
   data() {
     return {
+      loading: false,
       data: {
         expire_date: "",
         card_number: "",
         user_name: "",
         cvv: "",
-        card_type: "",
       },
-      card_icon: "",
+      card_icon: "https://www.svgrepo.com/show/103010/credit-card.svg",
       card_number: "",
       exp_date: "",
       valid: false,
       cardRules: [
         (v) => !!v || this.$t("card_number_required"),
-        (v) => (v && v.length == 19) || "Card number must have 16 characters",
-        (v) => console.log(v),
+        (v) => (v && v.length == 19) || this.$t("card_rules"),
       ],
       nameRules: [(v) => !!v || this.$t("cardholder_name_required")],
       expireDateRules: [
@@ -171,7 +163,6 @@ export default {
         this.exp_date += "/";
       }
       this.data.expire_date = v;
-      console.log("this.data.expire_date :>> ", this.data.expire_date);
     },
     card_number(v) {
       if (v.length == 4 || v.length == 9 || v.length == 14) {
@@ -179,50 +170,39 @@ export default {
       }
       this.data.card_number = v;
     },
-    card_type(v) {
-      return (this.data.card_type = v);
-      // if (v === "visa") return (this.card_icon = "fab fa-cc-visa");
-      // if (v === "amex") return (this.card_icon = "fab fa-cc-amex");
-      // if (v === "mastercard") return (this.card_icon = "fab fa-cc-mastercard");
-      // if (v === "discover") return (this.card_icon = "fab fa-cc-discover");
-      // if (v === "troy") return (this.card_icon = "fab fa-cc-troy");
-      // if (v === "") return (this.card_icon = "fab fa-credit-card");
-      console.log("card type :>> ", this.data.card_type);
-      v === "visa"
-        ? (this.card_icon = "mdi-credit-card-check-outline")
-        : v === "mastercard"
-        ? (this.card_icon = "mdi-credit-card-lock")
-        : v === "amex"
-        ? (this.card_icon = "mdi-credit-card-check")
-        : v === "discover"
-        ? (this.card_icon = "mdi-card-account-details")
-        : v === "troy"
-        ? (this.card_icon = "mdi-credit-card-search-outline")
-        : (this.card_icon = "mdi-credit-card");
+    getCardType(v) {
+      if (v === "visa") {
+        this.card_icon =
+          "https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg";
+      } else if (v === "mastercard") {
+        this.card_icon =
+          "https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg";
+      } else {
+        this.card_icon = "https://www.svgrepo.com/show/103010/credit-card.svg";
+      }
     },
   },
   computed: {
     getCardType() {
-      let number = this.data.card_number;
+      let number = this.card_number;
       let re = new RegExp("^4");
-      if (number.match(re) != null) return (this.data.card_type = "visa");
-      re = new RegExp("^(34|37)");
-      if (number.match(re) != null) return (this.data.card_type = "amex");
+      if (number.match(re) != null) return "visa";
       re = new RegExp("^5[1-5]");
-      if (number.match(re) != null) return (this.data.card_type = "mastercard");
-      re = new RegExp("^6011");
-      if (number.match(re) != null) return (this.data.card_type = "discover");
-      re = new RegExp("^9792");
-      if (number.match(re) != null) return (this.data.card_type = "troy");
-      return (this.data.card_type = "visa"); // default type
+      if (number.match(re) != null) return "mastercard";
+      // re = new RegExp("^(34|37)");
+      // if (number.match(re) != null) return (this.data.card_type = "amex");
+      // re = new RegExp("^6011");
+      // if (number.match(re) != null) return (this.data.card_type = "discover");
+      // re = new RegExp("^9792");
+      // if (number.match(re) != null) return (this.data.card_type = "troy");
+      return ""; // default type
     },
     btnDisable() {
       return (
         this.data.card_number &&
         this.data.user_name &&
         this.data.expire_date &&
-        this.data.cvv &&
-        this.data.card_type
+        this.data.cvv
       );
     },
   },
@@ -241,8 +221,8 @@ export default {
 .card_input__icon {
   position: absolute;
   content: "";
-  top: 16px;
-  right: 16px;
+  top: 52px;
+  right: 24px;
   bottom: 0;
 }
 </style>
