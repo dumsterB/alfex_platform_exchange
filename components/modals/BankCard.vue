@@ -16,33 +16,36 @@
                 $t("card_number")
               }}</v-subheader>
               <v-text-field
-                single-line
-                :rules="cardRules"
-                outlined
-                mask="credit-card"
                 v-model="card_number"
-                dense
+                mask="credit-card"
+                :rules="cardRules"
+                @click="onLoading"
                 class="card_input"
                 maxlength="19"
+                single-line
+                outlined
+                dense
               />
+              <template>
+                <v-fade-transition leave-absolute>
+                  <v-progress-circular
+                    v-if="loading"
+                    size="24"
+                    color="green"
+                    indeterminate
+                    class="card_input__icon"
+                  ></v-progress-circular>
 
-              <v-icon v-if="getCardType === 'visa'" class="card_input__icon"
-                >mdi-credit-card-check-outline</v-icon
-              >
-              <v-icon
-                v-if="getCardType === 'mastercard'"
-                class="card_input__icon"
-                >mdi-credit-card-lock</v-icon
-              >
-              <v-icon v-if="getCardType === 'amex'" class="card_input__icon"
-                >mdi-credit-card-check</v-icon
-              >
-              <v-icon v-if="getCardType === 'discover'" class="card_input__icon"
-                >mdi-card-account-details</v-icon
-              >
-              <v-icon v-if="getCardType === 'troy'" class="card_input__icon"
-                >mdi-credit-card-search-outline</v-icon
-              >
+                  <img
+                    v-else
+                    class="card_input__icon"
+                    width="24"
+                    height="24"
+                    :src="card_icon"
+                    alt=""
+                  />
+                </v-fade-transition>
+              </template>
             </v-col>
 
             <v-col cols="12" class="pb-0">
@@ -123,6 +126,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       data: {
         expire_date: "",
         card_number: "",
@@ -136,8 +140,7 @@ export default {
       valid: false,
       cardRules: [
         (v) => !!v || this.$t("card_number_required"),
-        (v) => (v && v.length == 19) || "Card number must have 16 characters",
-        (v) => console.log(v),
+        (v) => (v && v.length == 19) || this.$t("card_rules"),
       ],
       nameRules: [(v) => !!v || this.$t("cardholder_name_required")],
       expireDateRules: [
@@ -164,6 +167,12 @@ export default {
       localStorage.setItem("bank_cards", JSON.stringify(list));
       this.$emit("save");
     },
+    onLoading() {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 2000);
+    },
   },
   watch: {
     exp_date(v) {
@@ -171,7 +180,6 @@ export default {
         this.exp_date += "/";
       }
       this.data.expire_date = v;
-      console.log("this.data.expire_date :>> ", this.data.expire_date);
     },
     card_number(v) {
       if (v.length == 4 || v.length == 9 || v.length == 14) {
@@ -181,24 +189,19 @@ export default {
     },
     card_type(v) {
       return (this.data.card_type = v);
-      // if (v === "visa") return (this.card_icon = "fab fa-cc-visa");
-      // if (v === "amex") return (this.card_icon = "fab fa-cc-amex");
-      // if (v === "mastercard") return (this.card_icon = "fab fa-cc-mastercard");
-      // if (v === "discover") return (this.card_icon = "fab fa-cc-discover");
-      // if (v === "troy") return (this.card_icon = "fab fa-cc-troy");
-      // if (v === "") return (this.card_icon = "fab fa-credit-card");
-      console.log("card type :>> ", this.data.card_type);
-      v === "visa"
-        ? (this.card_icon = "mdi-credit-card-check-outline")
-        : v === "mastercard"
-        ? (this.card_icon = "mdi-credit-card-lock")
-        : v === "amex"
-        ? (this.card_icon = "mdi-credit-card-check")
-        : v === "discover"
-        ? (this.card_icon = "mdi-card-account-details")
-        : v === "troy"
-        ? (this.card_icon = "mdi-credit-card-search-outline")
-        : (this.card_icon = "mdi-credit-card");
+    },
+    card_icon(v) {
+      this.data.card_type === "visa"
+        ? (this.card_icon =
+            "https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg")
+        : this.data.card_type === "mastercard"
+        ? (this.card_icon =
+            "https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg")
+        : this.data.card_type !== "visa" && this.card_icon !== "mastercard"
+        ? (this.card_icon =
+            "https://www.svgrepo.com/show/103010/credit-card.svg")
+        : (this.card_icon =
+            "https://www.svgrepo.com/show/103010/credit-card.svg");
     },
   },
   computed: {
@@ -206,15 +209,28 @@ export default {
       let number = this.data.card_number;
       let re = new RegExp("^4");
       if (number.match(re) != null) return (this.data.card_type = "visa");
-      re = new RegExp("^(34|37)");
-      if (number.match(re) != null) return (this.data.card_type = "amex");
       re = new RegExp("^5[1-5]");
       if (number.match(re) != null) return (this.data.card_type = "mastercard");
-      re = new RegExp("^6011");
-      if (number.match(re) != null) return (this.data.card_type = "discover");
-      re = new RegExp("^9792");
-      if (number.match(re) != null) return (this.data.card_type = "troy");
-      return (this.data.card_type = "visa"); // default type
+      // re = new RegExp("^(34|37)");
+      // if (number.match(re) != null) return (this.data.card_type = "amex");
+      // re = new RegExp("^6011");
+      // if (number.match(re) != null) return (this.data.card_type = "discover");
+      // re = new RegExp("^9792");
+      // if (number.match(re) != null) return (this.data.card_type = "troy");
+      return (this.data.card_type = ""); // default type
+    },
+    cardIcon() {
+      return this.data.card_type === "visa"
+        ? (this.card_icon =
+            "https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg")
+        : this.data.card_type === "mastercard"
+        ? (this.card_icon =
+            "https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg")
+        : this.data.card_type !== "visa" && this.card_icon !== "mastercard"
+        ? (this.card_icon =
+            "https://www.svgrepo.com/show/103010/credit-card.svg")
+        : (this.card_icon =
+            "https://www.svgrepo.com/show/103010/credit-card.svg");
     },
     btnDisable() {
       return (
@@ -241,8 +257,8 @@ export default {
 .card_input__icon {
   position: absolute;
   content: "";
-  top: 16px;
-  right: 16px;
+  top: 52px;
+  right: 24px;
   bottom: 0;
 }
 </style>
