@@ -218,6 +218,9 @@ export default {
       // console.log("this.prices", this.prices);
       this.resetList(this.prices);
     },
+    filter() {
+      this.resetList();
+    },
   },
   async created() {
     // console.log("this.arbitrage_sessions", this.arbitrage_sessions);

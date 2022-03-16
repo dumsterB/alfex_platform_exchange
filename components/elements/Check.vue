@@ -7,7 +7,12 @@
             <v-list-item-title class="text-h5 mb-1">
               <strong>{{ title }}</strong>
             </v-list-item-title>
-            <v-chip color="green" outlined class="historyChip" small>
+            <v-chip
+              outlined
+              :class="tgl ? 'historyChipTgl' : 'historyChip'"
+              small
+              @click="history_tgl"
+            >
               <v-icon x-small>mdi-history</v-icon
               ><span class="history-btn-cl">History</span>
             </v-chip>
@@ -19,11 +24,13 @@
               <p class="text-gray">{{ $t("total_equity") }}</p>
               <p class="text-h6">
                 <strong
-                  >{{ main_currency ? totalEquity : total_equity_usdt }} {{ main_currency ? "BTC" : "USD" }}</strong
+                  >{{ main_currency ? totalEquity : total_equity_usdt }}
+                  {{ main_currency ? "BTC" : "USD" }}</strong
                 >
               </p>
               <p class="text-gray">
-                ≈ {{ main_currency ? total_equity_usdt : totalEquity }} {{ main_currency ? "USD" : "BTC" }}
+                ≈ {{ main_currency ? total_equity_usdt : totalEquity }}
+                {{ main_currency ? "USD" : "BTC" }}
               </p>
             </v-col>
             <v-col>
@@ -37,9 +44,8 @@
                 >
               </p>
               <p class="text-gray">
-                ≈ {{
-                    main_currency ? available_balance_usdt : available_balance
-                  }}
+                ≈
+                {{ main_currency ? available_balance_usdt : available_balance }}
                 {{ main_currency ? "USD" : "BTC" }}
               </p>
             </v-col>
@@ -62,6 +68,17 @@ export default {
     "main_currency",
   ],
   name: "GeneralCapital",
+  data() {
+    return {
+      tgl: false,
+    };
+  },
+  methods: {
+    history_tgl() {
+      this.tgl = !this.tgl;
+      this.$emit('history', this.tgl);
+    },
+  },
 };
 </script>
 
@@ -76,5 +93,11 @@ export default {
 .historyChip {
   position: absolute;
   right: 5px;
+}
+.historyChipTgl {
+  position: absolute;
+  right: 5px;
+  color: green;
+  border: 1px solid green;
 }
 </style>
