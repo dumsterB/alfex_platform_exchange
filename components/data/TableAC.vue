@@ -21,10 +21,9 @@
       <TradePosition
         :tradeItem="current"
         :action="action"
-        :userWallet="
-          userWallet ? userWallet : { balance: $t('wallet_balance') }
-        "
-        :tradePlatform="selectedArbitrageCompany"
+        :userWallet="userWallet ? userWallet : { balance: null }"
+        :tradePlatform="selected"
+        :price="selected ? selected.price : null"
         @close="closeTrade"
       />
     </v-dialog>
@@ -63,7 +62,7 @@ export default {
       list: [],
       interv: null,
       action: null,
-      selectedArbitrageCompany: null,
+      selected: null,
       userWallet: null,
     };
   },
@@ -124,9 +123,7 @@ export default {
     buy(item) {
       this.action = "Buy";
       this.dialog = true;
-      this.selectedArbitrageCompany = this.list.find(
-        (elem) => elem.name === item.name
-      );
+      this.selected = this.list.find((elem) => elem.name === item.name);
 
       this.userWallet = this.wallets.find(
         (el) => el.currency.symbol === this.current.symbol
@@ -135,9 +132,7 @@ export default {
     sell(item) {
       this.action = "Sell";
       this.dialog = true;
-      this.selectedArbitrageCompany = this.list.filter(
-        (elem) => elem.name === item.name
-      );
+      this.selected = this.list.filter((elem) => elem.name === item.name);
       this.userWallet = this.wallets.find(
         (el) => el.currency.symbol === this.current.symbol
       );
@@ -145,7 +140,7 @@ export default {
     closeTrade() {
       this.action = null;
       this.dialog = false;
-      this.selectedArbitrageCompany = null;
+      this.selected = null;
       this.userWallet = null;
     },
   },
