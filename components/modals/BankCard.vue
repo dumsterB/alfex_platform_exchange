@@ -19,7 +19,6 @@
                 v-model="card_number"
                 mask="credit-card"
                 :rules="cardRules"
-                @click="onLoading"
                 class="card_input"
                 maxlength="19"
                 single-line
@@ -28,16 +27,7 @@
               />
               <template>
                 <v-fade-transition leave-absolute>
-                  <v-progress-circular
-                    v-if="loading"
-                    size="24"
-                    color="green"
-                    indeterminate
-                    class="card_input__icon"
-                  ></v-progress-circular>
-
                   <img
-                    v-else
                     class="card_input__icon"
                     width="24"
                     height="24"
@@ -132,9 +122,8 @@ export default {
         card_number: "",
         user_name: "",
         cvv: "",
-        card_type: "",
       },
-      card_icon: "",
+      card_icon: "https://www.svgrepo.com/show/103010/credit-card.svg",
       card_number: "",
       exp_date: "",
       valid: false,
@@ -167,12 +156,6 @@ export default {
       localStorage.setItem("bank_cards", JSON.stringify(list));
       this.$emit("save");
     },
-    onLoading() {
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
-    },
   },
   watch: {
     exp_date(v) {
@@ -187,58 +170,39 @@ export default {
       }
       this.data.card_number = v;
     },
-    card_type(v) {
-      return (this.data.card_type = v);
-    },
-    card_icon(v) {
-      this.data.card_type === "visa"
-        ? (this.card_icon =
-            "https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg")
-        : this.data.card_type === "mastercard"
-        ? (this.card_icon =
-            "https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg")
-        : this.data.card_type !== "visa" && this.card_icon !== "mastercard"
-        ? (this.card_icon =
-            "https://www.svgrepo.com/show/103010/credit-card.svg")
-        : (this.card_icon =
-            "https://www.svgrepo.com/show/103010/credit-card.svg");
+    getCardType(v) {
+      if (v === "visa") {
+        this.card_icon =
+          "https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg";
+      } else if (v === "mastercard") {
+        this.card_icon =
+          "https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg";
+      } else {
+        this.card_icon = "https://www.svgrepo.com/show/103010/credit-card.svg";
+      }
     },
   },
   computed: {
     getCardType() {
-      let number = this.data.card_number;
+      let number = this.card_number;
       let re = new RegExp("^4");
-      if (number.match(re) != null) return (this.data.card_type = "visa");
+      if (number.match(re) != null) return "visa";
       re = new RegExp("^5[1-5]");
-      if (number.match(re) != null) return (this.data.card_type = "mastercard");
+      if (number.match(re) != null) return "mastercard";
       // re = new RegExp("^(34|37)");
       // if (number.match(re) != null) return (this.data.card_type = "amex");
       // re = new RegExp("^6011");
       // if (number.match(re) != null) return (this.data.card_type = "discover");
       // re = new RegExp("^9792");
       // if (number.match(re) != null) return (this.data.card_type = "troy");
-      return (this.data.card_type = ""); // default type
-    },
-    cardIcon() {
-      return this.data.card_type === "visa"
-        ? (this.card_icon =
-            "https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg")
-        : this.data.card_type === "mastercard"
-        ? (this.card_icon =
-            "https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg")
-        : this.data.card_type !== "visa" && this.card_icon !== "mastercard"
-        ? (this.card_icon =
-            "https://www.svgrepo.com/show/103010/credit-card.svg")
-        : (this.card_icon =
-            "https://www.svgrepo.com/show/103010/credit-card.svg");
+      return ""; // default type
     },
     btnDisable() {
       return (
         this.data.card_number &&
         this.data.user_name &&
         this.data.expire_date &&
-        this.data.cvv &&
-        this.data.card_type
+        this.data.cvv
       );
     },
   },
