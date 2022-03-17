@@ -286,10 +286,4 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.green{
-  color: white;
-}
-.red{
-  color: white;
-}
 </style>
