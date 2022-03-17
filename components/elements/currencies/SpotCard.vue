@@ -32,7 +32,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col :cols="6"  class="mt-2">
+        <v-col :cols="6" class="mt-2">
           <span>{{ $t("price") }}</span>
         </v-col>
         <v-col :cols="6">
@@ -72,19 +72,19 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col :cols="4" class="mt-2">
+        <v-col :cols="6" class="mt-2">
           <span>{{ $t("total") }}</span>
         </v-col>
-        <v-col :cols="8">
+        <v-col :cols="6">
           <span>
-           <v-text-field
-             v-model="t_price"
-             outlined
-             dense
-             hide-details
-             suffix="USD"
-             type="number"
-           ></v-text-field>
+            <v-text-field
+              v-model="t_price"
+              outlined
+              dense
+              hide-details
+              suffix="USD"
+              type="number"
+            ></v-text-field>
           </span>
         </v-col>
       </v-row>
@@ -114,7 +114,9 @@
           >
         </v-col>
         <v-col :cols="6">
-          <v-btn large block @click="depositChanger('withdraw')">{{$t("withdraw") }}</v-btn>
+          <v-btn large block @click="depositChanger('withdraw')">{{
+            $t("withdraw")
+          }}</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -145,6 +147,9 @@ export default {
     return {
       t_price: null,
       amount: null,
+      t_price_checker: true,
+      amount_checker: true,
+      lst_am: true,
       buy_sell: true,
       slider_v: "0",
       loading: false,
@@ -204,15 +209,30 @@ export default {
         this.t_price = null;
       }
     },
+    am_def_price() {
+      if (this.t_price) {
+        let am;
+        if (this.buy_sell) {
+          am = parseFloat(this.t_price) / parseFloat(this.price);
+        } else {
+          am = parseFloat(this.amount);
+        }
+        this.amount = Math.round(am * 1000000) / 1000000;
+      } else {
+        this.amount = null;
+      }
+    },
     sl_def() {
       let v_n = parseFloat(this.slider_v);
-      let amount;
-      if (this.buy_sell) {
-        amount = (this.av_bal * v_n) / parseFloat(this.price) / 100;
-      } else {
-        amount = (this.av_bal * v_n) / 100;
+      if (v_n) {
+        let amount;
+        if (this.buy_sell) {
+          amount = (this.av_bal * v_n) / parseFloat(this.price) / 100;
+        } else {
+          amount = (this.av_bal * v_n) / 100;
+        }
+        this.amount = Math.round(amount * 1000000) / 1000000;
       }
-      this.amount = Math.round(amount * 1000000) / 1000000;
     },
     async trade_run() {
       this.loading = true;
@@ -271,13 +291,34 @@ export default {
   },
   watch: {
     amount() {
-      this.am_def();
+      if (this.amount_checker) {
+        this.t_price_checker = false;
+        this.am_def();
+        this.lst_am = true;
+      } else {
+        this.amount_checker = true;
+      }
+    },
+    t_price() {
+      if (this.t_price_checker) {
+        this.amount_checker = false;
+        this.am_def_price();
+        this.lst_am = false;
+      } else {
+        this.t_price_checker = true;
+      }
     },
     slider_v() {
       this.sl_def();
     },
     price() {
-      this.am_def();
+      if (this.lst_am) {
+        this.t_price_checker = false;
+        this.am_def();
+      } else {
+        this.amount_checker = false;
+        this.am_def_price();
+      }
     },
   },
   created() {
