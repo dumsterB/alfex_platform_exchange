@@ -23,9 +23,23 @@
               <span style="margin-bottom: -4px">${{ currency.price }}</span>
             </v-list-item-content>
             <v-list-item-content class="coinList pa-1 flexNone">
-              <v-btn icon id="no-background-hover" class="star_btn" @click.stop="handlerSelection(currency)">
-                <v-icon v-if="star_selection" color="yellow">mdi-star-outline</v-icon>
-                <v-icon v-if="!star_selection" color="yellow">mdi-star</v-icon>
+              <v-btn fab icon class=" no-background-hover">
+                <v-icon
+                  @click.prevent.stop="handlerSelection"
+                  class=" ma-4 pa-1"
+                  size="35"
+                  v-if="star_selection"
+                  style="color: yellow"
+                >mdi-star</v-icon
+                >
+                <v-icon
+                  @click.prevent.stop="handlerSelection"
+                  class=" ma-4 pa-1"
+                  size="30"
+                  v-if="!star_selection"
+                  style="color: #FFF59D"
+                >mdi-star-outline</v-icon
+                >
               </v-btn>
               <span>{{ currency.change_p }}%</span>
             </v-list-item-content>
@@ -97,7 +111,7 @@ export default {
   data() {
     return {
       interv: null,
-      star_selection:true,
+      star_selection:false,
     };
   },
   watch: {},
@@ -151,7 +165,7 @@ html[theme="light"] {
     background-color: #ebebeb;
   }
 }
-#no-background-hover::before {
+.no-background-hover::before {
   background-color: transparent !important;
 }
 </style>
