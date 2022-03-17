@@ -23,6 +23,10 @@
               <span>${{ currency.price }}</span>
             </v-list-item-content>
             <v-list-item-content class="coinList pa-1 flexNone">
+              <v-btn icon @click.stop="handlerSelection(currency)">
+                <v-icon v-if="star_selection" color="yellow">mdi-star-outline</v-icon>
+                <v-icon v-if="!star_selection" color="yellow">mdi-star</v-icon>
+              </v-btn>
               <div class="chip">24H</div>
               <span
                 >{{ currency.change_p }}%</span
@@ -96,6 +100,7 @@ export default {
   data() {
     return {
       interv: null,
+      star_selection:true,
     };
   },
   watch: {},
@@ -115,6 +120,10 @@ export default {
         return "back-success";
       }
     },
+    handlerSelection(currency){
+      console.log(currency.name)
+      this.star_selection=!this.star_selection
+    }
   },
   mounted() {},
 };

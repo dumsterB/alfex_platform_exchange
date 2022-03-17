@@ -322,7 +322,7 @@ export default {
     let socket = global.socket;
     socket.send(`{
       "method": "unsubscribe",
-      "data": ["${this.base_p}_${this.curr_code}-USD@ticker_5s", "${this.base_p}_all@ticker_10s", 
+      "data": ["${this.base_p}_${this.curr_code}-USD@ticker_5s", "${this.base_p}_all@ticker_10s",
       "all_${this.curr_code}-USD@ticker_5s"]
     }`);
   },

@@ -72,11 +72,20 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col :cols="6">
+        <v-col :cols="4">
           <span>{{ $t("total") }}</span>
         </v-col>
-        <v-col :cols="6">
-          <span>{{ t_price }} {{ t_price ? curr : "" }}</span>
+        <v-col :cols="8">
+          <span>
+           <v-text-field
+             v-model="t_price"
+             outlined
+             dense
+             hide-details
+             suffix="USD"
+             type="number"
+           ></v-text-field>
+          </span>
         </v-col>
       </v-row>
       <v-row>
@@ -105,9 +114,7 @@
           >
         </v-col>
         <v-col :cols="6">
-          <v-btn large block @click="depositChanger('withdraw')">{{
-            $t("withdraw")
-          }}</v-btn>
+          <v-btn large block @click="depositChanger('withdraw')">{{$t("withdraw") }}</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -279,4 +286,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.green{
+  color: white;
+}
+.red{
+  color: white;
+}
 </style>
