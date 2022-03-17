@@ -3,21 +3,15 @@
     <v-row>
       <v-col :cols="12" :md="8" :lg="8" :sm="12" :xs="12">
         <div
-          class="
-            d-flex
-            mt-2
-            mdc-form-field--space-between
-            justify-content-beetween
-            currencyNavbar
-          "
+          class="d-flex mt-2 mdc-form-field--space-between justify-content-beetween currencyNavbar"
         >
           <div>
             <p class="text-h6 ml-10">{{ $t("markets") }}</p>
           </div>
           <div class="d-flex">
-            <p elevation="0" class="mr-4 mt-2">
+            <!-- <p elevation="0" class="mr-4 mt-2">
               <v-icon>mdi-filter</v-icon> {{ $t("filters") }}
-            </p>
+            </p> -->
             <v-text-field
               :label="$t('market_search_bar_placeholder')"
               v-model="search"

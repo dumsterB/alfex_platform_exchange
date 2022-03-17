@@ -6,6 +6,7 @@
           <v-row>
             <v-col :cols="12" :md="5" :lg="5">
               <v-switch
+                v-if="curr_crypto"
                 v-model="is_switched"
                 class="ml-6 mt-4"
                 :label="is_switched ? $t('Arbitrage') : $t('Spot')"
@@ -32,6 +33,8 @@
             :currency="curr_code"
             :price="price"
             :change="change"
+            :low="low"
+            :high="high"
           ></Indicators>
           <Platforms
             v-else
@@ -46,11 +49,11 @@
           <v-row class="ml-4">
             <v-col class="d-flex justify-center">
               <TradeGraph
+                v-if="graph_key"
                 :width="graphWidth"
                 :height="graphHeight"
                 :ovls="is_switched"
-                :currency="curr_code ? curr_code : undefined"
-                :platform="selected_platform"
+                :key_g="graph_key"
               ></TradeGraph>
             </v-col>
           </v-row>
@@ -106,6 +109,9 @@ export default {
     TableASession,
   },
   data() {
+    let stocks = JSON.parse(
+      JSON.stringify(this.$store.state.config.data.exchanges)
+    );
     return {
       is_switched: false,
       curr_id: null,
@@ -117,6 +123,9 @@ export default {
       base_p: this.$store.state.config.data.base_p,
       price: null,
       change: null,
+      low: null,
+      high: null,
+      stocks: stocks,
       prices: [],
       arb_data: [],
       as_filter: null,
@@ -124,9 +133,37 @@ export default {
   },
   computed: {
     ...mapGetters(model, {
-      currencies: "list",
+      currencies_full: "list",
       curr_by_id: "byId",
     }),
+    currencies() {
+      let c_f = this.currencies_full;
+      if (!this.curr_crypto) {
+        return c_f.filter(
+          (el) => el.currency_type && el.currency_type.key != "CRYPTO"
+        );
+      } else {
+        return c_f.filter(
+          (el) => el.currency_type && el.currency_type.key == "CRYPTO"
+        );
+      }
+    },
+    curr_crypto() {
+      return (
+        this.current &&
+        this.current.currency_type &&
+        this.current.currency_type.key == "CRYPTO"
+      );
+    },
+    graph_key() {
+      if (this.curr_crypto) {
+        return this.selected_platform + ":" + this.curr_code + "USD";
+      } else if (this.current && this.current.exchange_type) {
+        let k = this.stocks.find(el => el.key == this.current.exchange_type.key);
+        let kk = !k ? 'LSE' : k.tv;
+        return kk + ":" + this.curr_code;
+      }
+    },
   },
   watch: {
     curr_id() {
@@ -135,14 +172,26 @@ export default {
     },
     curr_code() {
       this.as_filter = {
-        "wallet.currency.symbol": this.curr_code
-      }
+        "wallet.currency.symbol": this.curr_code,
+      };
       if (this.curr_code && !this.is_switched) {
         this.spot_sockets();
       }
       if (this.curr_code && this.is_switched) {
         this.arbitrage_sockets();
       }
+    },
+    "$route.params.search": {
+      handler: function (search) {
+        if (
+          this.$router.currentRoute.query &&
+          this.$router.currentRoute.query.id
+        ) {
+          this.curr_id = parseInt(this.$router.currentRoute.query.id);
+        }
+      },
+      deep: true,
+      immediate: true,
     },
     is_switched() {
       if (!this.is_switched) {
@@ -178,14 +227,23 @@ export default {
     spot_sockets() {
       let me = this;
       let socket = global.socket;
-      socket.send(`{
-        "method": "unsubscribe",
-        "data": ["all_${me.curr_code}-USD@ticker_5s"]
-      }`);
-      socket.send(`{
-        "method": "subscribe",
-        "data": ["${me.base_p}_${me.curr_code}-USD@ticker_5s", "${me.base_p}_all@ticker_10s"]
-      }`);
+      if (this.curr_crypto) {
+        socket.send(`{
+          "method": "unsubscribe",
+          "data": ["all_${me.curr_code}-USD@ticker_5s"]
+        }`);
+        socket.send(`{
+          "method": "subscribe",
+          "data": ["${me.base_p}_${me.curr_code}-USD@ticker_5s", "${me.base_p}_all@ticker_10s"]
+        }`);
+      } else {
+        me.ex_type = me.current.exchange_type.key;
+        socket.send(`{
+          "method": "subscribe",
+          "data": ["shares_${me.curr_code}.${me.ex_type}@kline_1d"]
+        }`);
+      }
+
       socket.onmessage = function (event) {
         if (event.data) {
           let json_d = JSON.parse(event.data);
@@ -197,6 +255,25 @@ export default {
             if (data && data[0] && data[0].price) {
               me.price = data[0].price;
               me.change = data[0].change;
+            } else {
+              me.price = 1;
+              me.change = 0;
+            }
+          }
+          if (
+            json_d &&
+            json_d.method == `shares_${me.curr_code}.${me.ex_type}@kline_1d`
+          ) {
+            let data = json_d.data ? json_d.data.data || [] : [];
+            if (data && data[0]) {
+              let dt = data[0];
+              if (Array.isArray(dt)) {
+                dt = dt[0];
+              }
+              me.price = dt.close;
+              me.change = dt.close - dt.open;
+              me.low = dt.low;
+              me.high = dt.high;
             } else {
               me.price = 1;
               me.change = 0;
@@ -220,7 +297,7 @@ export default {
         "method": "subscribe",
         "data": ["all_${me.curr_code}-USD@ticker_5s"]
       }`);
-      
+
       socket.onmessage = function (event) {
         if (event.data) {
           let json_d = JSON.parse(event.data);
@@ -236,9 +313,6 @@ export default {
   async mounted() {
     await this.fetchTrades();
     this.fetchAS();
-    if (this.$router.currentRoute.query && this.$router.currentRoute.query.id) {
-      this.curr_id = parseInt(this.$router.currentRoute.query.id);
-    }
     window.addEventListener("resize", this.onResize);
   },
   beforeDestroy() {

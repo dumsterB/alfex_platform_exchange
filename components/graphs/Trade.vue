@@ -17,7 +17,11 @@
       ref="tvjschart"
     ></trading-vue> -->
     <!-- TradingView Widget BEGIN -->
-    <div v-if="!theme" class="tradingview-widget-container" id="root-tradingview">
+    <div
+      v-if="!theme"
+      class="tradingview-widget-container"
+      id="root-tradingview"
+    >
       <div id="tradingview_22087"></div>
       <div class="tradingview-widget-copyright"></div>
     </div>
@@ -60,14 +64,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    currency: {
+    key_g: {
       type: String,
-      default: "BTC"
     },
-    platform: {
-      type: String,
-      default: "BINANCE"
-    }
   },
   data() {
     return {
@@ -112,12 +111,9 @@ export default {
     theme() {
       this.initTV();
     },
-    currency() {
+    key_g() {
       this.initTV();
     },
-    platform() {
-      this.initTV();
-    }
   },
   mounted() {
     this.initTV();
@@ -137,8 +133,8 @@ export default {
             {
               "width": 980,
               "height": 610,
-              "symbol": "` + this.platform.toUpperCase() + `:` + this.currency.toUpperCase() + `USDT",
-              "interval": "D",
+              "symbol": "${this.key_g}",
+              "interval": "H",
               "timezone": "Etc/UTC",
               "theme": "dark",
               "style": "1",
@@ -163,7 +159,7 @@ export default {
           {
             "width": 980,
             "height": 610,
-            "symbol":  "` + this.platform + `:` + this.currency.toUpperCase() + `USDT",
+            "symbol":  "${this.key_g}",
             "interval": "D",
             "timezone": "Etc/UTC",
             "theme": "light",

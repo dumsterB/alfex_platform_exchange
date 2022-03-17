@@ -2,7 +2,6 @@
   <div class="ma-4">
     <div class="d-flex mdc-form-field--space-between">
       <p class="text-h6">{{ $t("exchange") }}</p>
-      <a href="#">{{ $t("view_more") }}</a>
     </div>
     <v-card class="pa-3">
       <div class="justify-center text-center">
@@ -124,7 +123,7 @@ export default {
     }),
     ...mapActions("data/trade", {
       trade_create: "create",
-      fetchTrades: "fetchList"
+      fetchTrades: "fetchList",
     }),
     ...mapActions("data/wallet", {
       fWallets: "fetchList",
@@ -144,21 +143,42 @@ export default {
     async trade_run() {
       this.loading = true;
       let trade_data = {};
-      let wall = this.wallets.find(el => el.currency.symbol == this.pay_curr);
+      let wall = this.wallets.find((el) => el.currency.symbol == this.pay_curr);
       if (wall) {
-        trade_data.wallet_id = wall.id
+        trade_data.wallet_id = wall.id;
         trade_data.source_currency_id = wall.currency_id;
         trade_data.source_amount = parseFloat(this.pay);
-      };
-      let curr = this.currencies.find(el => el.symbol == this.buy_curr);
+      }
+      let curr = this.currencies.find((el) => el.symbol == this.buy_curr);
       if (curr) {
         trade_data.dest_currency_id = curr.id;
         trade_data.dest_amount = parseFloat(this.buy);
       }
       trade_data.exchange_rate = this.ex_rate;
       console.log("trade_data", trade_data);
-      let rs = await this.trade_create({data: trade_data});
-      console.log("rs", rs);
+      let rs = await this.trade_create({ data: trade_data });
+      let title, color;
+      if (rs.data && rs.data.trade_status_id != 3) {
+        title = this.$t("not_enough_balance");
+        color = "error";
+      } else {
+        title = this.$t("create_order_progress");
+        color = "warning";
+        setTimeout(() => {
+          this.$store.commit("data/notifications/create", {
+            id: color + "_" + Math.random().toString(36),
+            title: this.$t("create_trade"),
+            text: this.$t("create_trade"),
+            color: "primary",
+          });
+        }, 2000);
+      }
+      this.$store.commit("data/notifications/create", {
+        id: color + "_" + Math.random().toString(36),
+        title: title,
+        text: title,
+        color: color,
+      });
       await this.fWallets();
       this.$emit("reload");
       this.loading = false;

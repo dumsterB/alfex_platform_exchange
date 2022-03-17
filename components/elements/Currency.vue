@@ -8,6 +8,7 @@
           v-bind="attrs"
           v-on="on"
           :width="220"
+          :class="diffColor(currency.change_p)"
         >
           <v-list-item
             three-line
@@ -23,7 +24,7 @@
             </v-list-item-content>
             <v-list-item-content class="coinList pa-1 flexNone">
               <div class="chip">24H</div>
-              <span :style="diffColor(currency.change_p)"
+              <span
                 >{{ currency.change_p }}%</span
               >
             </v-list-item-content>
@@ -109,9 +110,9 @@ export default {
   methods: {
     diffColor(diff) {
       if (diff < 0) {
-        return "color: red;";
+        return "back-failure";
       } else {
-        return "color: green;";
+        return "back-success";
       }
     },
   },

@@ -15,6 +15,7 @@
             :available_balance="spot_available_balance"
             :available_balance_usdt="spot_available_balance_usdt"
             :main_currency="true"
+            @history="spot_history"
           ></Check>
           <br />
           <Check
@@ -24,6 +25,7 @@
             :available_balance="fiat_available_balance"
             :available_balance_usdt="fiat_available_balance_usdt"
             :main_currency="false"
+            @history="fiat_history"
           >
           </Check>
         </div>
@@ -31,9 +33,12 @@
       <v-col md="8">
         <div class="ma-2 mr-8">
           <TableTransactions
+            v-if="!is_history"
             :wallets="wallets_t"
             @reload="init_tb"
           ></TableTransactions>
+          <TableOrders v-if="is_history" :filter="order_filter"></TableOrders>
+          <TableTrades v-if="is_history" :prices="prices"></TableTrades>
         </div>
       </v-col>
     </v-row>
@@ -44,10 +49,18 @@
 import { mapActions, mapGetters } from "vuex";
 import GeneralCapital from "@/components/elements/GeneralCapital";
 import Check from "@/components/elements/Check";
-import TableTransactions from "@/components/elements/TableTransactions";
+import TableTransactions from "@/components/data/TableWallets";
+import TableTrades from "@/components/data/TableTrades";
+import TableOrders from "@/components/data/TableOrders";
 
 export default {
-  components: { GeneralCapital, Check, TableTransactions },
+  components: {
+    GeneralCapital,
+    Check,
+    TableTransactions,
+    TableTrades,
+    TableOrders,
+  },
   mounted() {},
   data() {
     return {
@@ -64,6 +77,10 @@ export default {
       wallets_t: [],
       prices: null,
       base_p: this.$store.state.config.data.base_p,
+      is_history: false,
+      is_spot_order: false,
+      is_fiat_order: false,
+      order_filter: null,
     };
   },
   computed: {
@@ -81,6 +98,35 @@ export default {
     ...mapActions("data/wallet", {
       fetchWallet: "fetchList",
     }),
+    ...mapActions("data/trade", {
+      fetchTrades: "fetchList",
+    }),
+    ...mapActions("data/order", {
+      fetchOrders: "fetchList",
+    }),
+    check_tbls() {
+      if (this.is_spot_order && !this.is_fiat_order) {
+        this.order_filter = {
+          "dest_currency.currency_type.key": "CRYPTO",
+        };
+      } else if (!this.is_spot_order && this.is_fiat_order) {
+        this.order_filter = {
+          "dest_currency.currency_type.key": "FIAT",
+        };
+      } else {
+        this.order_filter = null;
+      }
+      console.log("this.order_filter", this.order_filter);
+      this.is_history = this.is_spot_order || this.is_fiat_order;
+    },
+    spot_history(tg) {
+      this.is_spot_order = tg;
+      this.check_tbls();
+    },
+    fiat_history(tg) {
+      this.is_fiat_order = tg;
+      this.check_tbls();
+    },
     init_tb() {
       let me = this;
       let data = this.prices;
@@ -177,6 +223,8 @@ export default {
   },
   async created() {
     await this.init();
+    this.fetchTrades();
+    this.fetchOrders();
   },
   destroyed() {
     let socket = global.socket;

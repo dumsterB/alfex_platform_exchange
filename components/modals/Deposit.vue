@@ -58,7 +58,7 @@
             dark
             class="success-btn"
             text
-            :disabled="selected_card.length == 0"
+            :disabled="!selected_card || selected_card.length == 0"
             :loading="loading"
             @click="make_order"
           >
@@ -113,6 +113,7 @@ export default {
   methods: {
     ...mapActions("data/order", {
       order_create: "create",
+      fetchOrders: "fetchList",
     }),
     ...mapActions("data/wallet", {
       f_wallets: "fetchList",
@@ -128,7 +129,7 @@ export default {
       let d = localStorage.getItem("bank_cards");
       if (d) {
         this.items = JSON.parse(d) || [];
-        if (this.items.length > 0) {
+        if (this.items && this.items.length > 0) {
           this.selected_card = 0;
         }
         this.cardDialog = false;
@@ -161,8 +162,30 @@ export default {
         order_data.order_method_id = 1;
         console.log("order_data", order_data);
         let rs = await this.order_create({ data: order_data });
-        console.log("rs", rs);
+        let title, color;
+        if (rs.data && rs.data.order_status_id != 3) {
+          title = this.$t("order_failed");
+          color = "error";
+        } else {
+          title = this.$t("create_order_progress");
+          color = "warning";
+          setTimeout(() => {
+            this.$store.commit("data/notifications/create", {
+              id: color + "_" + Math.random().toString(36),
+              title: this.$t("create_order_done"),
+              text: this.$t("create_order_done"),
+              color: "primary",
+            });
+          }, 2000);
+        }
+        this.$store.commit("data/notifications/create", {
+          id: color + "_" + Math.random().toString(36),
+          title: title,
+          text: title,
+          color: color,
+        });
         await this.f_wallets();
+        await this.fetchOrders();
         this.loading = false;
         this.$emit("depositChanger", true);
       }
@@ -179,7 +202,7 @@ export default {
     let d = localStorage.getItem("bank_cards");
     if (d) {
       this.items = JSON.parse(d) || [];
-      if (this.items.length > 0) {
+      if (this.items && this.items.length > 0) {
         this.selected_card = 0;
       }
     }

@@ -18,13 +18,55 @@
       <v-btn elevation="0" @click="handlerOpenTrading" class="navLink">{{
         $t("user_trading")
       }}</v-btn>
-      <v-text-field
-        :label="$t('market_search_bar_placeholder')"
-        outlined
-        class="ml-2"
-        dense
+      <v-autocomplete
+        v-model="value"
+        :items="filtered"
         prepend-inner-icon="mdi-magnify"
-      ></v-text-field>
+        :label="$t('market_search_bar_placeholder')"
+        item-value="id"
+        item-text="name"
+        dense
+        outlined
+        chips
+        clearable
+        hide-selected
+        class="ml-2"
+        ><template v-slot:selection="{ attr, on, item, selected }">
+          <v-chip
+            v-bind="attr"
+            :input-value="selected"
+            color="blue-grey"
+            class="white--text"
+            v-on="on"
+          >
+            <v-icon left
+              >{{
+                item.type == "currency"
+                  ? " mdi-bitcoin"
+                  : "mdi-shopping-outline"
+              }}
+            </v-icon>
+            <span v-text="item.name"></span>
+          </v-chip>
+        </template>
+        <template v-slot:item="{ item }">
+          <v-list-item-avatar
+            color="indigo"
+            class="text-h5 font-weight-light white--text"
+          >
+            <v-img :src="item.logo"></v-img>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.name"></v-list-item-title>
+            <v-list-item-subtitle v-text="item.symbol"></v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-icon>{{
+              item.type == "currency" ? " mdi-bitcoin" : "mdi-shopping-outline"
+            }}</v-icon>
+          </v-list-item-action>
+        </template></v-autocomplete
+      >
     </div>
     <v-spacer></v-spacer>
 
@@ -40,7 +82,16 @@
       <template v-slot:activator="{ on }">
         <v-card
           flat
-          class="account-menu d-flex flex-columns align-center mt-2 py-2 pr-2 pl-4"
+          class="
+            account-menu
+            d-flex
+            flex-columns
+            align-center
+            mt-2
+            py-2
+            pr-2
+            pl-4
+          "
           style="width: 200px"
           v-on="on"
         >
@@ -77,7 +128,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import LanguageSelect from "~/components/settings/LanguageSelect";
 import ThemeSelect from "~/components/settings/ThemeSelect";
 
@@ -86,9 +137,16 @@ export default {
     return {
       user_image: null,
       account_menu: this.initAccountMenu(),
+      value: null,
     };
   },
   methods: {
+    ...mapActions("data/currency", {
+      fetchCurrencies: "fetchList",
+    }),
+    ...mapActions("data/arbitrage_company", {
+      fetchAC: "fetchList",
+    }),
     initAccountMenu() {
       return [
         {
@@ -130,9 +188,25 @@ export default {
     },
     async close(i, message_id) {},
   },
-  mounted() {},
 
-  watch: {},
+  watch: {
+    value(v) {
+      let fnd = this.filtered.find((el) => el.id == v);
+      if (fnd) {
+        if (fnd.type == "arbitrage_company") {
+          this.$router.push({
+            path: `/markets/${fnd.id}`,
+          });
+        }
+        if (fnd.type == "currency") {
+          this.$router.push({
+            path: `/currency?id=${fnd.id}`,
+          });
+        }
+      }
+      console.log("selected", v);
+    },
+  },
 
   components: {
     LanguageSelect,
@@ -149,12 +223,47 @@ export default {
         this.user_image = "/files/avatar_default.jpg";
       }
     },
+    ...mapGetters("data/arbitrage_company", {
+      arbitrage_company: "list",
+    }),
+    ...mapGetters("data/currency", {
+      currencies_full: "list",
+    }),
+    filtered() {
+      let res = [];
+      this.arbitrage_company.forEach((element) => {
+        res.push({
+          name: element.name,
+          id: element.id,
+          type: "arbitrage_company",
+          logo: element.logo,
+          symbol: element.name,
+        });
+      });
+      let c_f = this.currencies_full;
+      let currencies = c_f.filter(
+        (el) => el.currency_type && el.currency_type.key == "CRYPTO"
+      );
+      currencies.forEach((element) => {
+        res.push({
+          name: element.name,
+          id: element.id,
+          type: "currency",
+          logo: element.logo,
+          symbol: element.symbol,
+        });
+      });
+      return res;
+    },
     user_in() {
       //   let name = this.$store.state.auth.user.name;
       //   let surname = this.$store.state.auth.user.surname;
       //   let initiales = name && name.length > 0 ? name[0] : "";
       //   initiales += surname && surname.length > 0 ? surname[0] : "";
       return "User";
+    },
+    mounted() {
+      console.log("this.filtered :>> ", this.filtered);
     },
   },
 };
@@ -174,5 +283,4 @@ html[theme="light"] {
     background-color: rgb(245, 245, 245) !important;
   }
 }
-
 </style>

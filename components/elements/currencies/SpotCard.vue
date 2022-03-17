@@ -1,107 +1,127 @@
 <template>
-  <v-card class="ma-2 mr-8 pa-4">
-    <v-row>
-      <v-col :cols="6">
-        <v-btn
-          large
-          block
-          :class="!buy_sell ? 'green--text' : 'green'"
-          :outlined="buy_sell"
-          @click="buy_sell = true"
-          >{{ $t("buy") }}</v-btn
-        >
-      </v-col>
-      <v-col :cols="6">
-        <v-btn
-          large
-          block
-          :class="!buy_sell ? 'red' : 'red--text'"
-          :outlined="!buy_sell"
-          @click="buy_sell = false"
-          >{{ $t("sell") }}</v-btn
-        >
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col :cols="9">
-        <span>{{ $t("available_balance_title") }}</span>
-      </v-col>
-      <v-col :cols="3">
-        <span>{{ av_bal }} {{ curr }}</span>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col :cols="6">
-        <span>{{ $t("price") }}</span>
-      </v-col>
-      <v-col :cols="6">
-        <v-text-field
-          v-model="price"
-          outlined
-          dense
-          hide-details
-          readonly
-          suffix="USD"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col :cols="6">
-        <span>{{ $t("amount") }}</span>
-      </v-col>
-      <v-col :cols="6">
-        <v-text-field
-          v-model="amount"
-          outlined
-          dense
-          hide-details
-          :suffix="currency"
-          type="number"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col :cols="12">
-        <v-slider hide-details max="100" min="0" v-model="slider_v"></v-slider>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col :cols="6">
-        <span>{{ $t("total") }}</span>
-      </v-col>
-      <v-col :cols="6">
-        <span>{{ t_price }} {{ t_price ? curr : "" }}</span>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col :cols="12">
-        <v-btn
-          :loading="loading"
-          :disabled="!amount"
-          large
-          block
-          @click="trade_run"
-          :class="buy_sell ? 'green' : 'red'"
-          >{{ buy_sell ? $t("buy") : $t("sell") }}</v-btn
-        >
-      </v-col>
-    </v-row>
-    <v-divider class="mt-4 mb-4"></v-divider>
-    <v-row>
-      <v-col :cols="6">
-        <v-btn large block class="green--text" outlined>{{
-          $t("deposit_title")
-        }}</v-btn>
-      </v-col>
-      <v-col :cols="6">
-        <v-btn large block>{{ $t("withdraw") }}</v-btn>
-      </v-col>
-    </v-row>
-  </v-card>
+  <div>
+    <v-card class="ma-2 mr-8 pa-4">
+      <v-row>
+        <v-col :cols="6">
+          <v-btn
+            large
+            block
+            :class="!buy_sell ? 'green--text' : 'green'"
+            :outlined="buy_sell"
+            @click="buy_sell = true"
+            >{{ $t("buy") }}</v-btn
+          >
+        </v-col>
+        <v-col :cols="6">
+          <v-btn
+            large
+            block
+            :class="!buy_sell ? 'red' : 'red--text'"
+            :outlined="!buy_sell"
+            @click="buy_sell = false"
+            >{{ $t("sell") }}</v-btn
+          >
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col :cols="9">
+          <span>{{ $t("available_balance_title") }}</span>
+        </v-col>
+        <v-col :cols="3">
+          <span>{{ av_bal }} {{ curr }}</span>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col :cols="6">
+          <span>{{ $t("price") }}</span>
+        </v-col>
+        <v-col :cols="6">
+          <v-text-field
+            v-model="price"
+            outlined
+            dense
+            hide-details
+            readonly
+            suffix="USD"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col :cols="6">
+          <span>{{ $t("amount") }}</span>
+        </v-col>
+        <v-col :cols="6">
+          <v-text-field
+            v-model="amount"
+            outlined
+            dense
+            hide-details
+            :suffix="currency"
+            type="number"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col :cols="12">
+          <v-slider
+            hide-details
+            max="100"
+            min="0"
+            v-model="slider_v"
+          ></v-slider>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col :cols="6">
+          <span>{{ $t("total") }}</span>
+        </v-col>
+        <v-col :cols="6">
+          <span>{{ t_price }} {{ t_price ? curr : "" }}</span>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col :cols="12">
+          <v-btn
+            :loading="loading"
+            :disabled="!amount"
+            large
+            block
+            @click="trade_run"
+            :class="buy_sell ? 'green' : 'red'"
+            >{{ buy_sell ? $t("buy") : $t("sell") }}</v-btn
+          >
+        </v-col>
+      </v-row>
+      <v-divider class="mt-4 mb-4"></v-divider>
+      <v-row>
+        <v-col :cols="6">
+          <v-btn
+            large
+            block
+            class="green--text"
+            outlined
+            @click="depositChanger('deposit_title')"
+            >{{ $t("deposit_title") }}</v-btn
+          >
+        </v-col>
+        <v-col :cols="6">
+          <v-btn large block @click="depositChanger('withdraw')">{{
+            $t("withdraw")
+          }}</v-btn>
+        </v-col>
+      </v-row>
+    </v-card>
+    <Deposit
+      :action="action"
+      :dialog="dialog"
+      @depositChanger="depositChanger"
+    ></Deposit>
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import Deposit from "@/components/modals/Deposit";
 
 export default {
   props: {
@@ -111,6 +131,9 @@ export default {
     },
     price: 0,
   },
+  components: {
+    Deposit,
+  },
   data() {
     return {
       t_price: null,
@@ -118,6 +141,8 @@ export default {
       buy_sell: true,
       slider_v: "0",
       loading: false,
+      action: null,
+      dialog: false,
     };
   },
   computed: {
@@ -153,7 +178,12 @@ export default {
     }),
     ...mapActions("data/trade", {
       trade_create: "create",
+      fetchTrades: "fetchList",
     }),
+    depositChanger(val) {
+      this.dialog = !this.dialog;
+      this.action = val;
+    },
     am_def() {
       if (this.amount) {
         let t_price;
@@ -187,7 +217,7 @@ export default {
       let pay = this.t_price;
       let buy = this.amount;
       if (!this.buy_sell) buy = parseFloat(this.t_price) * this.price;
-      console.log(pay, buy, this.t_price, this.price)
+      console.log(pay, buy, this.t_price, this.price);
       let wall = this.wallet.find((el) => el.currency.symbol == pay_curr);
       if (wall) {
         trade_data.wallet_id = wall.id;
@@ -203,7 +233,30 @@ export default {
       if (!this.buy_sell) trade_data.exchange_rate = this.price;
       console.log("trade_data", trade_data);
       let rs = await this.trade_create({ data: trade_data });
-      console.log("rs", rs);
+      let title, color;
+      if (rs.data && rs.data.trade_status_id != 3) {
+        title = this.$t("not_enough_balance");
+        color = "error";
+      } else {
+        title = this.$t("create_order_progress");
+        color = "warning";
+        setTimeout(() => {
+          this.$store.commit("data/notifications/create", {
+            id: color + "_" + Math.random().toString(36),
+            title: this.$t("create_order_done"),
+            text: this.$t("create_order_done"),
+            color: "primary",
+          });
+        }, 2000);
+      }
+      this.$store.commit("data/notifications/create", {
+        id: color + "_" + Math.random().toString(36),
+        title: title,
+        text: title,
+        color: color,
+      });
+      await this.fetchWallet();
+      await this.fetchTrades();
       setTimeout(() => {
         this.loading = false;
       }, 500);
