@@ -23,10 +23,22 @@
       <v-container>
         <v-text-field
           :label="`${$t('choose_amount')}`"
+          v-model="amount_usd"
+          outlined
+          dense
+          suffix="USD"
+          hide-details
+          type="number"
+        ></v-text-field>
+      </v-container>
+      <v-container>
+        <v-text-field
+          :label="`${$t('total')}`"
           v-model="amount"
           :rules="rules"
           outlined
           dense
+          :suffix="tradeItem.symbol"
           :error-messages="err_m"
           type="number"
         ></v-text-field>
@@ -77,12 +89,10 @@ export default {
   data() {
     return {
       amount: "",
+      am_ch: true,
+      amusd_ch: true,
+      amount_usd: "",
       wl: {},
-      rules: [
-        // $t("amount_required")
-        (value) => !!value || this.$t("amount_required"),
-        (value) => (value && value.length >= 1) || "Min 1 characters",
-      ],
       loading: false,
       loadingSell: false,
       err_m: null,
@@ -141,7 +151,22 @@ export default {
   watch: {
     amount() {
       this.err_m = null;
-    }
+      if (this.amount && this.am_ch) {
+        this.amusd_ch = false;
+        this.amount_usd = parseFloat(this.amount) * this.price;
+      } else {
+        this.am_ch = true;
+      }
+    },
+    amount_usd() {
+      this.err_m = null;
+      if (this.amount_usd && this.amusd_ch) {
+        this.am_ch = false;
+        this.amount = parseFloat(this.amount_usd) / this.price;
+      } else {
+        this.amusd_ch = true;
+      }
+    },
   },
   methods: {
     ...mapActions("data/arbitrage_session", {
@@ -152,9 +177,12 @@ export default {
       fetchWallet: "fetchList",
     }),
     validate_amount(act) {
+      if (!this.amount) {
+        this.err_m = [this.$t("amount_required")];
+        return false;
+      }
       if (act == "Buy") {
         let ttl = parseFloat(this.amount) * this.price;
-        console.log(ttl, this.wl.balance)
         if (!this.wl.balance || ttl > this.wl.balance) {
           this.err_m = [this.$t("not_enough_balance")];
           return false;

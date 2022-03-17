@@ -20,13 +20,14 @@
                 <v-img :src="currency.logo" :max-width="20"></v-img>
                 <span class="mt-1 ml-1">{{ currency.symbol }}</span>
               </div>
-              <span>${{ currency.price }}</span>
+              <span style="margin-bottom: -4px">${{ currency.price }}</span>
             </v-list-item-content>
             <v-list-item-content class="coinList pa-1 flexNone">
-              <div class="chip">24H</div>
-              <span
-                >{{ currency.change_p }}%</span
-              >
+              <v-btn icon id="no-background-hover" class="star_btn" @click.stop="handlerSelection(currency)">
+                <v-icon v-if="star_selection" color="yellow">mdi-star-outline</v-icon>
+                <v-icon v-if="!star_selection" color="yellow">mdi-star</v-icon>
+              </v-btn>
+              <span>{{ currency.change_p }}%</span>
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -96,6 +97,7 @@ export default {
   data() {
     return {
       interv: null,
+      star_selection:true,
     };
   },
   watch: {},
@@ -115,6 +117,10 @@ export default {
         return "back-success";
       }
     },
+    handlerSelection(currency){
+      console.log(currency.name)
+      this.star_selection=!this.star_selection
+    }
   },
   mounted() {},
 };
@@ -137,9 +143,15 @@ export default {
 .currecyCard {
   cursor: pointer;
 }
+.star_btn:hover{
+  background: none;
+}
 html[theme="light"] {
   .chip {
     background-color: #ebebeb;
   }
+}
+#no-background-hover::before {
+  background-color: transparent !important;
 }
 </style>
