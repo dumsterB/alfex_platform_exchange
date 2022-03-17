@@ -32,7 +32,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col :cols="6">
+        <v-col :cols="6"  class="mt-2">
           <span>{{ $t("price") }}</span>
         </v-col>
         <v-col :cols="6">
@@ -47,7 +47,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col :cols="6">
+        <v-col :cols="6" class="mt-2">
           <span>{{ $t("amount") }}</span>
         </v-col>
         <v-col :cols="6">
@@ -72,7 +72,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col :cols="4">
+        <v-col :cols="4" class="mt-2">
           <span>{{ $t("total") }}</span>
         </v-col>
         <v-col :cols="8">
