@@ -19,10 +19,16 @@
           <v-list-item-group v-model="selected_card" color="primary">
             <v-list-item v-for="(item, i) in items" :key="i">
               <v-list-item-content>
-                <v-list-item-title>
-                  <v-icon class="mr-5">mdi-credit-card-outline</v-icon
-                  >{{ item ? item.card_number : "" }}</v-list-item-title
-                >
+                <v-list-item-title class="d-flex align-center">
+                  <img
+                    class="card_input__icon mr-2"
+                    width="24"
+                    height="24"
+                    :src="item.card_icon"
+                    alt=""
+                  />
+                  {{ item ? item.card_number : "" }}
+                </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>

@@ -8,92 +8,98 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </div>
+        <v-form :lazy-validation="false" v-model="valid">
+          <v-card-text class="pb-6">
+            <v-row>
+              <v-col cols="12" class="pb-0 card">
+                <v-subheader
+                  class="grey--text text--lighten-1 pl-0 subheader"
+                  >{{ $t("card_number") }}</v-subheader
+                >
+                <v-text-field
+                  v-model="card_number"
+                  mask="credit-card"
+                  :rules="cardRules"
+                  class="card_input"
+                  maxlength="19"
+                  single-line
+                  outlined
+                  dense
+                />
+                <template>
+                  <v-fade-transition leave-absolute>
+                    <img
+                      class="card_input__icon"
+                      width="24"
+                      height="24"
+                      :src="data.card_icon"
+                      alt=""
+                    />
+                  </v-fade-transition>
+                </template>
+              </v-col>
 
-        <v-card-text class="pb-6">
-          <v-row>
-            <v-col cols="12" class="pb-0 card">
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader">{{
-                $t("card_number")
-              }}</v-subheader>
-              <v-text-field
-                v-model="card_number"
-                mask="credit-card"
-                :rules="cardRules"
-                class="card_input"
-                maxlength="19"
-                single-line
-                outlined
-                dense
-              />
-              <template>
-                <v-fade-transition leave-absolute>
-                  <img
-                    class="card_input__icon"
-                    width="24"
-                    height="24"
-                    :src="card_icon"
-                    alt=""
-                  />
-                </v-fade-transition>
-              </template>
-            </v-col>
+              <v-col cols="12" class="pb-0">
+                <v-subheader
+                  class="grey--text text--lighten-1 pl-0 subheader"
+                  >{{ $t("cardholder_name") }}</v-subheader
+                >
+                <v-text-field
+                  single-line
+                  outlined
+                  label=""
+                  dense
+                  v-model="data.user_name"
+                  type="text"
+                  :rules="nameRules"
+                />
+              </v-col>
 
-            <v-col cols="12" class="pb-0">
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader">{{
-                $t("cardholder_name")
-              }}</v-subheader>
-              <v-text-field
-                single-line
-                outlined
-                label=""
-                dense
-                v-model="data.user_name"
-                type="text"
-                :rules="nameRules"
-              />
-            </v-col>
+              <v-col cols="8">
+                <v-subheader
+                  class="grey--text text--lighten-1 pl-0 subheader"
+                  >{{ $t("expiry") }}</v-subheader
+                >
+                <v-text-field
+                  label="MM/YY"
+                  :rules="expireDateRules"
+                  outlined
+                  dense
+                  maxlength="5"
+                  v-model="exp_date"
+                />
+              </v-col>
 
-            <v-col cols="8">
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader">{{
-                $t("expiry")
-              }}</v-subheader>
-              <v-text-field
-                label="MM/YY"
-                :rules="expireDateRules"
-                outlined
-                dense
-                maxlength="5"
-                v-model="exp_date"
-              />
-            </v-col>
-
-            <v-col cols="4">
-              <v-subheader class="grey--text text--lighten-1 pl-0 subheader"
-                >CVV</v-subheader
-              >
-              <v-text-field
-                type="password"
-                :rules="cvvRules"
-                single-line
-                outlined
-                dense
-                v-model="data.cvv"
-                maxlength="3"
-              />
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            :disabled="!btnDisable"
-            dark
-            elevation="0"
-            @click="addCardNumber"
-            large
-            class="success-btn mb-4 ml-2"
-            >{{ $t("add_card") }}
-          </v-btn>
-        </v-card-actions>
+              <v-col cols="4">
+                <v-subheader class="grey--text text--lighten-1 pl-0 subheader"
+                  >CVV</v-subheader
+                >
+                <v-text-field
+                  :append-icon="showCVV ? 'visibility_off' : 'visibility'"
+                  :type="showCVV ? 'text' : 'password'"
+                  @click:append="showCVV = !showCVV"
+                  v-model="data.cvv"
+                  :rules="cvvRules"
+                  maxlength="3"
+                  single-line
+                  outlined
+                  dense
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              :disabled="!btnDisable"
+              dark
+              elevation="0"
+              @click="addCardNumber"
+              large
+              class="success-btn mb-4 ml-2"
+              >{{ $t("add_card") }}
+            </v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </div>
@@ -102,9 +108,17 @@
 const validateExpDate = (value) => {
   const monthAndYear = value.split("/");
   const valueDate = new Date();
-  valueDate.setFullYear(parseInt(`20${monthAndYear[1]}`), monthAndYear[0], 1);
+  valueDate.setFullYear(parseInt(`20${monthAndYear[1]}`), +monthAndYear[0], 1);
   const today = new Date();
-  return valueDate > today;
+  return valueDate > Date.parse(today);
+};
+const validateExpMonth = (value) => {
+  const monthAndYear = value.split("/");
+  return +monthAndYear[0] < 13 && +monthAndYear[0] !== 0;
+};
+const validateIsNumber = (value) => {
+  let stringValue = value.split(" ").join("");
+  return /^\d+$/.test(stringValue);
 };
 export default {
   name: "BankCard",
@@ -116,30 +130,33 @@ export default {
   },
   data() {
     return {
-      loading: false,
       data: {
         expire_date: "",
         card_number: "",
         user_name: "",
         cvv: "",
+        card_icon: "https://www.svgrepo.com/show/103010/credit-card.svg",
       },
-      card_icon: "https://www.svgrepo.com/show/103010/credit-card.svg",
+      showCVV: false,
       card_number: "",
       exp_date: "",
       valid: false,
       cardRules: [
         (v) => !!v || this.$t("card_number_required"),
         (v) => (v && v.length == 19) || this.$t("card_rules"),
+        (v) => (v && validateIsNumber(v)) || this.$t("card_rules_number"),
       ],
       nameRules: [(v) => !!v || this.$t("cardholder_name_required")],
       expireDateRules: [
         (v) => !!v || this.$t("card_expiry_required"),
         (v) => (v && v.length == 5) || this.$t("invalid_date"),
+        (v) => (v && validateExpMonth(v)) || this.$t("invalid_date"),
         (v) => (v && validateExpDate(v)) || this.$t("your_card_expired"),
       ],
       cvvRules: [
         (v) => !!v || this.$t("CVV_required"),
         (v) => (v && v.length == 3) || this.$t("CVV_rules"),
+        (v) => (v && validateIsNumber(v)) || this.$t("card_rules_number"),
       ],
       years: [],
     };
@@ -155,6 +172,10 @@ export default {
       list.push(this.data);
       localStorage.setItem("bank_cards", JSON.stringify(list));
       this.$emit("save");
+      this.data.user_name = "";
+      this.data.cvv = "";
+      this.card_number = "";
+      this.exp_date = "";
     },
   },
   watch: {
@@ -172,13 +193,14 @@ export default {
     },
     getCardType(v) {
       if (v === "visa") {
-        this.card_icon =
+        this.data.card_icon =
           "https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg";
       } else if (v === "mastercard") {
-        this.card_icon =
+        this.data.card_icon =
           "https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg";
       } else {
-        this.card_icon = "https://www.svgrepo.com/show/103010/credit-card.svg";
+        this.data.card_icon =
+          "https://www.svgrepo.com/show/103010/credit-card.svg";
       }
     },
   },
@@ -198,12 +220,13 @@ export default {
       return ""; // default type
     },
     btnDisable() {
-      return (
-        this.data.card_number &&
-        this.data.user_name &&
-        this.data.expire_date &&
-        this.data.cvv
-      );
+      // return (
+      //   this.data.card_number &&
+      //   this.data.user_name &&
+      //   this.data.expire_date &&
+      //   this.data.cvv
+      // );
+      return this.valid;
     },
   },
   mounted() {},

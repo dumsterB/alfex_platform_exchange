@@ -543,4 +543,6 @@ export default {
   cardholder_name: "Имя владельца карты",
   cardholder_name_required: "Требуется имя владельца карты",
   card_rules: "Номер карты должен состоять из 16 символов.",
+  card_rules_number: "Номер карты может состоять только из чисел.",
+  cvv_rules_number: "CVV может состоять только из цифр.",
 };

@@ -549,4 +549,6 @@ export default {
   cardholder_name: "Name des Karteninhabers",
   cardholder_name_required: "Der Name des Karteninhabers ist erforderlich",
   card_rules: "Die Kartennummer muss 16 Zeichen lang sein.",
+  card_rules_number: "Die Kartennummer darf nur aus Zahlen bestehen.",
+  cvv_rules_number: "Der CVV darf nur aus Ziffern bestehen.",
 };
