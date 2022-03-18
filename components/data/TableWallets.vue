@@ -27,6 +27,7 @@
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn
+          v-if="item.currency.currency_type.key == 'FIAT'"
           elevation="0"
           class="success-text"
           @click="depositChanger(item)"

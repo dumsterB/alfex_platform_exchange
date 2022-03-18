@@ -69,7 +69,7 @@
               :userWallet="cmp.wallet"
               :tradePlatform="cmp.company"
               :price="cmp.price"
-              :height="350"
+              :height="380"
               @reload="reload"
           /></v-col> </v-row></v-col
     ></v-row>
