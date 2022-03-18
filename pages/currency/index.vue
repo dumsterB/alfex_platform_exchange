@@ -173,6 +173,9 @@ export default {
         let k = this.stocks.find(
           (el) => el.key == this.current.exchange_type.key
         );
+        if (this.current && this.current.currency_type.key == "FIAT") {
+          return "USD" + this.curr_code;
+        }
         let kk = !k ? "LSE" : k.tv;
         return kk + ":" + this.curr_code;
       }

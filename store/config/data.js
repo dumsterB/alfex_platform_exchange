@@ -245,7 +245,7 @@ export const state = () => ({
         {
             name: "Forex",
             key: "FOREX",
-            tv: "FOREX",
+            tv: "IDC",
             currency: "USD",
             list: [],
         },
