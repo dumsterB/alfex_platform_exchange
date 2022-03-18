@@ -1,18 +1,31 @@
 <template>
   <div>
-    <v-container>
       <v-row>
-        <v-col :cols="12" :md="3" :lg="3">
+        <v-col :cols="4">
           <v-row>
-            <v-col :cols="12" :md="5" :lg="5">
-              <v-switch
-                v-if="curr_crypto"
-                v-model="is_switched"
-                class="ml-6 mt-4"
-                :label="is_switched ? $t('Arbitrage') : $t('Spot')"
-              ></v-switch>
+            <v-col :cols="7">
+              <v-row v-if="curr_crypto" class="mt-2 ml-4">
+                <v-col :lg="6">
+                  <v-btn
+                    small
+                    block
+                    :class="page_state == 0 ? 'green' : 'green--text'"
+                    @click="page_state = 0"
+                    >{{ $t('Spot') }}</v-btn
+                  >
+                </v-col>
+                <v-col :lg="6" class="pl-0">
+                  <v-btn
+                    small
+                    block
+                    :class="page_state == 1 ? 'green' : 'green--text'"
+                    @click="page_state = 1"
+                    >{{ $t('Arbitrage') }}</v-btn
+                  >
+                </v-col>
+              </v-row>
             </v-col>
-            <v-col :cols="12" :md="7" :lg="7">
+            <v-col :cols="5">
               <v-autocomplete
                 class="crypto-select ml-4 mt-4"
                 v-model="curr_id"
@@ -27,9 +40,9 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col :cols="12" :md="9" :lg="9">
+        <v-col :cols="8">
           <Indicators
-            v-if="!is_switched"
+            v-if="page_state == 0"
             :currency="curr_code"
             :price="price"
             :change="change"
@@ -45,21 +58,20 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col :cols="12" :xl="8">
+        <v-col :lg="8" :md="12">
           <v-row class="ml-4">
             <v-col class="d-flex justify-center">
               <TradeGraph
                 v-if="graph_key"
                 :width="graphWidth"
                 :height="graphHeight"
-                :ovls="is_switched"
                 :key_g="graph_key"
               ></TradeGraph>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <TableTrades v-if="!is_switched" :prices="prices"></TableTrades>
+              <TableTrades v-if="page_state == 0" :prices="prices"></TableTrades>
               <TableASession
                 v-else
                 :prices="prices"
@@ -69,9 +81,9 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col :cols="12" :md="12" :lg="4">
+        <v-col :lg="4" :md="6">
           <SpotCard
-            v-if="!is_switched"
+            v-if="page_state == 0"
             :currency="curr_code"
             :price="price"
           ></SpotCard>
@@ -83,7 +95,6 @@
           ></TableAC>
         </v-col>
       </v-row>
-    </v-container>
   </div>
 </template>
 
@@ -113,12 +124,12 @@ export default {
       JSON.stringify(this.$store.state.config.data.exchanges)
     );
     return {
-      is_switched: false,
+      page_state: 0,
       curr_id: null,
       curr_code: null,
       current: {},
-      graphWidth: parseInt(((window.innerWidth - 250) * 2) / 3),
-      graphHeight: 500,
+      graphWidth: parseInt(((window.innerWidth - 350) * 2) / 3),
+      graphHeight: 600,
       selected_platform: "binance",
       base_p: this.$store.state.config.data.base_p,
       price: null,
@@ -159,8 +170,10 @@ export default {
       if (this.curr_crypto) {
         return this.selected_platform + ":" + this.curr_code + "USD";
       } else if (this.current && this.current.exchange_type) {
-        let k = this.stocks.find(el => el.key == this.current.exchange_type.key);
-        let kk = !k ? 'LSE' : k.tv;
+        let k = this.stocks.find(
+          (el) => el.key == this.current.exchange_type.key
+        );
+        let kk = !k ? "LSE" : k.tv;
         return kk + ":" + this.curr_code;
       }
     },
@@ -174,10 +187,10 @@ export default {
       this.as_filter = {
         "wallet.currency.symbol": this.curr_code,
       };
-      if (this.curr_code && !this.is_switched) {
+      if (this.curr_code && this.page_state == 0) {
         this.spot_sockets();
       }
-      if (this.curr_code && this.is_switched) {
+      if (this.curr_code && this.page_state == 1) {
         this.arbitrage_sockets();
       }
     },
@@ -193,8 +206,8 @@ export default {
       deep: true,
       immediate: true,
     },
-    is_switched() {
-      if (!this.is_switched) {
+    page_state() {
+      if (this.page_state == 0) {
         this.spot_sockets();
       } else {
         this.arbitrage_sockets();

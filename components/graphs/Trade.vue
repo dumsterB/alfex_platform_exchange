@@ -131,8 +131,8 @@ export default {
             crtobj.setAttribute("type", "text/javascript");
             crtobj.innerHTML = `new TradingView.widget(
             {
-              "width": 980,
-              "height": 610,
+              "width": ${this.width},
+              "height": ${this.height},
               "symbol": "${this.key_g}",
               "interval": "H",
               "timezone": "Etc/UTC",
@@ -157,8 +157,8 @@ export default {
             crtobj.setAttribute("type", "text/javascript");
             crtobj.innerHTML = `new TradingView.widget(
           {
-            "width": 980,
-            "height": 610,
+            "width": ${this.width},
+            "height": ${this.height},
             "symbol":  "${this.key_g}",
             "interval": "D",
             "timezone": "Etc/UTC",
