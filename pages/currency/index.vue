@@ -286,7 +286,12 @@ export default {
               if (Array.isArray(dt)) {
                 dt = dt[0];
               }
-              me.price = dt.close;
+              
+              if (me.ex_type == "FOREX") {
+                me.price = Math.round(10000000 / dt.close) / 10000000;
+              } else {
+                me.price = dt.close;
+              }
               me.change = dt.close - dt.open;
               me.low = dt.low;
               me.high = dt.high;
