@@ -174,7 +174,7 @@ export default {
           (el) => el.key == this.current.exchange_type.key
         );
         if (this.current && this.current.currency_type.key == "FIAT") {
-          return "USD" + this.curr_code;
+          return this.curr_code + "USD";
         }
         let kk = !k ? "LSE" : k.tv;
         return kk + ":" + this.curr_code;
@@ -289,12 +289,17 @@ export default {
               
               if (me.ex_type == "FOREX") {
                 me.price = Math.round(10000000 / dt.close) / 10000000;
+                let open = Math.round(10000000 / dt.open) / 10000000;
+                me.change = me.price - open;
+                me.low = Math.round(10000000 / dt.low) / 10000000;
+                me.high = Math.round(10000000 / dt.high) / 10000000;
               } else {
                 me.price = dt.close;
+                me.change = dt.close - dt.open;
+                me.low = dt.low;
+                me.high = dt.high;
               }
-              me.change = dt.close - dt.open;
-              me.low = dt.low;
-              me.high = dt.high;
+              
             } else {
               me.price = 1;
               me.change = 0;
