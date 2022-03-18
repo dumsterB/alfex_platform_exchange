@@ -23,24 +23,24 @@
               <span style="margin-bottom: -4px">${{ currency.price }}</span>
             </v-list-item-content>
             <v-list-item-content class="coinList pa-1 flexNone">
-              <v-btn fab icon class=" no-background-hover">
-                <v-icon
-                  @click.prevent.stop="handlerSelection"
-                  class=" ma-4 pa-1"
-                  size="35"
-                  v-if="star_selection"
-                  style="color: yellow"
-                >mdi-star</v-icon
-                >
-                <v-icon
-                  @click.prevent.stop="handlerSelection"
-                  class=" ma-4 pa-1"
-                  size="30"
-                  v-if="!star_selection"
-                  style="color: #FFF59D"
-                >mdi-star-outline</v-icon
-                >
-              </v-btn>
+              <div class="star-btn">
+                <v-btn icon>
+                  <v-icon
+                    @click.prevent.stop="handlerSelection"
+                    size="30"
+                    v-if="star_selection"
+                    style="color: yellow"
+                    >mdi-star</v-icon
+                  >
+                  <v-icon
+                    @click.prevent.stop="handlerSelection"
+                    size="25"
+                    v-if="!star_selection"
+                    style="color: #fff59d"
+                    >mdi-star-outline</v-icon
+                  >
+                </v-btn>
+              </div>
               <span>{{ currency.change_p }}%</span>
             </v-list-item-content>
           </v-list-item>
@@ -106,12 +106,12 @@ export default {
         return [];
       },
     },
-    tooltip: false
+    tooltip: false,
   },
   data() {
     return {
       interv: null,
-      star_selection:false,
+      star_selection: false,
     };
   },
   watch: {},
@@ -131,10 +131,10 @@ export default {
         return "back-success";
       }
     },
-    handlerSelection(currency){
-      console.log(currency.name)
-      this.star_selection=!this.star_selection
-    }
+    handlerSelection(currency) {
+      console.log(currency.name);
+      this.star_selection = !this.star_selection;
+    },
   },
   mounted() {},
 };
@@ -157,7 +157,7 @@ export default {
 .currecyCard {
   cursor: pointer;
 }
-.star_btn:hover{
+.star_btn:hover {
   background: none;
 }
 html[theme="light"] {
@@ -165,7 +165,8 @@ html[theme="light"] {
     background-color: #ebebeb;
   }
 }
-.no-background-hover::before {
-  background-color: transparent !important;
+.star-btn {
+  text-align: center;
+  width: 40px;
 }
 </style>

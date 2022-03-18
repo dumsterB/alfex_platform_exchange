@@ -6,19 +6,17 @@
     <div style="cursor: pointer" @click="handlerOpenMarketPage">
       <div class="d-flex justify-space-between">
         <v-card-title>{{ `${item.name}` }}</v-card-title>
-        <v-btn fab icon class=" ma-5 pa-1 no-background-hover">
+        <v-btn fab icon class=" ma-5 pa-1">
           <v-icon
             @click.prevent.stop="togglerFavorite"
-            class=" "
-            size="45"
+            size="40"
             v-if="isFavorite"
             style="color: yellow"
           >mdi-star</v-icon
           >
           <v-icon
             @click.prevent.stop="togglerFavorite"
-            class=" ma-4 pa-1"
-            size="40"
+            size="35"
             v-if="!isFavorite"
             style="color: #FFF59D"
           >mdi-star-outline</v-icon
@@ -88,7 +86,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#no-background-hover::before {
-  background-color: transparent !important;
-}
 </style>
