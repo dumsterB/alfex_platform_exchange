@@ -243,34 +243,41 @@ export const state = () => ({
     ],
     exchanges: [
         {
-          name: "London Stock Exchange",
-          key: "LSE",
-          tv: "LSE",
-          currency: "GBX",
-          list: [],
+            name: "Forex",
+            key: "FOREX",
+            tv: "FOREX",
+            currency: "USD",
+            list: [],
         },
         {
-          name: "US Stock Market",
-          key: "US",
-          tv: "NASDAQ",
-          currency: "USD",
-          list: [],
+            name: "London Stock Exchange",
+            key: "LSE",
+            tv: "LSE",
+            currency: "GBX",
+            list: [],
         },
         {
-          name: "Francfurt Exchange",
-          key: "F",
-          tv: "XETR",
-          currency: "EUR",
-          list: [],
+            name: "US Stock Market",
+            key: "US",
+            tv: "NASDAQ",
+            currency: "USD",
+            list: [],
         },
         {
-          name: "Xetra Exchange",
-          key: "XETRA",
-          tv: "XETR",
-          currency: "EUR",
-          list: [],
+            name: "Francfurt Exchange",
+            key: "F",
+            tv: "XETR",
+            currency: "EUR",
+            list: [],
         },
-      ]
+        {
+            name: "Xetra Exchange",
+            key: "XETRA",
+            tv: "XETR",
+            currency: "EUR",
+            list: [],
+        },
+    ]
 })
 
 export const getters = {

@@ -5,7 +5,7 @@
       :headers="headers"
       :items-per-page="perpage"
       :search="search"
-      hide-default-footer
+      :footer-props="{'items-per-page-options':[3, 5, 10, -1]}"
       dense
       @click:row="handleClick"
       class="elevation-1 ma-4 ml-8 mt-8"
