@@ -112,9 +112,9 @@
 const validateExpDate = (value) => {
   const monthAndYear = value.split("/");
   const valueDate = new Date();
-  valueDate.setFullYear(parseInt(`20${monthAndYear[1]}`), monthAndYear[0], 1);
+  valueDate.setFullYear(parseInt(`20${monthAndYear[1]}`), +monthAndYear[0], 1);
   const today = new Date();
-  return valueDate > today;
+  return valueDate > Date.parse(today);
 };
 export default {
   name: "BankCard",
