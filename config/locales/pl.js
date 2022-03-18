@@ -537,4 +537,5 @@ export default {
   cardholder_name: "Imię i nazwisko posiadacza karty",
   cardholder_name_required: "Imię i nazwisko posiadacza karty jest wymagane",
   card_rules: "Numer karty musi mieć 16 znaków.",
+  card_rules_number: "Numer karty może składać się tylko z cyfr.",
 };

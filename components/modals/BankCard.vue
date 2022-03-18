@@ -106,6 +106,14 @@ const validateExpDate = (value) => {
   const today = new Date();
   return valueDate > Date.parse(today);
 };
+const validateExpMonth = (value) => {
+  const monthAndYear = value.split("/");
+  return +monthAndYear[0] < 12 && +monthAndYear[0] !== 0;
+};
+const validateCardNumber = (value) => {
+  let stringValue = value.split(" ").join("");
+  return /^\d+$/.test(stringValue);
+};
 export default {
   name: "BankCard",
   props: {
@@ -116,7 +124,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       data: {
         expire_date: "",
         card_number: "",
@@ -130,11 +137,13 @@ export default {
       cardRules: [
         (v) => !!v || this.$t("card_number_required"),
         (v) => (v && v.length == 19) || this.$t("card_rules"),
+        (v) => (v && validateCardNumber(v)) || this.$t("card_rules_number"),
       ],
       nameRules: [(v) => !!v || this.$t("cardholder_name_required")],
       expireDateRules: [
         (v) => !!v || this.$t("card_expiry_required"),
         (v) => (v && v.length == 5) || this.$t("invalid_date"),
+        (v) => (v && validateExpMonth(v)) || this.$t("invalid_date"),
         (v) => (v && validateExpDate(v)) || this.$t("your_card_expired"),
       ],
       cvvRules: [
