@@ -21,12 +21,14 @@
               <v-list-item-content>
                 <v-list-item-title class="d-flex align-center">
                   <img
+                    v-if="item.card_icon"
                     class="card_input__icon mr-2"
                     width="24"
                     height="24"
                     :src="item.card_icon"
                     alt=""
                   />
+                  <v-icon class="mr-2" v-else>mdi-credit-card-outline</v-icon>
                   {{ item ? item.card_number : "" }}
                 </v-list-item-title>
               </v-list-item-content>
