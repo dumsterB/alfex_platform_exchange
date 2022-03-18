@@ -8,6 +8,7 @@
           v-bind="attrs"
           v-on="on"
           :width="220"
+          :class="diffColor(currency.change_p)"
         >
           <v-list-item
             three-line
@@ -19,13 +20,28 @@
                 <v-img :src="currency.logo" :max-width="20"></v-img>
                 <span class="mt-1 ml-1">{{ currency.symbol }}</span>
               </div>
-              <span>${{ currency.price }}</span>
+              <span style="margin-bottom: -4px">${{ currency.price }}</span>
             </v-list-item-content>
             <v-list-item-content class="coinList pa-1 flexNone">
-              <div class="chip">24H</div>
-              <span :style="diffColor(currency.change_p)"
-                >{{ currency.change_p }}%</span
-              >
+              <v-btn fab icon class=" no-background-hover">
+                <v-icon
+                  @click.prevent.stop="handlerSelection"
+                  class=" ma-4 pa-1"
+                  size="35"
+                  v-if="star_selection"
+                  style="color: yellow"
+                >mdi-star</v-icon
+                >
+                <v-icon
+                  @click.prevent.stop="handlerSelection"
+                  class=" ma-4 pa-1"
+                  size="30"
+                  v-if="!star_selection"
+                  style="color: #FFF59D"
+                >mdi-star-outline</v-icon
+                >
+              </v-btn>
+              <span>{{ currency.change_p }}%</span>
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -95,6 +111,7 @@ export default {
   data() {
     return {
       interv: null,
+      star_selection:false,
     };
   },
   watch: {},
@@ -109,11 +126,15 @@ export default {
   methods: {
     diffColor(diff) {
       if (diff < 0) {
-        return "color: red;";
+        return "back-failure";
       } else {
-        return "color: green;";
+        return "back-success";
       }
     },
+    handlerSelection(currency){
+      console.log(currency.name)
+      this.star_selection=!this.star_selection
+    }
   },
   mounted() {},
 };
@@ -136,9 +157,15 @@ export default {
 .currecyCard {
   cursor: pointer;
 }
+.star_btn:hover{
+  background: none;
+}
 html[theme="light"] {
   .chip {
     background-color: #ebebeb;
   }
+}
+.no-background-hover::before {
+  background-color: transparent !important;
 }
 </style>

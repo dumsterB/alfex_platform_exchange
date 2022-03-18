@@ -240,7 +240,37 @@ export const state = () => ({
         "Yemen",
         "Zambia",
         "Zimbabwe",
-    ]
+    ],
+    exchanges: [
+        {
+          name: "London Stock Exchange",
+          key: "LSE",
+          tv: "LSE",
+          currency: "GBX",
+          list: [],
+        },
+        {
+          name: "US Stock Market",
+          key: "US",
+          tv: "NASDAQ",
+          currency: "USD",
+          list: [],
+        },
+        {
+          name: "Francfurt Exchange",
+          key: "F",
+          tv: "XETR",
+          currency: "EUR",
+          list: [],
+        },
+        {
+          name: "Xetra Exchange",
+          key: "XETRA",
+          tv: "XETR",
+          currency: "EUR",
+          list: [],
+        },
+      ]
 })
 
 export const getters = {

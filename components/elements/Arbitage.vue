@@ -218,7 +218,7 @@ export default {
         return el.currency;
       });
       if (crs.length > this.cur_len) {
-        res = wlts.crs(0, this.cur_len);
+        res = crs.slice(0, this.cur_len);
       } else {
         res = crs;
         for (let i = crs.length; i < this.cur_len; i++) {

@@ -1,17 +1,29 @@
 <template>
   <v-card
-    @click="handlerOpenMarketPage"
     class="pl-0 pr-0 mb-2 ml-2 mr-2"
     :width="380"
   >
-    <div>
+    <div style="cursor: pointer" @click="handlerOpenMarketPage">
       <div class="d-flex justify-space-between">
         <v-card-title>{{ `${item.name}` }}</v-card-title>
-        <v-icon
-          @click.prevent.stop="togglerFavorite"
-          class="yellow--text ma-4 pa-1"
-          >{{ isFavorite ? "mdi-star" : "mdi-star-outline" }}</v-icon
-        >
+        <v-btn fab icon class=" ma-5 pa-1 no-background-hover">
+          <v-icon
+            @click.prevent.stop="togglerFavorite"
+            class=" "
+            size="45"
+            v-if="isFavorite"
+            style="color: yellow"
+          >mdi-star</v-icon
+          >
+          <v-icon
+            @click.prevent.stop="togglerFavorite"
+            class=" ma-4 pa-1"
+            size="40"
+            v-if="!isFavorite"
+            style="color: #FFF59D"
+          >mdi-star-outline</v-icon
+          >
+        </v-btn>
       </div>
 
       <v-list class="mt-4 mr-4 mb-4 ml-4">
@@ -75,4 +87,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#no-background-hover::before {
+  background-color: transparent !important;
+}
+</style>

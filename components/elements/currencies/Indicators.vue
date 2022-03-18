@@ -9,19 +9,19 @@
     <v-col :cols="2">
       <p class="ma-0 pa-0 mt-3">{{ indicators[1].title }}</p>
       <p class="ma-0 pa-0 mt-1" :style="diffColor(change)">
-        {{ change }}
+        {{ change ? change.toFixed(4) : "" }}
       </p>
     </v-col>
     <v-col :cols="2">
       <p class="ma-0 pa-0 mt-3">{{ indicators[2].title }}</p>
       <p class="ma-0 pa-0 mt-1">
-        {{ 0 }}
+        {{ high }}
       </p>
     </v-col>
     <v-col :cols="2">
       <p class="ma-0 pa-0 mt-3">{{ indicators[3].title }}</p>
       <p class="ma-0 pa-0 mt-1">
-        {{ 0 }}
+        {{ low }}
       </p>
     </v-col>
   </v-row>
@@ -36,6 +36,8 @@ export default {
     },
     price: 0,
     change: 0,
+    low: 0,
+    high: 0,
   },
   data() {
     return {
