@@ -202,7 +202,7 @@ export default {
         if (this.buy_sell) {
           t_price = parseFloat(this.price) * parseFloat(this.amount);
         } else {
-          t_price = parseFloat(this.amount);
+          t_price = parseFloat(this.price) * parseFloat(this.amount);
         }
         this.t_price = t_price.toFixed(4);
       } else {
@@ -215,7 +215,7 @@ export default {
         if (this.buy_sell) {
           am = parseFloat(this.t_price) / parseFloat(this.price);
         } else {
-          am = parseFloat(this.amount);
+          am = parseFloat(this.t_price) / parseFloat(this.price);
         }
         this.amount = Math.round(am * 1000000) / 1000000;
       } else {

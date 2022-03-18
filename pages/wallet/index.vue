@@ -185,9 +185,9 @@ export default {
       let me = this;
       let socket = global.socket;
       socket.send(`{
-      "method": "subscribe",
-      "data": ["${me.base_p}_all@ticker_10s"]
-    }`);
+        "method": "subscribe",
+        "data": ["${me.base_p}_all@ticker_10s"]
+      }`);
       socket.onmessage = function (event) {
         if (event.data) {
           let json_d = JSON.parse(event.data);
