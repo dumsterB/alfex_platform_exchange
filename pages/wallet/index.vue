@@ -181,6 +181,13 @@ export default {
         console.log("sums", sum_t, sum_spot, sum_fiat);
       }
     },
+    wallets_subscribe_definer() {
+      let str = "";
+      this.wallets.forEach((wall, i) => {
+        let cr = wall.currency.symbol;
+        str += `${me.base_p}_${cr}-USD@ticker_10s`;
+      });
+    },
     async init() {
       let me = this;
       let socket = global.socket;
@@ -219,7 +226,7 @@ export default {
   watch: {
     prices() {
       this.init_tb();
-    },
+    }
   },
   async created() {
     await this.init();
