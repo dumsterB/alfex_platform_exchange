@@ -8,16 +8,21 @@
                 <v-col :lg="6">
                   <v-btn
                     small
+                    elevation="0"
                     block
                     :class="page_state == 0 ? 'green' : 'green--text'"
                     @click="page_state = 0"
+                    outlined
+                    dark
                     >{{ $t('Spot') }}</v-btn
                   >
                 </v-col>
                 <v-col :lg="6" class="pl-0">
                   <v-btn
                     small
+                    elevation="0"
                     block
+                    outlined
                     :class="page_state == 1 ? 'green' : 'green--text'"
                     @click="page_state = 1"
                     >{{ $t('Arbitrage') }}</v-btn
@@ -286,7 +291,7 @@ export default {
               if (Array.isArray(dt)) {
                 dt = dt[0];
               }
-              
+
               if (me.ex_type == "FOREX") {
                 me.price = Math.round(10000000 / dt.close) / 10000000;
                 let open = Math.round(10000000 / dt.open) / 10000000;
@@ -299,7 +304,7 @@ export default {
                 me.low = dt.low;
                 me.high = dt.high;
               }
-              
+
             } else {
               me.price = 1;
               me.change = 0;
