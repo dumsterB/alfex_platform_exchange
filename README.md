@@ -1,3 +1,4 @@
+https://platform-prof-investment.alfexdev.fun
 # vue-platform
 
 ## Build Setup
