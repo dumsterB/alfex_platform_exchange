@@ -1,4 +1,6 @@
-https://platform-prof-investment.alfexdev.fun
+https://dev-platform.dubaicoins.vip/account
+login: test.test@mail.com
+password: Password222
 # vue-platform
 
 ## Build Setup
